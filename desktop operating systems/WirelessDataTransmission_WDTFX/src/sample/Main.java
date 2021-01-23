@@ -7,6 +7,7 @@ import javafx.scene.Scene;
 import javafx.stage.Stage;
 import sample.Platform.AlertMessage;
 import sample.lib.Server.ServerSocketKt;
+import sample.lib.SocketCommunication.SocketConfigKt;
 
 public class Main extends Application {
 

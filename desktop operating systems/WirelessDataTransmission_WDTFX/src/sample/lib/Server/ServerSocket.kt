@@ -1,6 +1,5 @@
 package sample.lib.Server
 
-import javafx.application.Platform
 import sample.lib.Message.IMessage
 import sample.lib.SocketCommunication.MAX_COUNT_OF_CONNECT
 import sample.lib.SocketCommunication.SERVER_SOCKET_IS_ON

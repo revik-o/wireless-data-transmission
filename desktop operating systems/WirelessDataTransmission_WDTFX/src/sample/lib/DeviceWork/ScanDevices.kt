@@ -58,7 +58,7 @@ class ScanDevices {
                                         break
                                     }
                                 }
-//                                checkIP = true /////////////////////////////////// <____________________________
+                                checkIP = true /////////////////////////////////// <____________________________
                                 if (checkIP) {
                                     println("Find IP: $IP")
                                     sendData(InetSocketAddress(IP, SOCKET_PORT), actionForFoundDevice)
