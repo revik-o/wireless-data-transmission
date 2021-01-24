@@ -1,5 +1,7 @@
 package sample.lib.DeviceWork
 
+import sample.DataBase.IDataBase
+import sample.DataBase.ModelDAO.DeviceModelDAO
 import sample.lib.DelegateFunction.IDelegateFunction4Action
 import sample.lib.DeviceIP.EnumerationDeviceIP4
 import sample.lib.IDelegateFunctionInt
@@ -18,26 +20,29 @@ class ScanDevices {
     var timeOut: Int = 500
         get set
 
+    private lateinit var deviceModelDAO: DeviceModelDAO
     private lateinit var actionForFoundDevice: IDelegateFunction4Action
     private lateinit var actionForTransferPercent: IDelegateFunctionInt
 
-    private fun initMethod(actionForFoundDevice: IDelegateFunction4Action, actionForTransferPercent: IDelegateFunctionInt) {
+    private fun initMethod(deviceModelDAO: DeviceModelDAO, actionForFoundDevice: IDelegateFunction4Action, actionForTransferPercent: IDelegateFunctionInt) {
+        this.deviceModelDAO = deviceModelDAO
         this.actionForFoundDevice = actionForFoundDevice
         this.actionForTransferPercent = actionForTransferPercent
         this.scanDevices()
     }
 
-    constructor(actionForFoundDevice: IDelegateFunction4Action, actionForTransferPercent: IDelegateFunctionInt) {
-        initMethod(actionForFoundDevice, actionForTransferPercent)
+    constructor(deviceModelDAO: DeviceModelDAO, actionForFoundDevice: IDelegateFunction4Action, actionForTransferPercent: IDelegateFunctionInt) {
+        initMethod(deviceModelDAO, actionForFoundDevice, actionForTransferPercent)
     }
 
-    constructor(timeOut: Int, actionForFoundDevice: IDelegateFunction4Action, actionForTransferPercent: IDelegateFunctionInt) {
+    constructor(timeOut: Int, deviceModelDAO: DeviceModelDAO, actionForFoundDevice: IDelegateFunction4Action, actionForTransferPercent: IDelegateFunctionInt) {
         this.timeOut = timeOut
-        initMethod(actionForFoundDevice, actionForTransferPercent)
+        initMethod(deviceModelDAO, actionForFoundDevice, actionForTransferPercent)
     }
 
     private fun scanDevices() {
         deviceIP.enumerationIP().forEach {
+            this.deviceModelDAO.selectWhereIPLike(it).forEach { sendData(InetSocketAddress(it[3], SOCKET_PORT), actionForFoundDevice) }
             val numberOfProcessorCores = Runtime.getRuntime().availableProcessors()
             var length = 255
             var sum = 0.0
