@@ -31,4 +31,10 @@ fun sendData(socketAddress: InetSocketAddress, action: IDelegateFunction4Action)
         try { socket.close() }
         catch (E2: IOException) {}
     }
+    catch (E: Exception)
+    {
+        println("Can't connect to ${socketAddress.address.toString().substring(1)}")
+        try { socket.close() }
+        catch (E2: IOException) {}
+    }
 }

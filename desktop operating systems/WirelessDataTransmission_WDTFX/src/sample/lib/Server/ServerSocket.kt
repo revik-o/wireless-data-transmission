@@ -1,13 +1,12 @@
 package sample.lib.Server
 
-import sample.lib.Message.IMessage
 import sample.lib.SocketCommunication.MAX_COUNT_OF_CONNECT
 import sample.lib.SocketCommunication.SERVER_SOCKET_IS_ON
 import sample.lib.SocketCommunication.SOCKET_PORT
 import java.net.ServerSocket
 import java.util.concurrent.Semaphore
 
-fun startServerSocket(message: IMessage) {
+fun startServerSocket() {
     Thread {
         val serverSocket = ServerSocket(SOCKET_PORT)
         println("Server start")
@@ -15,7 +14,7 @@ fun startServerSocket(message: IMessage) {
         while (SERVER_SOCKET_IS_ON) {
             semaphore.acquire()
             println("Start waiting new client...")
-            WorkWithClient(serverSocket.accept(), semaphore, message).start()
+            WorkWithClient(serverSocket.accept(), semaphore).start()
         }
         serverSocket.close()
         println("Server off")

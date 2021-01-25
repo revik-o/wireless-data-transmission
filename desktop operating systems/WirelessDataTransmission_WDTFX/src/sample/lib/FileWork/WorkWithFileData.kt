@@ -1,5 +1,6 @@
 package sample.lib.FileWork
 
+import sample.lib.Message.ILoadStageMessage
 import java.io.InputStream
 import java.io.OutputStream
 
@@ -10,7 +11,7 @@ fun sendFile(inputStream: InputStream, outputStream: OutputStream) {
     outputStream.flush()
 }
 
-fun acceptFile(inputStream: InputStream, outputStream: OutputStream, lengthFile: Long) {
+fun acceptFile(inputStream: InputStream, outputStream: OutputStream, lengthFile: Long, iLoadStageMessage: ILoadStageMessage) {
     var countOfWrite: Int
     var length = 0
     val byteArray = ByteArray(BUFFER_SIZE_FOR_TRANSFER)
@@ -21,6 +22,7 @@ fun acceptFile(inputStream: InputStream, outputStream: OutputStream, lengthFile:
             break
         }
         outputStream.write(byteArray, 0, countOfWrite)
+        iLoadStageMessage.changeProgress4ProgressBar((length.toDouble() / lengthFile))
     }
     outputStream.flush()
 }

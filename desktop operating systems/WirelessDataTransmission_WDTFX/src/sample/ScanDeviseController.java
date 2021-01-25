@@ -1,13 +1,11 @@
 package sample;
 
 import java.io.*;
-import java.net.InetSocketAddress;
 import java.net.Socket;
 import java.net.URL;
 import java.util.ResourceBundle;
 import java.util.Set;
 import java.util.TreeSet;
-import java.util.concurrent.atomic.AtomicBoolean;
 
 import javafx.application.Platform;
 import javafx.event.ActionEvent;
@@ -17,14 +15,9 @@ import javafx.scene.control.Label;
 import javafx.scene.layout.AnchorPane;
 import javafx.stage.Stage;
 
-import sample.DataBase.Model.DeviceModel;
-import sample.DataBase.ModelDAO.DeviceModelDAO;
 import sample.Platform.DataBase.DataBaseConfigKt;
-import sample.lib.DeviceIP.EnumerableIP4Kt;
-import sample.lib.DeviceWork.DevicePostKt;
+import sample.lib.BUTTON_ACTION;
 import sample.lib.DeviceWork.ScanDevices;
-import sample.lib.FileWork.SocketСommunication4DirectoryKt;
-import sample.lib.FileWork.SocketСommunication4FileKt;
 
 public class ScanDeviseController {
 
@@ -92,72 +85,7 @@ public class ScanDeviseController {
     }
 
     private void buttonMouseClicked(Socket socket, String nameDevice, String typeDevice) {
-        scanDevices.stopScan();
-        ////////
-        boolean ipIsExistsInDatabase = false;
-        for (String[] strings : DataBaseConfigKt.getDeviceModelDAO().selectWhereIPLike(EnumerableIP4Kt.enumerableIp4(socket.getInetAddress().toString().substring(1))))
-            if (strings[3].equals(socket.getInetAddress().toString().substring(1))) {
-                ipIsExistsInDatabase = true;
-                break;
-            }
-        if (!ipIsExistsInDatabase) {
-            DataBaseConfigKt.getDeviceModelDAO().insert(new DeviceModel(nameDevice, typeDevice, socket.getInetAddress().toString().substring(1)));
-            System.out.println("add new device");
-        }
-        //////
-        if (!fileSet.isEmpty()) {
-            int sendType = 0;
-            for (File file: fileSet) {
-                if (file.isDirectory()) {
-                    sendType = 2;
-                    break;
-                }
-                else sendType = 1;
-            }
-            int finalSendType = sendType;
-            System.out.println(sendType + "->>>>");
-            if (sendType == 1) {
-                ////// only files
-                DevicePostKt.sendData(
-                        new InetSocketAddress(socket.getInetAddress().toString().substring(1), socket.getPort()),
-                        (string1, string2, dataInputStream1, dataOutputStream1, socket1) -> {
-                            try {
-                                dataOutputStream1.write(finalSendType);
-                                dataOutputStream1.write(fileSet.size());
-                                fileSet.forEach(file -> SocketСommunication4FileKt.sendDataFromFile(file, dataOutputStream1, dataInputStream1));
-                            } catch (IOException e) { e.printStackTrace(); }
-                        }
-                );
-            } else {
-                ////// Dirs and Files
-                DevicePostKt.sendData(
-                        new InetSocketAddress(socket.getInetAddress().toString().substring(1), socket.getPort()),
-                        (string1, string2, dataInputStream1, dataOutputStream1, socket1) -> {
-                            try {
-                                dataOutputStream1.write(finalSendType);
-                                dataOutputStream1.write(fileSet.size());
-                                fileSet.forEach(file -> {
-                                    System.out.println(file.isDirectory());
-                                    if (file.isDirectory()) {
-                                        try {
-                                            dataOutputStream1.writeBoolean(true);
-                                            SocketСommunication4DirectoryKt.sendDataFromDirectory(file, file, dataInputStream1, dataOutputStream1);
-                                        } catch (IOException e) { System.out.println("Не удалось отправить файл"); }
-                                    }
-                                    else {
-                                        try {
-                                            dataOutputStream1.writeBoolean(false);
-                                            SocketСommunication4FileKt.sendDataFromFile(file, dataOutputStream1, dataInputStream1);
-                                        } catch (IOException e) { System.out.println("Не удалось отправить directories"); }
-                                    }
-                                });
-                            } catch (IOException e) { e.printStackTrace(); }
-                        }
-                );
-            }
-        } else {
-            System.out.println("empty");
-        }
+        BUTTON_ACTION.INSTANCE.sendButtonAction(scanDevices, socket, nameDevice, typeDevice, fileSet);
     }
 
 }

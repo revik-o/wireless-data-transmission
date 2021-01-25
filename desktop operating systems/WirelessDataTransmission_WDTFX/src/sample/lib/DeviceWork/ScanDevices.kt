@@ -1,6 +1,5 @@
 package sample.lib.DeviceWork
 
-import sample.DataBase.IDataBase
 import sample.DataBase.ModelDAO.DeviceModelDAO
 import sample.lib.DelegateFunction.IDelegateFunction4Action
 import sample.lib.DeviceIP.EnumerationDeviceIP4
@@ -63,7 +62,7 @@ class ScanDevices {
                                         break
                                     }
                                 }
-                                checkIP = true /////////////////////////////////// <____________________________
+//                                checkIP = true /////////////////////////////////// <____________________________
                                 if (checkIP) {
                                     println("Find IP: $IP")
                                     sendData(InetSocketAddress(IP, SOCKET_PORT), actionForFoundDevice)

@@ -12,4 +12,6 @@ class AlertMessage: IMessage {
             action.voidFunction()
     }
 
+    override fun showMessage(strMessage: String) { JOptionPane.showMessageDialog(null, strMessage, "Message", JOptionPane.INFORMATION_MESSAGE) }
+
 }

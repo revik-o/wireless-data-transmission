@@ -1,6 +1,5 @@
 package sample.lib.SocketCommunication
 
-import sample.Platform.AlertMessage
 import sample.lib.Server.startServerSocket
 import java.io.BufferedInputStream
 import java.io.DataInputStream
@@ -40,7 +39,7 @@ var SERVER_SOCKET_IS_ON = true
         }
         if (value) {
             println(serverSocketIsWork)
-            if (!serverSocketIsWork) startServerSocket(AlertMessage())
+            if (!serverSocketIsWork) startServerSocket()
             println("Reboot server")
         }
     }
