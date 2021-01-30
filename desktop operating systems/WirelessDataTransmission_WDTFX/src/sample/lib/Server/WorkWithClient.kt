@@ -10,6 +10,8 @@ import sample.lib.SocketCommunication.DEVICE_TYPE
 import sample.lib.SocketCommunication.LOCAL_DEVICE_NAME
 import sample.lib.publicILoadStageMessage
 import sample.lib.publicIMessage4ServerSocket
+import java.awt.Toolkit
+import java.awt.datatransfer.DataFlavor
 import java.io.BufferedInputStream
 import java.io.DataInputStream
 import java.io.DataOutputStream
@@ -64,6 +66,9 @@ class WorkWithClient(socket: Socket, semaphore: Semaphore): Thread() {
                 }
             })
             publicIMessage4ServerSocket.showMessage("That's all Dirs and Files")
+        } else if (sendType == 3) {
+            println(Toolkit.getDefaultToolkit().systemClipboard.getData(DataFlavor.stringFlavor) as String)
+            dataOutputStream.writeUTF(Toolkit.getDefaultToolkit().systemClipboard.getData(DataFlavor.stringFlavor) as String)
         }
         dataInputStream.close()
         dataOutputStream.close()

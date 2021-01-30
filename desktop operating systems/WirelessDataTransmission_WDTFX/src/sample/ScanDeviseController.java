@@ -65,6 +65,13 @@ public class ScanDeviseController {
         initScanDevise(stage);
     }
 
+    int status = 0;
+
+    ScanDeviseController(Stage stage, int status) {
+        this.status = status;
+        initScanDevise(stage);
+    }
+
     private void ScanDevise() {
         addDev.getChildren().clear();
         scanDevices = new ScanDevices(
@@ -85,7 +92,8 @@ public class ScanDeviseController {
     }
 
     private void buttonMouseClicked(Socket socket, String nameDevice, String typeDevice) {
-        BUTTON_ACTION.INSTANCE.sendButtonAction(scanDevices, socket, nameDevice, typeDevice, fileSet);
+        if (status == 3) BUTTON_ACTION.INSTANCE.sendButtonAction4Buff(scanDevices, socket, nameDevice, typeDevice, status);
+        else BUTTON_ACTION.INSTANCE.sendButtonAction(scanDevices, socket, nameDevice, typeDevice, fileSet);
     }
 
 }

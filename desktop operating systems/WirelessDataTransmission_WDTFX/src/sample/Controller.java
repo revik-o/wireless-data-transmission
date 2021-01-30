@@ -4,6 +4,7 @@ import java.io.File;
 import java.io.IOException;
 import java.lang.reflect.InvocationTargetException;
 import java.net.URL;
+import java.util.List;
 import java.util.ResourceBundle;
 import java.util.Set;
 import java.util.TreeSet;
@@ -78,7 +79,18 @@ public class Controller {
     }
 
     @FXML
-    void Clean(ActionEvent event) throws NoSuchMethodException, IllegalAccessException, InvocationTargetException, InstantiationException {
+    void GetClipboard(ActionEvent event) throws IOException {
+        FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("scanDevise.fxml"));
+        Stage stage = new Stage();
+        fxmlLoader.setController(new ScanDeviseController(stage, 3));
+        Parent root = fxmlLoader.load();
+        stage.setTitle("Scan Devices");
+        stage.setScene(new Scene(root));
+        stage.show();
+    }
+
+    @FXML
+    void Clean(ActionEvent event) {
         drag_file.getChildren().clear();
         fileSet.clear();
     }

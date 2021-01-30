@@ -5,11 +5,8 @@ import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.stage.Stage;
-import sample.Platform.DataBase.DataBaseConfigKt;
 import sample.Platform.InitKt;
 import sample.Platform.PlatformConfigKt;
-import sample.lib.ApplicationConfigKt;
-import sample.lib.Message.ILoadStageMessage;
 import sample.lib.Server.ServerSocketKt;
 
 import java.io.File;

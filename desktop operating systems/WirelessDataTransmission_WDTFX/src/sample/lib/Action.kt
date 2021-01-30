@@ -8,10 +8,14 @@ import sample.lib.DeviceWork.sendData
 import sample.lib.FileWork.sendDataFromDirectory
 import sample.lib.FileWork.sendDataFromFile
 import sample.lib.Message.ILoadStageMessage
+import sample.lib.SocketCommunication.SOCKET_PORT
+import java.awt.Toolkit
+import java.awt.datatransfer.StringSelection
 import java.io.DataInputStream
 import java.io.DataOutputStream
 import java.io.File
 import java.io.IOException
+import java.lang.Exception
 import java.net.InetSocketAddress
 import java.net.Socket
 
@@ -41,8 +45,8 @@ object BUTTON_ACTION {
         val internetProtocolAddress: String = socket.inetAddress.toString().substring(1)
         scanDevices.stopScan()
         DATABASE_ACTION.addNewDeviceToDatabaseWithUsingFilter(internetProtocolAddress, nameDevice, typeDevice)
+        var sendType = 0
         if (fileSet.isNotEmpty()) {
-            var sendType = 0
             for (file in fileSet){
                 if (file.isDirectory) {
                     sendType = 2
@@ -104,6 +108,24 @@ object BUTTON_ACTION {
         }
         else { println("empty") }
         println("всё отправленно")
+    }
+
+    fun sendButtonAction4Buff(scanDevices: ScanDevices, socket: Socket, nameDevice: String, typeDevice: String, status: Int) {
+        scanDevices.stopScan()
+        val internetProtocolAddress: String = socket.inetAddress.toString().substring(1)
+        DATABASE_ACTION.addNewDeviceToDatabaseWithUsingFilter(internetProtocolAddress, nameDevice, typeDevice)
+        if (status == 3) {
+            sendData(InetSocketAddress(internetProtocolAddress, SOCKET_PORT), object: IDelegateFunction4Action {
+                override fun voidFunction(string1: String, string2: String, dataInputStream: DataInputStream, dataOutputStream: DataOutputStream, socket: Socket) {
+                    try {
+                        dataOutputStream.write(status)
+                        Toolkit.getDefaultToolkit().systemClipboard.setContents(StringSelection(dataInputStream.readUTF()), null)
+                    } catch (E: Exception) {
+                        E.printStackTrace()
+                    }
+                }
+            })
+        }
     }
 
 }

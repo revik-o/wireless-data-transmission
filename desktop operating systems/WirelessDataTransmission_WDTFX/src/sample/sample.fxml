@@ -7,7 +7,7 @@
 <?import javafx.scene.layout.HBox?>
 <?import javafx.scene.layout.Pane?>
 
-<BorderPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="sample.Controller">
+<BorderPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/15.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="sample.Controller">
    <top>
       <HBox minHeight="30.0" prefHeight="30.0" prefWidth="200.0" BorderPane.alignment="CENTER" />
    </top>
@@ -17,6 +17,8 @@
             <Button mnemonicParsing="false" onAction="#ScanDevices" text="Scan devices" textAlignment="CENTER" />
             <Pane prefHeight="70.0" prefWidth="14.0" />
             <Button mnemonicParsing="false" onAction="#NextStep" text="Next step" />
+            <Pane prefHeight="70.0" prefWidth="14.0" />
+            <Button mnemonicParsing="false" onAction="#GetClipboard" text="Get clipboard" />
             <Pane prefHeight="70.0" prefWidth="14.0" />
             <Button mnemonicParsing="false" onAction="#Clean" text="Clean" />
          </children>
