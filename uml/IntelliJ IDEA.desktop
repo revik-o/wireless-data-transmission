@@ -1,0 +1,8 @@
+[Desktop Entry]
+Encoding=UTF-8
+Version=2020.3.2
+Type=Application
+Terminal=false
+Exec=/home/oleg/idea-IC-203.7148.57/bin/idea.sh
+Name=IntelliJ IDEA
+Icon=/home/oleg/idea-IC-203.7148.57/bin/idea.png
