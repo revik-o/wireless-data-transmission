@@ -32,14 +32,16 @@ public class Window4StatusLoadController {
     }
 
     public void setParam1(String str) {
-        Platform.runLater(() ->{
-            textBox.setText(str);
-        });
+        if (textBox != null)
+            Platform.runLater(() ->{
+                textBox.setText(str);
+            });
     }
     public void setParam2(Double param2) {
         new Thread(new Task() {
             @Override
             protected Object call() throws Exception {
+                if (progressBar != null)
                 Platform.runLater(() -> {
                     double p = param2;
                     progressBar.setProgress(p);

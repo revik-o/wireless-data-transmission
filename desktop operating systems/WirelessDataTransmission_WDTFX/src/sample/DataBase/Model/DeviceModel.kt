@@ -6,13 +6,9 @@ package sample.DataBase.Model
 class DeviceModel {
 
     var id : Long? = null
-        get set
     var deviceName : String? = null
-        get set
     var deviceType : String? = null
-        get set
     var ipAddress : String? = null
-        get set
 
     constructor()
 
