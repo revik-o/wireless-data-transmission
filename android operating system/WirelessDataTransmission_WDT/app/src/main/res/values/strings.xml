@@ -1,3 +1,7 @@
 <resources>
+
     <string name="app_name">Wireless Data Transmission</string>
+
+    <string name="activity_welcome_start">START</string>
+
 </resources>
