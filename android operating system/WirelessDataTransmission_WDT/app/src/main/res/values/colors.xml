@@ -8,5 +8,5 @@
     <color name="black">#FF000000</color>
     <color name="white">#FFFFFFFF</color>
 
-    <color name="gray_200">#939597</color>
+    <color name="color_for_launcher_logo_and_splash_screen">#4B1946</color>
 </resources>
