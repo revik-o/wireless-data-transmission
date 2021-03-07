@@ -1,6 +1,0 @@
-<layer-list xmlns:android="http://schemas.android.com/apk/res/android">
-  <item android:drawable="@drawable/ic_logo_wdt"
-      android:height="50dp"
-      android:width="50dp"
-      android:gravity="center"/>
-</layer-list>

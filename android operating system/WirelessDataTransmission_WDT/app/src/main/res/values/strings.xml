@@ -2,6 +2,7 @@
 
     <string name="app_name">Wireless Data Transmission</string>
 
-    <string name="activity_welcome_start">START</string>
+    <string name="activity_welcome_button1">Send data from folder</string>
+    <string name="activity_welcome_button2">Send data from Google drive</string>
 
 </resources>

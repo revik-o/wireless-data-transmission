@@ -8,13 +8,29 @@
 
     <Button
         android:id="@+id/startButton"
-        android:layout_width="150dp"
-        android:layout_height="150dp"
-        android:textSize="25dp"
+        android:layout_width="300dp"
+        android:layout_height="100dp"
+        android:layout_marginBottom="170dp"
+        android:textSize="20dp"
         android:background="@drawable/start_button"
-        android:text="@string/activity_welcome_start"
+        android:text="@string/activity_welcome_button1"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        />
+
+    <Button
+        android:id="@+id/startButton2"
+        android:layout_width="300dp"
+        android:layout_height="100dp"
+        android:layout_marginTop="170dp"
+        android:background="@drawable/start_button"
+        android:text="@string/activity_welcome_button2"
+        android:textSize="20dp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
+
 </androidx.constraintlayout.widget.ConstraintLayout>
