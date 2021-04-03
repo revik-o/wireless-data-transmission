@@ -1,6 +1,6 @@
 package ua.edu.onaft.wirelessdatatransmission_wdt.Configuration
 
-import com.WDTlib.AlertInterface.ILoadAlert
+import com.WDTComponents.AlertInterfaces.ILoadAlert
 
 class LoadAlertConfiguration: ILoadAlert {
 

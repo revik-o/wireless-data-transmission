@@ -11,4 +11,6 @@
     <color name="ic_launcher_wdt_background">#6B1E66</color>
 
     <color name="color_for_launcher_logo_and_splash_screen">#4B1946</color>
+
+    <color name="gray">#c9c9c9</color>
 </resources>

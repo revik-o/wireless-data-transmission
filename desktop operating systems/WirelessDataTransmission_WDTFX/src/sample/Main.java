@@ -9,7 +9,7 @@ import sample.Platform.PlatformDataBase;
 import sample.Platform.Message;
 import sample.Platform.PlatformDataBaseKt;
 import sample.Platform.RealizeAlertInterface;
-import sample.WDTComponents.StartApplicationConfigs.DefaultStartApplicationConfigs;
+import com.WDTComponents.StartApplicationConfigs.DefaultStartApplicationConfigs;
 
 import java.io.File;
 

@@ -1,0 +1,121 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent">
+
+        <LinearLayout
+            android:id="@+id/fileViewerFragmentMainLinearLayout"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical">
+
+            <Space
+                android:id="@+id/fileViewerFragmentSpace"
+                android:layout_width="match_parent"
+                android:layout_height="101dp" />
+
+<!--            <FrameLayout-->
+<!--                android:layout_width="match_parent"-->
+<!--                android:layout_height="wrap_content"-->
+<!--                android:background="?selectableItemBackgroundBorderless">-->
+
+<!--                <ImageView-->
+<!--                    android:id="@+id/imageView2"-->
+<!--                    android:layout_width="50dp"-->
+<!--                    android:layout_height="50dp"-->
+<!--                    android:layout_marginLeft="5dp"-->
+<!--                    app:srcCompat="@drawable/ic_baseline_folder_24"-->
+<!--                    app:tint="?attr/colorSecondary"-->
+<!--                    tools:ignore="VectorDrawableCompat" />-->
+
+<!--                <TextView-->
+<!--                    android:id="@+id/textView3"-->
+<!--                    android:layout_width="wrap_content"-->
+<!--                    android:layout_height="wrap_content"-->
+<!--                    android:layout_gravity="left"-->
+<!--                    android:layout_marginLeft="58dp"-->
+<!--                    android:layout_marginTop="4dp"-->
+<!--                    android:text="H9436"-->
+<!--                    android:textColor="?attr/colorSecondary"-->
+<!--                    android:textSize="30sp"/>-->
+<!--            </FrameLayout>-->
+        </LinearLayout>
+    </ScrollView>
+
+    <HorizontalScrollView
+        android:id="@+id/fileViewerFragmentHorizontalScrollView"
+        android:layout_width="match_parent"
+        android:layout_height="50dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        android:background="@drawable/gradient_for_appbar"
+        app:layout_constraintTop_toBottomOf="@+id/fileViewerFragmentFrameLayoutAppBar">
+
+        <LinearLayout
+            android:id="@+id/fileViewerFragmentHorizontalLinearLayout"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:orientation="horizontal" >
+
+<!--            <TextView-->
+<!--                android:id="@+id/textView6"-->
+<!--                android:layout_width="wrap_content"-->
+<!--                android:layout_height="wrap_content"-->
+<!--                android:text="TextView"-->
+<!--                android:textSize="25sp"-->
+<!--                android:layout_gravity="left"-->
+<!--                android:layout_marginLeft="5dp"-->
+<!--                android:textColor="?attr/colorSecondary"/><TextView-->
+<!--            android:layout_width="wrap_content"-->
+<!--            android:layout_height="wrap_content"-->
+<!--            android:text=" > "-->
+<!--            android:textSize="25sp"-->
+<!--            android:layout_gravity="left"-->
+<!--            android:textColor="?attr/colorSecondary"/>-->
+        </LinearLayout>
+    </HorizontalScrollView>
+
+    <FrameLayout
+        android:id="@+id/fileViewerFragmentFrameLayoutAppBar"
+        android:layout_width="match_parent"
+        android:layout_height="50dp"
+        android:background="@color/main_white"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent">
+
+        <ImageView
+            android:id="@+id/fileViewerFragmentBackArrowButton"
+            android:layout_width="40dp"
+            android:layout_height="40dp"
+            android:layout_gravity="bottom"
+            android:layout_marginLeft="5dp"
+            android:layout_marginBottom="5dp"
+            app:srcCompat="@drawable/ic_back_arrow"
+            android:background="?selectableItemBackgroundBorderless"
+            tools:ignore="VectorDrawableCompat" />
+
+        <TextView
+            android:id="@+id/fileViewerFragmentTextView"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="right"
+            android:layout_marginTop="3dp"
+            android:layout_marginRight="7dp"
+            android:text="Choose files"
+            android:textColor="@color/green_01ac8a"
+            android:textSize="28sp"
+            android:textStyle="bold" />
+    </FrameLayout>
+</androidx.constraintlayout.widget.ConstraintLayout>

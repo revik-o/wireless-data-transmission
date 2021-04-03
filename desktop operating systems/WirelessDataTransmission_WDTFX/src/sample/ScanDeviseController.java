@@ -14,8 +14,8 @@ import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.layout.AnchorPane;
 import javafx.stage.Stage;
-import sample.WDTComponents.AppConfig;
-import sample.WDTComponents.WorkingWithDevices.ScanDevicesIPVersion4;
+import com.WDTComponents.AppConfig;
+import com.WDTComponents.WorkingWithDevices.ScanDevicesIPVersion4;
 
 /*import sample.Platform.DataBase.DataBaseConfigKt;
 import sample.lib.BUTTON_ACTION;
@@ -56,11 +56,14 @@ public class ScanDeviseController {
         ScanDevise_();
     }
 
+    private Stage stage;
+
     private void initScanDevise(Stage stage) {
         stage.setOnCloseRequest(windowEvent -> {
 //            scanDevices.stopScan();
             scanDevices_.stopScanDevices();
         });
+        this.stage = stage;
     }
 
     ScanDeviseController(Stage stage) {
@@ -100,9 +103,10 @@ public class ScanDeviseController {
 
     private void buttonMouseClicked_(Socket socket) {
         scanDevices_.stopScanDevices();
-        if (status == 3)
+        if (status == 3) {
+            this.stage.close();
             AppConfig.Action.SendTypeInterface.iActionForSendType.clientActionForSendType3(socket);
-        else {
+        } else {
             int sendType = 0;
             for (File file : fileSet){
                 if (file.isDirectory()) {
@@ -111,10 +115,17 @@ public class ScanDeviseController {
                 }
                 else sendType = 1;
             }
-            if (sendType == 1)
-                AppConfig.Action.SendTypeInterface.iActionForSendType.clientActionForSendType1(socket, fileSet);
-            if (sendType == 2)
-                AppConfig.Action.SendTypeInterface.iActionForSendType.clientActionForSendType2(socket, fileSet);
+            if (sendType == 1) {
+                this.stage.close();
+                new Thread(() ->
+                    AppConfig.Action.SendTypeInterface.iActionForSendType.clientActionForSendType1(socket, fileSet)
+                ).start();
+            } else if (sendType == 2) {
+                this.stage.close();
+                new Thread(() ->
+                        AppConfig.Action.SendTypeInterface.iActionForSendType.clientActionForSendType2(socket, fileSet)
+                ).start();
+            }
         }
     }
 

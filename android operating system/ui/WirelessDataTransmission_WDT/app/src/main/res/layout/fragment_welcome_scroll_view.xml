@@ -1,0 +1,147 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/mainWelcomeActivityConstraintLayout"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/main_white">
+
+    <ScrollView
+        android:id="@+id/welcomeActivityScrollView"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="1.0"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical" >
+
+            <Space
+                android:id="@+id/welcomeActivitySpace"
+                android:layout_width="match_parent"
+                android:layout_height="70dp" />
+
+            <FrameLayout
+                android:id="@+id/welcomeActivitySendData"
+                android:layout_width="match_parent"
+                android:layout_height="135dp"
+                android:background="@color/dark_blue_1d3947">
+
+                <ImageView
+                    android:id="@+id/welcomeActivitySendDataImageView"
+                    android:layout_width="155dp"
+                    android:layout_height="155dp"
+                    android:layout_gravity="right"
+                    android:layout_marginTop="10dp"
+                    android:layout_marginRight="-12dp"
+                    android:rotation="40"
+                    app:srcCompat="@drawable/ic_arrows"
+                    tools:ignore="VectorDrawableCompat" />
+
+                <TextView
+                    android:id="@+id/welcomeActivitySendDataTextView"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="5dp"
+                    android:text="@string/send_data_button"
+                    android:textSize="45sp"
+                    android:textStyle="bold"
+                    android:textColor="@color/green_01ac8a"/>
+
+            </FrameLayout>
+
+            <FrameLayout
+                android:id="@+id/welcomeActivitySendDataFromGoogleDrive"
+                android:layout_width="match_parent"
+                android:layout_height="135dp"
+                android:background="@color/blue_5cb5e1">
+
+                <ImageView
+                    android:id="@+id/welcomeActivitySendDataFromGoogleDriveImageView"
+                    android:layout_width="155dp"
+                    android:layout_height="155dp"
+                    android:layout_gravity="right"
+                    android:layout_marginTop="10dp"
+                    android:layout_marginRight="-12dp"
+                    android:rotation="40"
+                    app:srcCompat="@drawable/ic_arrows"
+                    app:tint="@color/blue_a3d0e7"
+                    tools:ignore="VectorDrawableCompat" />
+
+                <TextView
+                    android:id="@+id/welcomeActivitySendDataFromGoogleDriveTextView"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="5dp"
+                    android:text="@string/send_data_from_google_drive_button"
+                    android:textSize="33sp"
+                    android:textStyle="bold"
+                    android:textColor="@color/blue_294e61"/>
+
+                <ImageView
+                    android:id="@+id/welcomeActivitySendDataFromGoogleDriveImageViewGoogleDrive"
+                    android:layout_width="30dp"
+                    android:layout_height="30dp"
+                    android:layout_marginLeft="5dp"
+                    android:layout_marginTop="95dp"
+                    app:srcCompat="@drawable/ic_baseline_google_drive_24"
+                    tools:ignore="VectorDrawableCompat" />
+            </FrameLayout>
+
+            <FrameLayout
+                android:id="@+id/welcomeActivityGetClipboard"
+                android:layout_width="match_parent"
+                android:layout_height="135dp"
+                android:background="@color/blue_455761">
+
+                <ImageView
+                    android:id="@+id/welcomeActivityGetClipboardImageView"
+                    android:layout_width="155dp"
+                    android:layout_height="155dp"
+                    android:layout_gravity="right"
+                    android:layout_marginTop="10dp"
+                    android:layout_marginRight="-12dp"
+                    android:rotation="20"
+                    app:srcCompat="@drawable/ic_clipboards"
+                    tools:ignore="VectorDrawableCompat" />
+
+                <TextView
+                    android:id="@+id/welcomeActivityGetClipboardTextView"
+                    android:layout_width="219dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="5dp"
+                    android:text="@string/get_clipboard_button"
+                    android:textSize="38sp"
+                    android:textStyle="bold"
+                    android:textColor="@color/blue_a9d7ee"/>
+            </FrameLayout>
+        </LinearLayout>
+    </ScrollView>
+
+    <FrameLayout
+        android:id="@+id/welcomeActivityAppBar"
+        android:layout_width="match_parent"
+        android:layout_height="55dp"
+        android:background="@drawable/gradient_for_appbar"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent">
+
+        <ImageView
+            android:id="@+id/welcomeActivityAppBarSideMenu"
+            android:layout_width="40dp"
+            android:layout_height="40dp"
+            android:layout_marginLeft="10dp"
+            android:layout_marginTop="10dp"
+            app:srcCompat="@drawable/ic_baseline_menu_24"
+            android:background="?selectableItemBackgroundBorderless"
+            tools:ignore="VectorDrawableCompat" />
+    </FrameLayout>
+</androidx.constraintlayout.widget.ConstraintLayout>

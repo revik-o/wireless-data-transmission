@@ -42,10 +42,10 @@ public class Window4StatusLoadController {
             @Override
             protected Object call() throws Exception {
                 if (progressBar != null)
-                Platform.runLater(() -> {
-                    double p = param2;
-                    progressBar.setProgress(p);
-                });
+                    Platform.runLater(() -> {
+                        double p = param2;
+                        progressBar.setProgress(p);
+                    });
                 return null;
             }
         }).start();
