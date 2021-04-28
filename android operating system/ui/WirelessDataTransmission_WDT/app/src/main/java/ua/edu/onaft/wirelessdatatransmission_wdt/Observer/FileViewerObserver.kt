@@ -22,17 +22,12 @@ class FileViewerObserver(arraySize: Int, fileViewerViewModel: FileViewerViewMode
     private var spaceHeights = listOf(Constant.specialSpace, Constant.usualSpace)
 
     private fun addViewToMainLinearLayout(indexOfCurrentArray: Int, customFrameLayoutArg: CustomFrameLayout) {
-        Thread {
-            val customFrameLayout = CustomFrameLayout(SessionState.activity, ScreenDimension(SessionState.activity), customFrameLayoutArg.file, customFrameLayoutArg.isFile, customFrameLayoutArg.text)
-            customFrameLayout.isChosen = customFrameLayoutArg.isChosen
-            customFrameLayout.frameLayout.setOnClickListener(DirectoryOrFileOnClickListener(SessionState.activity, fileViewerViewModel, customFrameLayout))
-            customFrameLayout.frameLayout.setOnLongClickListener(DirectoryOrFileLongClickListener(SessionState.activity, fileViewerViewModel, customFrameLayout))
-            currentCustomFrameLayouts[indexOfCurrentArray] = customFrameLayout
-            SessionState.activity.runOnUiThread {
-                linearLayouts[0]?.addView(customFrameLayout.frameLayout)
-            }
-        }.start()
-
+        val customFrameLayout = CustomFrameLayout(SessionState.activity, ScreenDimension(SessionState.activity), customFrameLayoutArg.file, customFrameLayoutArg.isFile, customFrameLayoutArg.text)
+        customFrameLayout.isChosen = customFrameLayoutArg.isChosen
+        customFrameLayout.frameLayout.setOnClickListener(DirectoryOrFileOnClickListener(SessionState.activity, fileViewerViewModel, customFrameLayout))
+        customFrameLayout.frameLayout.setOnLongClickListener(DirectoryOrFileLongClickListener(SessionState.activity, fileViewerViewModel, customFrameLayout))
+        currentCustomFrameLayouts[indexOfCurrentArray] = customFrameLayout
+        linearLayouts[0]?.addView(customFrameLayout.frameLayout)
     }
 
     private fun removeAllAndAddSpaceToLinearLayout(idLinearLayout: Int) {

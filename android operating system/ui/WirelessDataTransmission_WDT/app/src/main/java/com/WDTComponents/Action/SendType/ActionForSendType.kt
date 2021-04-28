@@ -29,7 +29,7 @@ object ActionForSendType: IActionForSendType {
         }
     }
 
-    override fun clientActionForSendType1(socket: Socket, fileSet: Set<File>) {
+    override fun clientActionForSendType1(socket: Socket, files: List<File>) {
         val internetProtocolAddress: String = socket.inetAddress.toString().substring(1)
         DataTransfer.sendDataFromClient(
             InetSocketAddress(internetProtocolAddress, socket.port),
@@ -44,10 +44,10 @@ object ActionForSendType: IActionForSendType {
                 ) {
                     AppConfig.DataBase.ModelDAOInterface.iDeviceModelDAO.addNewDeviceToDatabaseWithUsingFilter(internetProtocolAddress, nameDevice, typeDevice)
                     try {
-                        dataOutputStream.write(fileSet.size)
+                        dataOutputStream.write(files.size)
                         val iLoadAlert: ILoadAlert = AppConfig.AlertInterface.iLoadAlert.getConstructor().newInstance()
                         iLoadAlert.showAlert()
-                        fileSet.forEach { file -> DataTransferFromFile.sendDataFromFile(file, dataOutputStream, dataInputStream, setTextForLoadAlert(iLoadAlert))}
+                        files.forEach { file -> DataTransferFromFile.sendDataFromFile(file, dataOutputStream, dataInputStream, setTextForLoadAlert(iLoadAlert))}
                         iLoadAlert.closeAlert()
                     }
                     catch (E: IOException) { E.printStackTrace() }
@@ -56,7 +56,7 @@ object ActionForSendType: IActionForSendType {
         )
     }
 
-    override fun clientActionForSendType2(socket: Socket, fileSet: Set<File>) {
+    override fun clientActionForSendType2(socket: Socket, files: List<File>) {
         val internetProtocolAddress: String = socket.inetAddress.toString().substring(1)
         DataTransfer.sendDataFromClient(
             InetSocketAddress(internetProtocolAddress, socket.port),
@@ -71,10 +71,10 @@ object ActionForSendType: IActionForSendType {
                 ) {
                     AppConfig.DataBase.ModelDAOInterface.iDeviceModelDAO.addNewDeviceToDatabaseWithUsingFilter(internetProtocolAddress, nameDevice, typeDevice)
                     try {
-                        dataOutputStream.write(fileSet.size)
+                        dataOutputStream.write(files.size)
                         val iLoadAlert: ILoadAlert = AppConfig.AlertInterface.iLoadAlert.getConstructor().newInstance()
                         iLoadAlert.showAlert()
-                        fileSet.forEach { file ->
+                        files.forEach { file ->
                             run {
                                 if (file.isDirectory) {
                                     try {

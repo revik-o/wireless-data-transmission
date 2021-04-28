@@ -6,13 +6,13 @@ import android.os.Environment
 import android.widget.FrameLayout
 import android.widget.ImageView
 import android.widget.Space
+import android.widget.Toast
 import androidx.annotation.RequiresApi
 import androidx.appcompat.app.ActionBarDrawerToggle
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.GravityCompat
 import androidx.core.view.updateMargins
 import androidx.drawerlayout.widget.DrawerLayout
-
 import ua.edu.onaft.wirelessdatatransmission_wdt.ActionView.WelcomeActivity.GetClipboardClickListener
 import ua.edu.onaft.wirelessdatatransmission_wdt.ActionView.WelcomeActivity.SendDataClickListener
 import ua.edu.onaft.wirelessdatatransmission_wdt.ActionView.WelcomeActivity.SendDataFromGoogleDriveClickListener
@@ -21,6 +21,7 @@ import ua.edu.onaft.wirelessdatatransmission_wdt.Common.Constant
 import ua.edu.onaft.wirelessdatatransmission_wdt.Common.Method
 import ua.edu.onaft.wirelessdatatransmission_wdt.Common.ScreenDimension
 import ua.edu.onaft.wirelessdatatransmission_wdt.Common.SessionState
+import ua.edu.onaft.wirelessdatatransmission_wdt.Configuration.DefaultApplicationConfig
 
 class WelcomeActivity : AppCompatActivity() {
 
@@ -41,25 +42,6 @@ class WelcomeActivity : AppCompatActivity() {
     // Get Clipboard
     private lateinit var getClipboardFrameLayout: FrameLayout
     private lateinit var getClipboardImageView: ImageView
-
-    @RequiresApi(Build.VERSION_CODES.R)
-    private fun config() {
-        /**
-         * Update activity
-         */
-        SessionState.activity = this
-        /**
-         * Check Permissions
-         */
-        Method.checkPermissions()
-        /**
-         * External Storage
-         */
-        Constant.mainExternalStorageDirectory = if (Build.VERSION.SDK_INT <= Build.VERSION_CODES.R)
-            Environment.getExternalStorageDirectory()
-        else
-            applicationContext.getExternalFilesDir("/")
-    }
 
     override fun onStart() {
         /**
@@ -131,15 +113,11 @@ class WelcomeActivity : AppCompatActivity() {
         super.onStart()
     }
 
-    @RequiresApi(Build.VERSION_CODES.R)
+//    @RequiresApi(Build.VERSION_CODES.R)
     override fun onCreate(savedInstanceState: Bundle?) {
-        config()
+//        config()
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_welcome)
-        /**
-         * Update activity
-         */
-        SessionState.activity = this
         /**
          * Getting activity things
          */
@@ -158,6 +136,14 @@ class WelcomeActivity : AppCompatActivity() {
         // Get Clipboard
         getClipboardFrameLayout = findViewById(R.id.welcomeActivityGetClipboard)
         getClipboardImageView = findViewById(R.id.welcomeActivityGetClipboardImageView)
+    }
+
+    override fun onResume() {
+        super.onResume()
+        /**
+         * Update activity
+         */
+        SessionState.activity = this
     }
 
     override fun onBackPressed() {

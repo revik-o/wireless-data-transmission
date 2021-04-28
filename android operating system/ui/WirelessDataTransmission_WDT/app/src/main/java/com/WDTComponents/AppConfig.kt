@@ -1,18 +1,15 @@
 package com.WDTComponents
 
-import com.WDTComponents.DataBase.IWorkingWithDataBase
-import com.WDTComponents.DataBase.ModelDAO.IDeviceModelDAO
 import com.WDTComponents.Action.SendType.IActionForSendType
 import com.WDTComponents.AlertInterfaces.ILoadAlert
 import com.WDTComponents.AlertInterfaces.IMainMessage
 import com.WDTComponents.AlertInterfaces.IMessage
+import com.WDTComponents.DataBase.IWorkingWithDataBase
+import com.WDTComponents.DataBase.ModelDAO.IDeviceModelDAO
 import com.WDTComponents.IPWork.IPackageIP
 import com.WDTComponents.ServerControll.IServer
 import com.WDTComponents.SystemClipboard.ISystemClipboard
-//import com.WDTComponents.ThreadType.IUnusualThread
-import com.WDTComponents.ThreadType.IUsualThread
 import com.WDTComponents.WorkingWithClient.IWorkingWithClient
-
 import java.io.File
 
 /**
@@ -103,18 +100,18 @@ object AppConfig {
 
     }
 
-    object ThreadType {
-
-//        lateinit var iUnusualThread: IUnusualThread
-
-        lateinit var iUsualThread: IUsualThread
-
-    }
-
     object WorkingWithClientInterface {
 
         lateinit var iWorkingWithClient: IWorkingWithClient
 
     }
+
+}
+
+object TypeDeviceENUM {
+
+    val PHONE = "PHONE".intern()
+
+    val COMPUTER = "COMPUTER".intern()
 
 }

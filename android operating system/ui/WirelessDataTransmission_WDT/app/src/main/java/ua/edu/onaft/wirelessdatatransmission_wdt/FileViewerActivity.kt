@@ -42,14 +42,18 @@ class FileViewerActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_file_viewer)
         /**
-         * Update activity
-         */
-        SessionState.activity = this
-        /**
          * Getting activity things
          */
         viewPager = findViewById(R.id.fileViewerActivityViewPager)
         floatingActionButton = findViewById(R.id.fileViewerActivityFloatingActionButton)
+    }
+
+    override fun onResume() {
+        super.onResume()
+        /**
+         * Update activity
+         */
+        SessionState.activity = this
     }
 
     @RequiresApi(Build.VERSION_CODES.R)

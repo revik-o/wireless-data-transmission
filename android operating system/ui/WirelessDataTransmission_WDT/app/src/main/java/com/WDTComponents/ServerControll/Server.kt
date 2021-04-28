@@ -2,8 +2,6 @@ package com.WDTComponents.ServerControll
 
 import com.WDTComponents.AppConfig
 import com.WDTComponents.AppOption
-import com.WDTComponents.DelegateMethods.IDelegateMethod
-
 import java.io.BufferedInputStream
 import java.io.DataInputStream
 import java.net.ConnectException
@@ -21,20 +19,18 @@ class Server: IServer {
      */
     override fun startServerSocket() {
         AppOption.SERVER_SOCKET_IS_ON = true
-        AppConfig.ThreadType.iUsualThread.execute(object : IDelegateMethod {
-            override fun voidMethod() {
-                val serverSocket = ServerSocket(AppOption.SOCKET_PORT)
-                println("Server start")
-                val semaphore = Semaphore(AppOption.MAX_COUNT_OF_CONNECT)
-                while (AppOption.SERVER_SOCKET_IS_ON) {
-                    semaphore.acquire()
-                    println("Start waiting new client...")
-                    AppConfig.WorkingWithClientInterface.iWorkingWithClient.start(serverSocket.accept(), semaphore)
-                }
-                serverSocket.close()
-                println("Server is off")
+        Thread {
+            val serverSocket = ServerSocket(AppOption.SOCKET_PORT)
+            println("Server start")
+            val semaphore = Semaphore(AppOption.MAX_COUNT_OF_CONNECT)
+            while (AppOption.SERVER_SOCKET_IS_ON) {
+                semaphore.acquire()
+                println("Start waiting new client...".intern())
+                AppConfig.WorkingWithClientInterface.iWorkingWithClient.start(serverSocket.accept(), semaphore)
             }
-        })
+            serverSocket.close()
+            println("Server is off")
+        }.start()
     }
 
     /**

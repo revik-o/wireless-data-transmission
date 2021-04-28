@@ -15,9 +15,9 @@ interface IActionForSendType {
     /**
      *
      */
-    fun clientActionForSendType1(socket: Socket, fileSet: Set<File>)
+    fun clientActionForSendType1(socket: Socket, files: List<File>)
 
-    fun clientActionForSendType2(socket: Socket, fileSet: Set<File>)
+    fun clientActionForSendType2(socket: Socket, files: List<File>)
 
     fun clientActionForSendType3(socket: Socket)
 

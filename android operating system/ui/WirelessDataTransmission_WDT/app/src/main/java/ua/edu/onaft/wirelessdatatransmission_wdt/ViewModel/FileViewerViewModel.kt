@@ -12,7 +12,6 @@ import java.io.File
 
 class FileViewerViewModel(arraySize: Int) {
 
-    private val chosenFiles = ArrayList<File>()
     private val fileViewerObserver = FileViewerObserver(arraySize, this)
     private var mainLinearLayout: LinearLayout? = null
     lateinit var currentFile: File
@@ -34,12 +33,12 @@ class FileViewerViewModel(arraySize: Int) {
     }
 
     fun addChosenFile(file: File) {
-        chosenFiles.add(file)
+        SessionState.files.add(file)
         fileViewerObserver.addChosenCustomFrameLayout(file)
     }
 
     fun removeChosenFile(file: File) {
-        chosenFiles.remove(file)
+        SessionState.files.remove(file)
         fileViewerObserver.removeChosenCustomFrameLayout(file)
     }
 

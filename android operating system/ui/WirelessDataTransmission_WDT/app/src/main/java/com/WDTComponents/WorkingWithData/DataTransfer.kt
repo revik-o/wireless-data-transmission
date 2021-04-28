@@ -28,7 +28,7 @@ object DataTransfer {
     }
 
     fun sendDataFromClient(socketAddress: InetSocketAddress, sendType: Int, action: IDelegateMethodSocketAction) {
-        println("2312312 12" + socketAddress.address.toString().substring(1))
+        println(socketAddress.address.toString().substring(1))
         val socket = Socket()
         try
         {
