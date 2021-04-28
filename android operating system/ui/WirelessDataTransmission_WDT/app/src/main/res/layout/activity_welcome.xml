@@ -14,7 +14,7 @@
         android:layout_height="match_parent"
         app:headerLayout="@layout/fragment_welcome_navigation_view_content"
         android:layout_gravity="start"
-        android:background="@color/main_white"/>
+        android:background="?attr/colorPrimary"/>
 
     <include layout="@layout/fragment_welcome_scroll_view"
         android:layout_height="match_parent"

@@ -1,4 +1,4 @@
-package ua.edu.onaft.wirelessdatatransmission_wdt.Commont.Action
+package ua.edu.onaft.wirelessdatatransmission_wdt.Common.Action
 
 import android.app.Activity
 import android.view.View

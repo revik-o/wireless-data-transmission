@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="utf-8"?>
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:background="?selectableItemBackground">
+    -<ImageView
+        android:id="@+id/folderImageView"
+        android:layout_width="50dp"
+        android:layout_height="50dp"
+        android:layout_marginStart="5dp"
+        app:srcCompat="@drawable/ic_baseline_folder_24"
+        app:tint="?attr/colorOnSecondary"
+        tools:ignore="VectorDrawableCompat" />
+
+    <TextView
+        android:id="@+id/folderTextView"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="left"
+        android:layout_marginStart="58dp"
+        android:layout_marginTop="4dp"
+        android:text="H9436"
+        android:maxLines="1"
+        android:textColor="?attr/colorOnSecondary"
+        android:textSize="30sp"
+        tools:ignore="RtlHardcoded" />
+</FrameLayout>

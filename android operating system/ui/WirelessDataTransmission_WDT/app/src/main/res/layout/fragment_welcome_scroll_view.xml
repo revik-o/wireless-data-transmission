@@ -5,8 +5,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/mainWelcomeActivityConstraintLayout"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:background="@color/main_white">
+    android:layout_height="match_parent">
 
     <ScrollView
         android:id="@+id/welcomeActivityScrollView"
@@ -40,16 +39,16 @@
                     android:layout_height="155dp"
                     android:layout_gravity="right"
                     android:layout_marginTop="10dp"
-                    android:layout_marginRight="-12dp"
+                    android:layout_marginEnd="-12dp"
                     android:rotation="40"
                     app:srcCompat="@drawable/ic_arrows"
-                    tools:ignore="VectorDrawableCompat" />
+                    tools:ignore="RtlHardcoded,VectorDrawableCompat"/>
 
                 <TextView
                     android:id="@+id/welcomeActivitySendDataTextView"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_marginLeft="5dp"
+                    android:layout_marginStart="5dp"
                     android:text="@string/send_data_button"
                     android:textSize="45sp"
                     android:textStyle="bold"
@@ -69,7 +68,7 @@
                     android:layout_height="155dp"
                     android:layout_gravity="right"
                     android:layout_marginTop="10dp"
-                    android:layout_marginRight="-12dp"
+                    android:layout_marginEnd="-12dp"
                     android:rotation="40"
                     app:srcCompat="@drawable/ic_arrows"
                     app:tint="@color/blue_a3d0e7"
@@ -79,7 +78,7 @@
                     android:id="@+id/welcomeActivitySendDataFromGoogleDriveTextView"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_marginLeft="5dp"
+                    android:layout_marginStart="5dp"
                     android:text="@string/send_data_from_google_drive_button"
                     android:textSize="33sp"
                     android:textStyle="bold"
@@ -89,7 +88,7 @@
                     android:id="@+id/welcomeActivitySendDataFromGoogleDriveImageViewGoogleDrive"
                     android:layout_width="30dp"
                     android:layout_height="30dp"
-                    android:layout_marginLeft="5dp"
+                    android:layout_marginStart="5dp"
                     android:layout_marginTop="95dp"
                     app:srcCompat="@drawable/ic_baseline_google_drive_24"
                     tools:ignore="VectorDrawableCompat" />
@@ -110,13 +109,13 @@
                     android:layout_marginRight="-12dp"
                     android:rotation="20"
                     app:srcCompat="@drawable/ic_clipboards"
-                    tools:ignore="VectorDrawableCompat" />
+                    tools:ignore="RtlHardcoded,VectorDrawableCompat" />
 
                 <TextView
                     android:id="@+id/welcomeActivityGetClipboardTextView"
                     android:layout_width="219dp"
                     android:layout_height="wrap_content"
-                    android:layout_marginLeft="5dp"
+                    android:layout_marginStart="5dp"
                     android:text="@string/get_clipboard_button"
                     android:textSize="38sp"
                     android:textStyle="bold"
@@ -138,7 +137,7 @@
             android:id="@+id/welcomeActivityAppBarSideMenu"
             android:layout_width="40dp"
             android:layout_height="40dp"
-            android:layout_marginLeft="10dp"
+            android:layout_marginStart="10dp"
             android:layout_marginTop="10dp"
             app:srcCompat="@drawable/ic_baseline_menu_24"
             android:background="?selectableItemBackgroundBorderless"
