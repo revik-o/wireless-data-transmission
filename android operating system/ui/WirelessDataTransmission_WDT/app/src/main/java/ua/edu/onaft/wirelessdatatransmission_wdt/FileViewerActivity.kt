@@ -54,6 +54,8 @@ class FileViewerActivity : AppCompatActivity() {
          * Update activity
          */
         SessionState.activity = this
+
+        SessionState.sendType = 0
     }
 
     @RequiresApi(Build.VERSION_CODES.R)

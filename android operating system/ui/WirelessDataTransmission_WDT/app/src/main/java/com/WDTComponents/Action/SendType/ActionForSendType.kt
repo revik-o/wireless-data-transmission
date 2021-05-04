@@ -29,6 +29,12 @@ object ActionForSendType: IActionForSendType {
         }
     }
 
+    private fun setPercentageOfDownloadForLoadAlert(iLoadAlert: ILoadAlert): IDelegateMethodDoubleArg {
+        return object : IDelegateMethodDoubleArg {
+            override fun voidMethod(double: Double) { iLoadAlert.setPercentageOfDownload(double)}
+        }
+    }
+
     override fun clientActionForSendType1(socket: Socket, files: List<File>) {
         val internetProtocolAddress: String = socket.inetAddress.toString().substring(1)
         DataTransfer.sendDataFromClient(
@@ -47,7 +53,13 @@ object ActionForSendType: IActionForSendType {
                         dataOutputStream.write(files.size)
                         val iLoadAlert: ILoadAlert = AppConfig.AlertInterface.iLoadAlert.getConstructor().newInstance()
                         iLoadAlert.showAlert()
-                        files.forEach { file -> DataTransferFromFile.sendDataFromFile(file, dataOutputStream, dataInputStream, setTextForLoadAlert(iLoadAlert))}
+                        files.forEach { file -> DataTransferFromFile.sendDataFromFile(
+                                file,
+                                dataOutputStream,
+                                dataInputStream,
+                                setTextForLoadAlert(iLoadAlert),
+                                setPercentageOfDownloadForLoadAlert(iLoadAlert)
+                        )}
                         iLoadAlert.closeAlert()
                     }
                     catch (E: IOException) { E.printStackTrace() }
@@ -79,12 +91,25 @@ object ActionForSendType: IActionForSendType {
                                 if (file.isDirectory) {
                                     try {
                                         dataOutputStream.writeBoolean(true)
-                                        DataTransferFromDirectory.sendDataFromDirectory(file, file, dataOutputStream, dataInputStream, setTextForLoadAlert(iLoadAlert))
+                                        DataTransferFromDirectory.sendDataFromDirectory(
+                                                file,
+                                                file,
+                                                dataOutputStream,
+                                                dataInputStream,
+                                                setTextForLoadAlert(iLoadAlert),
+                                                setPercentageOfDownloadForLoadAlert(iLoadAlert)
+                                        )
                                     } catch (E: IOException) { println("Failed to send directory: ${file.name}") }
                                 } else {
                                     try {
                                         dataOutputStream.writeBoolean(false)
-                                        DataTransferFromFile.sendDataFromFile(file, dataOutputStream, dataInputStream, setTextForLoadAlert(iLoadAlert))
+                                        DataTransferFromFile.sendDataFromFile(
+                                                file,
+                                                dataOutputStream,
+                                                dataInputStream,
+                                                setTextForLoadAlert(iLoadAlert),
+                                                setPercentageOfDownloadForLoadAlert(iLoadAlert)
+                                        )
                                     } catch (E: IOException) { println("Failed to send file: ${file.name}") }
                                 }
                             }

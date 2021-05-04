@@ -22,7 +22,13 @@ class FileViewerObserver(arraySize: Int, fileViewerViewModel: FileViewerViewMode
     private var spaceHeights = listOf(Constant.specialSpace, Constant.usualSpace)
 
     private fun addViewToMainLinearLayout(indexOfCurrentArray: Int, customFrameLayoutArg: CustomFrameLayout) {
-        val customFrameLayout = CustomFrameLayout(SessionState.activity, ScreenDimension(SessionState.activity), customFrameLayoutArg.file, customFrameLayoutArg.isFile, customFrameLayoutArg.text)
+        val customFrameLayout = CustomFrameLayout(
+                SessionState.activity,
+//                ScreenDimension(SessionState.activity),
+                customFrameLayoutArg.file,
+                customFrameLayoutArg.isFile,
+                customFrameLayoutArg.text
+        )
         customFrameLayout.isChosen = customFrameLayoutArg.isChosen
         customFrameLayout.frameLayout.setOnClickListener(DirectoryOrFileOnClickListener(SessionState.activity, fileViewerViewModel, customFrameLayout))
         customFrameLayout.frameLayout.setOnLongClickListener(DirectoryOrFileLongClickListener(SessionState.activity, fileViewerViewModel, customFrameLayout))
@@ -50,7 +56,13 @@ class FileViewerObserver(arraySize: Int, fileViewerViewModel: FileViewerViewMode
     }
 
     fun addChosenCustomFrameLayout(file: File) {
-        val customFrameLayout = CustomFrameLayout(SessionState.activity, ScreenDimension(SessionState.activity), file, file.isFile, file.name)
+        val customFrameLayout = CustomFrameLayout(
+                SessionState.activity,
+//                ScreenDimension(SessionState.activity),
+                file,
+                file.isFile,
+                file.name
+        )
         chosenCustomFrameLayouts.add(customFrameLayout)
         customFrameLayout.isChosen = true
         customFrameLayout.frameLayout.setOnClickListener(DirectoryOrFileOnClickListener(SessionState.activity, fileViewerViewModel, customFrameLayout))
@@ -89,7 +101,13 @@ class FileViewerObserver(arraySize: Int, fileViewerViewModel: FileViewerViewMode
                     continue@mainLoop
                 }
             }
-            addViewToMainLinearLayout(index, CustomFrameLayout(SessionState.activity, screenDimension, file, file.isFile, file.name))
+            addViewToMainLinearLayout(index, CustomFrameLayout(
+                    SessionState.activity,
+//                    screenDimension,
+                    file,
+                    file.isFile,
+                    file.name
+            ))
         }
     }
 

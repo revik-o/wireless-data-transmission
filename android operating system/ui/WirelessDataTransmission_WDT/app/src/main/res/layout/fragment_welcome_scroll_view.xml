@@ -72,7 +72,7 @@
                     android:rotation="40"
                     app:srcCompat="@drawable/ic_arrows"
                     app:tint="@color/blue_a3d0e7"
-                    tools:ignore="VectorDrawableCompat" />
+                    tools:ignore="RtlHardcoded,VectorDrawableCompat" />
 
                 <TextView
                     android:id="@+id/welcomeActivitySendDataFromGoogleDriveTextView"
@@ -134,13 +134,14 @@
         app:layout_constraintTop_toTopOf="parent">
 
         <ImageView
-            android:id="@+id/welcomeActivityAppBarSideMenu"
+            android:id="@+id/welcomeActivityAppBarSettingsMenu"
             android:layout_width="40dp"
             android:layout_height="40dp"
-            android:layout_marginStart="10dp"
+            android:layout_gravity="right"
+            android:layout_marginEnd="10dp"
             android:layout_marginTop="10dp"
-            app:srcCompat="@drawable/ic_baseline_menu_24"
+            app:srcCompat="@drawable/ic_baseline_settings_24"
             android:background="?selectableItemBackgroundBorderless"
-            tools:ignore="VectorDrawableCompat" />
+            tools:ignore="ContentDescription,RtlHardcoded,VectorDrawableCompat" />
     </FrameLayout>
 </androidx.constraintlayout.widget.ConstraintLayout>

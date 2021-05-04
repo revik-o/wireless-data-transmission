@@ -41,9 +41,19 @@ object Method {
     }
 
     @RequiresApi(Build.VERSION_CODES.R)
-    fun fillMainLinearLayoutForFileViewerFragment(activity: Activity, screenDimension: ScreenDimension, fileViewerViewModel: FileViewerViewModel, linearLayout: ViewGroup) {
+    fun fillMainLinearLayoutForFileViewerFragment(
+            activity: Activity,
+//            screenDimension: ScreenDimension,
+            fileViewerViewModel: FileViewerViewModel,
+            linearLayout: ViewGroup
+    ) {
         if (Constant.mainExternalStorageDirectory != null) {
-            val mainDirectory = CustomFrameLayout(activity, screenDimension, Constant.mainExternalStorageDirectory!!, false, Build.MODEL)
+            val mainDirectory = CustomFrameLayout(
+                    activity,
+//                    screenDimension,
+                    Constant.mainExternalStorageDirectory!!,
+                    false,
+                    Build.MODEL)
             mainDirectory.frameLayout.setOnClickListener(DirectoryOrFileOnClickListener(activity, fileViewerViewModel, mainDirectory))
             linearLayout.removeAllViews()
             addInLinearLayoutNewSpace(activity, linearLayout, Constant.specialSpace)
@@ -54,6 +64,11 @@ object Method {
                 activity.finish()
             }
         }
+    }
+
+    fun cleanArrayOfFiles() {
+        if (SessionState.choosenFiles.size != 0)
+            SessionState.choosenFiles.clear()
     }
 
 }

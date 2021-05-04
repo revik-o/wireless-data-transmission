@@ -5,7 +5,6 @@ import android.widget.LinearLayout
 import androidx.annotation.RequiresApi
 import ua.edu.onaft.wirelessdatatransmission_wdt.Common.Constant
 import ua.edu.onaft.wirelessdatatransmission_wdt.Common.Method
-import ua.edu.onaft.wirelessdatatransmission_wdt.Common.ScreenDimension
 import ua.edu.onaft.wirelessdatatransmission_wdt.Common.SessionState
 import ua.edu.onaft.wirelessdatatransmission_wdt.Observer.FileViewerObserver
 import java.io.File
@@ -33,12 +32,12 @@ class FileViewerViewModel(arraySize: Int) {
     }
 
     fun addChosenFile(file: File) {
-        SessionState.files.add(file)
+        SessionState.choosenFiles.add(file)
         fileViewerObserver.addChosenCustomFrameLayout(file)
     }
 
     fun removeChosenFile(file: File) {
-        SessionState.files.remove(file)
+        SessionState.choosenFiles.remove(file)
         fileViewerObserver.removeChosenCustomFrameLayout(file)
     }
 
@@ -56,10 +55,18 @@ class FileViewerViewModel(arraySize: Int) {
             if (!inMainExternalStorage) open(currentFile.parentFile!!)
             else {
                 inMainExternalStorage = false
-                Method.fillMainLinearLayoutForFileViewerFragment(SessionState.activity, ScreenDimension(SessionState.activity), this, mainLinearLayout!!)
+                Method.fillMainLinearLayoutForFileViewerFragment(
+                        SessionState.activity,
+//                        ScreenDimension(SessionState.activity),
+                        this,
+                        mainLinearLayout!!
+                )
             }
             true
-        } else false
+        } else {
+            SessionState.choosenFiles.clear()
+            false
+        }
     }
 
 }

@@ -9,6 +9,8 @@ object SessionState {
 
     lateinit var activity: Activity
 
-    val files = ArrayList<File>()
+    val choosenFiles = ArrayList<File>()
+
+    var sendType = 0
 
 }

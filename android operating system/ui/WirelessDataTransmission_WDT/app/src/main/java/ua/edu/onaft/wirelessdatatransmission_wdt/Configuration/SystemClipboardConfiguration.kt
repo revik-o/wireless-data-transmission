@@ -14,6 +14,7 @@ class SystemClipboardConfiguration: ISystemClipboard {
         )
     }
 
-    override fun getContent(): Any? = (SessionState.activity.getSystemService(Context.CLIPBOARD_SERVICE) as ClipboardManager).primaryClip?.getItemAt(0)?.text
+    override fun getContent(): Any? =
+            (SessionState.activity.getSystemService(Context.CLIPBOARD_SERVICE) as ClipboardManager).primaryClip?.getItemAt(0)?.text
 
 }

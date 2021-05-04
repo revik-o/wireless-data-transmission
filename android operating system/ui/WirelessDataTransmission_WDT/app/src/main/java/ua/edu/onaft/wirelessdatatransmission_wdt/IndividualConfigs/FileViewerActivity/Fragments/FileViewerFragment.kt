@@ -38,14 +38,14 @@ class FileViewerFragment(activity: Activity, fileViewerViewModel: FileViewerView
 
     @RequiresApi(Build.VERSION_CODES.R)
     override fun onStart() {
-        val screenDimension = ScreenDimension(activity)
-        val height = screenDimension.height
-        val width = screenDimension.width
+//        val screenDimension = ScreenDimension(activity)
+//        val height = screenDimension.height
+//        val width = screenDimension.width
 
-        frameLayoutAppBar.layoutParams.height = (height / 14.55).toInt()
-        backArrowButton.layoutParams.height = (frameLayoutAppBar.layoutParams.height / 1.375).toInt()
-        backArrowButton.layoutParams.width = backArrowButton.layoutParams.height
-        (backArrowButton.layoutParams as FrameLayout.LayoutParams).updateMargins(left = width / 45, bottom = frameLayoutAppBar.layoutParams.height / 11)
+//        frameLayoutAppBar.layoutParams.height = (height / 14.55).toInt()
+//        backArrowButton.layoutParams.height = (frameLayoutAppBar.layoutParams.height / 1.375).toInt()
+//        backArrowButton.layoutParams.width = backArrowButton.layoutParams.height
+//        (backArrowButton.layoutParams as FrameLayout.LayoutParams).updateMargins(left = width / 45, bottom = frameLayoutAppBar.layoutParams.height / 11)
 
 //        Constant.specialSpace = frameLayoutAppBar.layoutParams.height * 2
 
@@ -55,12 +55,17 @@ class FileViewerFragment(activity: Activity, fileViewerViewModel: FileViewerView
 //        (mainLinearLayout as LinearLayout).orientation = LinearLayout.VERTICAL
 //        mainLinearLayout.addView(space)
 
-        scrollView.removeAllViews()
+//        scrollView.removeAllViews()
         scrollView.addView(mainLinearLayout)
 
         backArrowButton.setOnClickListener(BackArrowButtonOnClickListener(activity))
 
-        Method.fillMainLinearLayoutForFileViewerFragment(activity, screenDimension, fileViewerViewModel, mainLinearLayout)
+        Method.fillMainLinearLayoutForFileViewerFragment(
+                activity,
+//                screenDimension,
+                fileViewerViewModel,
+                mainLinearLayout
+        )
         super.onStart()
     }
 

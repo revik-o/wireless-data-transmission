@@ -18,7 +18,7 @@ class DefaultApplicationConfig {
 
     init {
         /**
-         *
+         * Config custom classes
          */
         AppConfig.AlertInterface.errorIMessage = ErrorMessageConfiguration()
         AppConfig.AlertInterface.iLoadAlert = LoadAlertConfiguration().javaClass
@@ -36,7 +36,7 @@ class DefaultApplicationConfig {
             }
         }.start()
         /**
-         *
+         * Config default classes
          */
         AppConfig.Action.SendTypeInterface.iActionForSendType = ActionForSendType
         AppConfig.DataBase.ModelDAOInterface.iDeviceModelDAO = DeviceModelDAO(AppConfig.DataBase.WorkWithDataBaseInterface.iWorkingWithDataBase)
@@ -44,7 +44,7 @@ class DefaultApplicationConfig {
         AppConfig.WorkingWithClientInterface.iWorkingWithClient = StartForWorkingWithClient()
         AppConfig.ServerControllInterface.iServer = Server()
         /**
-         *
+         * Start WDT Components
          */
         AppConfig.IPWorkInterface.IPV4.iIP.getListOfIP()
         AppConfig.ServerControllInterface.iServer.startServerSocket()

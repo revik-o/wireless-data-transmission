@@ -9,6 +9,7 @@
     <string name="list_of_selected_files">List of selected files</string>
     <string name="choose_device">Choose device</string>
     <string name="cancel">Cancel</string>
+    <string name="device_name">Device name</string>
 
     <string name="navigation_drawer_open">Open navigation drawer</string>
     <string name="navigation_drawer_close">Close navigation drawer</string>

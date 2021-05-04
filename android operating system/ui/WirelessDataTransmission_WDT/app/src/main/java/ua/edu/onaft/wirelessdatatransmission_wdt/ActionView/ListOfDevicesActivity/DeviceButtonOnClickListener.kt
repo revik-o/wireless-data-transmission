@@ -11,7 +11,7 @@ class DeviceButtonOnClickListener(socket: Socket): View.OnClickListener {
 
     override fun onClick(v: View?) {
         var sendType = 0
-        for (file in SessionState.files) {
+        for (file in SessionState.choosenFiles) {
             if (file.isDirectory) {
                 sendType = 2
                 break
@@ -20,11 +20,11 @@ class DeviceButtonOnClickListener(socket: Socket): View.OnClickListener {
         }
         if (sendType == 1) {
             Thread {
-                AppConfig.Action.SendTypeInterface.iActionForSendType.clientActionForSendType1(socket, SessionState.files)
+                AppConfig.Action.SendTypeInterface.iActionForSendType.clientActionForSendType1(socket, SessionState.choosenFiles)
             }.start()
         } else if (sendType == 2) {
             Thread {
-                AppConfig.Action.SendTypeInterface.iActionForSendType.clientActionForSendType2(socket, SessionState.files)
+                AppConfig.Action.SendTypeInterface.iActionForSendType.clientActionForSendType2(socket, SessionState.choosenFiles)
             }.start()
         }
     }

@@ -10,6 +10,7 @@ import androidx.drawerlayout.widget.DrawerLayout
 
 import ua.edu.onaft.wirelessdatatransmission_wdt.R
 
+@Deprecated("Catted out side menu")
 class SideMenuButtonClickListener(activity: Activity, drawerLayout: DrawerLayout): View.OnClickListener {
 
     val activity: Activity = activity

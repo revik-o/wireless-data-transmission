@@ -12,6 +12,8 @@ import sample.Platform.RealizeAlertInterface;
 import com.WDTComponents.StartApplicationConfigs.DefaultStartApplicationConfigs;
 
 import java.io.File;
+import java.text.DateFormat;
+import java.util.Date;
 
 public class Main extends Application {
 

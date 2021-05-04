@@ -108,6 +108,9 @@ object AppConfig {
 
 }
 
+/**
+ *
+ */
 object TypeDeviceENUM {
 
     val PHONE = "PHONE".intern()
