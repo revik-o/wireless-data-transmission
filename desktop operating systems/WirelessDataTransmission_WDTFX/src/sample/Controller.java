@@ -1,12 +1,6 @@
 package sample;
 
-import java.io.File;
-import java.io.IOException;
-import java.net.URL;
-import java.util.ResourceBundle;
-import java.util.Set;
-import java.util.TreeSet;
-
+import javafx.application.Platform;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
@@ -18,9 +12,15 @@ import javafx.scene.layout.AnchorPane;
 import javafx.scene.text.Text;
 import javafx.stage.Stage;
 
+import java.io.File;
+import java.io.IOException;
+import java.net.URL;
+import java.util.ArrayList;
+import java.util.ResourceBundle;
+
 public class Controller {
 
-    private Set<File> fileSet;
+    private ArrayList<File> fileSet;
 
     @FXML
     private ResourceBundle resources;
@@ -36,7 +36,7 @@ public class Controller {
         fileSet.clear();
         drag_file.getChildren().clear();
         for (File file:
-             event.getDragboard().getFiles()) {
+                event.getDragboard().getFiles()) {
             fileSet.add(file);
             Text text = new Text(file.getAbsolutePath());
             text.setLayoutX(30);
@@ -51,14 +51,21 @@ public class Controller {
     }
 
     @FXML
-    void ScanDevices(ActionEvent event) throws IOException {
-        FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("scanDevise.fxml"));
-        Stage stage = new Stage();
-        fxmlLoader.setController(new ScanDeviseController(stage));
-        Parent root = fxmlLoader.load();
-        stage.setTitle("Scan Devices");
-        stage.setScene(new Scene(root));
-        stage.show();
+    void ScanDevices(ActionEvent event) {
+        Platform.runLater(() -> {
+            FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("scanDevise.fxml"));
+            Stage stage = new Stage();
+            fxmlLoader.setController(new ScanDeviseController(stage));
+            Parent root = null;
+            try {
+                root = fxmlLoader.load();
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+            stage.setTitle("Scan Devices");
+            stage.setScene(new Scene(root));
+            stage.show();
+        });
     }
 
     @FXML
@@ -95,7 +102,7 @@ public class Controller {
     void initialize() {
 //        assert scan_devices != null : "fx:id=\"scan_devices\" was not injected: check your FXML file 'sample.fxml'.";
         assert drag_file != null : "fx:id=\"drag_file\" was not injected: check your FXML file 'sample.fxml'.";
-        fileSet = new TreeSet<>();
+        fileSet = new ArrayList<>();
     }
 
 }

@@ -2,12 +2,13 @@ package com.WDTComponents.WorkingWithDevices
 
 import com.WDTComponents.AppConfig
 import com.WDTComponents.AppOption
-import com.WDTComponents.DelegateMethods.IDelegateMethod
 import com.WDTComponents.DelegateMethods.IDelegateMethodIntegerArg
 import com.WDTComponents.DelegateMethods.IDelegateMethodSocketAction
 import com.WDTComponents.WorkingWithData.DataTransfer
 import java.net.InetAddress
 import java.net.InetSocketAddress
+import java.util.concurrent.locks.ReentrantLock
+import kotlin.concurrent.withLock
 
 /**
  *
@@ -31,24 +32,32 @@ class ScanDevicesIPVersion4: IScanDevices {
         this.initMethod(actionMethodForFindDevice, actionMethodForTransferPercent)
     }
 
-    constructor(timeOut: Int, actionMethodForFindDevice: IDelegateMethodSocketAction, actionMethodForTransferPercent: IDelegateMethodIntegerArg) {
-        this.timeOut = timeOut
-        this.initMethod(actionMethodForFindDevice, actionMethodForTransferPercent)
-    }
+//    constructor(timeOut: Int, actionMethodForFindDevice: IDelegateMethodSocketAction, actionMethodForTransferPercent: IDelegateMethodIntegerArg) {
+//        this.timeOut = timeOut
+//        this.initMethod(actionMethodForFindDevice, actionMethodForTransferPercent)
+//    }
 
     override fun startScanDevices() {
         AppConfig.IPWorkInterface.IPV4.iIP.getEnumerableListOfIP().forEach {
-            AppConfig.DataBase.ModelDAOInterface.iDeviceModelDAO.selectWhereIPLike(it).forEach { DataTransfer.sendDataFromClient(InetSocketAddress(it[3], AppOption.SOCKET_PORT), 0, actionMethodForFindDevice, localDeviceIPAndRepeatableIPsList) }
-            val numberOfProcessorCores = Runtime.getRuntime().availableProcessors() * 2
-            var length = 255
-            var sum = 0.0
-            for (core in 0 until numberOfProcessorCores) {
-                val absoluteValueOfLength: Int = length / (numberOfProcessorCores - (core - 1))
-                val endScanPoint: Int = length - absoluteValueOfLength
-                val startScanPoint: Int = endScanPoint - absoluteValueOfLength
-                length -= absoluteValueOfLength
-                AppConfig.ThreadType.iUsualThread.execute(object : IDelegateMethod {
-                    override fun voidMethod() {
+            val lock = ReentrantLock()
+            val condition = lock.newCondition()
+            Thread {
+                lock.withLock {
+                    AppConfig.DataBase.ModelDAOInterface.iDeviceModelDAO.selectWhereIPLike(it).forEach { com.WDTComponents.WorkingWithData.DataTransfer.sendDataFromClient(InetSocketAddress(it[3], com.WDTComponents.AppOption.SOCKET_PORT), 0, actionMethodForFindDevice, localDeviceIPAndRepeatableIPsList) }
+                    condition.signal()
+                }
+            }.start()
+            lock.withLock {
+                condition.await()
+                val numberOfProcessorCores = Runtime.getRuntime().availableProcessors() * 2
+                var length = 255
+                var sum = 0.0
+                for (core in 0 until numberOfProcessorCores) {
+                    val absoluteValueOfLength: Int = length / (numberOfProcessorCores - (core - 1))
+                    val endScanPoint: Int = length - absoluteValueOfLength
+                    val startScanPoint: Int = endScanPoint - absoluteValueOfLength
+                    length -= absoluteValueOfLength
+                    Thread {
                         for (i in startScanPoint..endScanPoint) {
                             if (isEnumeration) {
                                 val temporaryIP: String = it + i
@@ -60,14 +69,13 @@ class ScanDevicesIPVersion4: IScanDevices {
                                             break
                                         }
                                     }
-                                    checkIP = true /////////////////////////////////// <____________________________
                                     if (checkIP) {
                                         println("Find IP: $temporaryIP")
                                         DataTransfer.sendDataFromClient(
-                                            InetSocketAddress(
-                                                temporaryIP,
-                                                AppOption.SOCKET_PORT
-                                            ), 0, actionMethodForFindDevice
+                                                InetSocketAddress(
+                                                        temporaryIP,
+                                                        AppOption.SOCKET_PORT
+                                                ), 0, actionMethodForFindDevice
                                         )
                                     }
                                 }
@@ -76,8 +84,8 @@ class ScanDevicesIPVersion4: IScanDevices {
                             } else break
                         }
                         actionMethodForTransferPercent.voidMethod(100)
-                    }
-                })
+                    }.start()
+                }
             }
         }
     }

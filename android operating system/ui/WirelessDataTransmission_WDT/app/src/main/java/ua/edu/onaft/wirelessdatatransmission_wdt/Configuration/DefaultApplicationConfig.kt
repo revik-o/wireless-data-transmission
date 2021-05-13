@@ -10,9 +10,7 @@ import com.WDTComponents.ServerControll.Server
 import com.WDTComponents.TypeDeviceENUM
 import com.WDTComponents.WorkingWithClient.StartForWorkingWithClient
 import ua.edu.onaft.wirelessdatatransmission_wdt.Common.Constant
-import ua.edu.onaft.wirelessdatatransmission_wdt.Common.SessionState
 import java.io.File
-import java.net.InetAddress
 
 class DefaultApplicationConfig {
 
@@ -31,9 +29,9 @@ class DefaultApplicationConfig {
             AppOption.LOCAL_DEVICE_NAME = "${Build.BRAND} ${Build.MODEL}".intern()
             if (Constant.mainExternalStorageDirectory != null) {
                 AppOption.DIRECTORY_FOR_DOWNLOAD_FILES = File(Constant.mainExternalStorageDirectory!!.absolutePath + "/Download/Wireless Data Transmission")
-            } else SessionState.activity.runOnUiThread {
-                SessionState.activity.finish()
-            }
+            } /*else SessionState.context.runOnUiThread {
+                SessionState.context.finish()
+            }*/
         }.start()
         /**
          * Config default classes
@@ -47,7 +45,7 @@ class DefaultApplicationConfig {
          * Start WDT Components
          */
         AppConfig.IPWorkInterface.IPV4.iIP.getListOfIP()
-        AppConfig.ServerControllInterface.iServer.startServerSocket()
+        //AppConfig.ServerControllInterface.iServer.startServerSocket()
     }
 
 }

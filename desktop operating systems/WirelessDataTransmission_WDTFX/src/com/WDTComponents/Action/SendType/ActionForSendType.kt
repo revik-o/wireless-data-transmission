@@ -29,7 +29,13 @@ object ActionForSendType: IActionForSendType {
         }
     }
 
-    override fun clientActionForSendType1(socket: Socket, fileSet: Set<File>) {
+    private fun setPercentageOfDownloadForLoadAlert(iLoadAlert: ILoadAlert): IDelegateMethodDoubleArg {
+        return object : IDelegateMethodDoubleArg {
+            override fun voidMethod(double: Double) { iLoadAlert.setPercentageOfDownload(double)}
+        }
+    }
+
+    override fun clientActionForSendType1(socket: Socket, files: List<File>) {
         val internetProtocolAddress: String = socket.inetAddress.toString().substring(1)
         DataTransfer.sendDataFromClient(
             InetSocketAddress(internetProtocolAddress, socket.port),
@@ -44,10 +50,16 @@ object ActionForSendType: IActionForSendType {
                 ) {
                     AppConfig.DataBase.ModelDAOInterface.iDeviceModelDAO.addNewDeviceToDatabaseWithUsingFilter(internetProtocolAddress, nameDevice, typeDevice)
                     try {
-                        dataOutputStream.write(fileSet.size)
+                        dataOutputStream.write(files.size)
                         val iLoadAlert: ILoadAlert = AppConfig.AlertInterface.iLoadAlert.getConstructor().newInstance()
                         iLoadAlert.showAlert()
-                        fileSet.forEach { file -> DataTransferFromFile.sendDataFromFile(file, dataOutputStream, dataInputStream, setTextForLoadAlert(iLoadAlert))}
+                        files.forEach { file -> DataTransferFromFile.sendDataFromFile(
+                                file,
+                                dataOutputStream,
+                                dataInputStream,
+                                setTextForLoadAlert(iLoadAlert),
+                                setPercentageOfDownloadForLoadAlert(iLoadAlert)
+                        )}
                         iLoadAlert.closeAlert()
                     }
                     catch (E: IOException) { E.printStackTrace() }
@@ -56,7 +68,7 @@ object ActionForSendType: IActionForSendType {
         )
     }
 
-    override fun clientActionForSendType2(socket: Socket, fileSet: Set<File>) {
+    override fun clientActionForSendType2(socket: Socket, files: List<File>) {
         val internetProtocolAddress: String = socket.inetAddress.toString().substring(1)
         DataTransfer.sendDataFromClient(
             InetSocketAddress(internetProtocolAddress, socket.port),
@@ -71,20 +83,33 @@ object ActionForSendType: IActionForSendType {
                 ) {
                     AppConfig.DataBase.ModelDAOInterface.iDeviceModelDAO.addNewDeviceToDatabaseWithUsingFilter(internetProtocolAddress, nameDevice, typeDevice)
                     try {
-                        dataOutputStream.write(fileSet.size)
+                        dataOutputStream.write(files.size)
                         val iLoadAlert: ILoadAlert = AppConfig.AlertInterface.iLoadAlert.getConstructor().newInstance()
                         iLoadAlert.showAlert()
-                        fileSet.forEach { file ->
+                        files.forEach { file ->
                             run {
                                 if (file.isDirectory) {
                                     try {
                                         dataOutputStream.writeBoolean(true)
-                                        DataTransferFromDirectory.sendDataFromDirectory(file, file, dataOutputStream, dataInputStream, setTextForLoadAlert(iLoadAlert))
+                                        DataTransferFromDirectory.sendDataFromDirectory(
+                                                file,
+                                                file,
+                                                dataOutputStream,
+                                                dataInputStream,
+                                                setTextForLoadAlert(iLoadAlert),
+                                                setPercentageOfDownloadForLoadAlert(iLoadAlert)
+                                        )
                                     } catch (E: IOException) { println("Failed to send directory: ${file.name}") }
                                 } else {
                                     try {
                                         dataOutputStream.writeBoolean(false)
-                                        DataTransferFromFile.sendDataFromFile(file, dataOutputStream, dataInputStream, setTextForLoadAlert(iLoadAlert))
+                                        DataTransferFromFile.sendDataFromFile(
+                                                file,
+                                                dataOutputStream,
+                                                dataInputStream,
+                                                setTextForLoadAlert(iLoadAlert),
+                                                setPercentageOfDownloadForLoadAlert(iLoadAlert)
+                                        )
                                     } catch (E: IOException) { println("Failed to send file: ${file.name}") }
                                 }
                             }
@@ -113,6 +138,35 @@ object ActionForSendType: IActionForSendType {
                     AppConfig.DataBase.ModelDAOInterface.iDeviceModelDAO.addNewDeviceToDatabaseWithUsingFilter(internetProtocolAddress, nameDevice, typeDevice)
                     try {
                         AppConfig.SystemClipboard.iSystemClipboard.setContent(dataInputStream.readUTF())
+                    }
+                    catch (E: Exception) {
+                        E.printStackTrace()
+                    }
+                }
+            }
+        )
+    }
+
+    override fun clientActionForSendType4(socket: Socket) {
+        val internetProtocolAddress: String = socket.inetAddress.toString().substring(1)
+        DataTransfer.sendDataFromClient(
+            InetSocketAddress(internetProtocolAddress, socket.port),
+            4,
+            object : IDelegateMethodSocketAction {
+                override fun voidMethod(
+                    nameDevice: String,
+                    typeDevice: String,
+                    dataInputStream: DataInputStream,
+                    dataOutputStream: DataOutputStream,
+                    socket: Socket
+                ) {
+                    AppConfig.DataBase.ModelDAOInterface
+                        .iDeviceModelDAO
+                        .addNewDeviceToDatabaseWithUsingFilter(
+                            internetProtocolAddress, nameDevice, typeDevice
+                        )
+                    try {
+                        dataOutputStream.writeUTF(AppConfig.SystemClipboard.iSystemClipboard.getContent())
                     }
                     catch (E: Exception) {
                         E.printStackTrace()
@@ -198,7 +252,6 @@ object ActionForSendType: IActionForSendType {
                                 )
                         }
                         iLoadAlert.closeAlert()
-//                        AppConfig.AlertInterface.iMessage.showMessage("Client is release")
                     }
                 },
                 endMethod
@@ -208,7 +261,12 @@ object ActionForSendType: IActionForSendType {
     }
 
     override fun serverActionForSendType3(dataOutputStream: DataOutputStream, endMethod: IDelegateMethod) {
-        dataOutputStream.writeUTF(AppConfig.SystemClipboard.iSystemClipboard.getContent() as String)
+        dataOutputStream.writeUTF(AppConfig.SystemClipboard.iSystemClipboard.getContent())
+        endMethod.voidMethod()
+    }
+
+    override fun serverActionForSendType4(dataInputStream: DataInputStream, endMethod: IDelegateMethod) {
+        AppConfig.SystemClipboard.iSystemClipboard.setContent(dataInputStream.readUTF())
         endMethod.voidMethod()
     }
 

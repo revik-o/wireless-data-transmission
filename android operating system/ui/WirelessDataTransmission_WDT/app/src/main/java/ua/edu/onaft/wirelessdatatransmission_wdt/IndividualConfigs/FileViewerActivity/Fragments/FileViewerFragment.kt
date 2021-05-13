@@ -9,18 +9,10 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.FrameLayout
 import android.widget.LinearLayout
-import android.widget.ScrollView
-import android.widget.Space
 import androidx.annotation.RequiresApi
-import androidx.core.view.updateMargins
 import androidx.fragment.app.Fragment
-import ua.edu.onaft.wirelessdatatransmission_wdt.ActionView.FileViewerActivity.ActionFragment.DirectoryOrFileLongClickListener
-import ua.edu.onaft.wirelessdatatransmission_wdt.ActionView.FileViewerActivity.ActionFragment.DirectoryOrFileOnClickListener
 import ua.edu.onaft.wirelessdatatransmission_wdt.Common.Action.BackArrowButtonOnClickListener
-import ua.edu.onaft.wirelessdatatransmission_wdt.Common.Constant
-import ua.edu.onaft.wirelessdatatransmission_wdt.Common.CustomFrameLayout
 import ua.edu.onaft.wirelessdatatransmission_wdt.Common.Method
-import ua.edu.onaft.wirelessdatatransmission_wdt.Common.ScreenDimension
 import ua.edu.onaft.wirelessdatatransmission_wdt.R
 import ua.edu.onaft.wirelessdatatransmission_wdt.ViewModel.FileViewerViewModel
 
@@ -36,7 +28,7 @@ class FileViewerFragment(activity: Activity, fileViewerViewModel: FileViewerView
     private var mainLinearLayout: ViewGroup = linearLayout
 //    private lateinit var space: View
 
-    @RequiresApi(Build.VERSION_CODES.R)
+    @RequiresApi(Build.VERSION_CODES.N)
     override fun onStart() {
 //        val screenDimension = ScreenDimension(activity)
 //        val height = screenDimension.height
@@ -56,7 +48,6 @@ class FileViewerFragment(activity: Activity, fileViewerViewModel: FileViewerView
 //        mainLinearLayout.addView(space)
 
 //        scrollView.removeAllViews()
-        scrollView.addView(mainLinearLayout)
 
         backArrowButton.setOnClickListener(BackArrowButtonOnClickListener(activity))
 
@@ -75,6 +66,7 @@ class FileViewerFragment(activity: Activity, fileViewerViewModel: FileViewerView
         frameLayoutAppBar = constraintLayout.findViewById(R.id.fileViewerFragmentFrameLayoutAppBar)
         backArrowButton = constraintLayout.findViewById(R.id.fileViewerFragmentBackArrowButton)
         scrollView = constraintLayout.findViewById(R.id.fileViewerFragmentMainScrollView)
+        scrollView.addView(mainLinearLayout)
 //        mainLinearLayout = constraintLayout.findViewById(R.id.fileViewerFragmentMainLinearLayout)
 //        space = constraintLayout.findViewById(R.id.fileViewerFragmentSpace)
 

@@ -1,7 +1,9 @@
 package ua.edu.onaft.wirelessdatatransmission_wdt.Observer
 
 import android.annotation.SuppressLint
+import android.app.Activity
 import android.view.ViewGroup
+import android.view.animation.AnimationUtils
 import android.widget.LinearLayout
 import android.widget.Space
 import ua.edu.onaft.wirelessdatatransmission_wdt.ActionView.FileViewerActivity.ActionFragment.DirectoryOrFileLongClickListener
@@ -10,11 +12,13 @@ import ua.edu.onaft.wirelessdatatransmission_wdt.Common.Constant
 import ua.edu.onaft.wirelessdatatransmission_wdt.Common.CustomFrameLayout
 import ua.edu.onaft.wirelessdatatransmission_wdt.Common.ScreenDimension
 import ua.edu.onaft.wirelessdatatransmission_wdt.Common.SessionState
+import ua.edu.onaft.wirelessdatatransmission_wdt.R
 import ua.edu.onaft.wirelessdatatransmission_wdt.ViewModel.FileViewerViewModel
 import java.io.File
 
-class FileViewerObserver(arraySize: Int, fileViewerViewModel: FileViewerViewModel) {
+class FileViewerObserver(activity: Activity, arraySize: Int, fileViewerViewModel: FileViewerViewModel) {
 
+    private val activity: Activity = activity
     private val fileViewerViewModel: FileViewerViewModel = fileViewerViewModel
     private val linearLayouts = Array<LinearLayout?>(arraySize) { null }
     private var chosenCustomFrameLayouts = ArrayList<CustomFrameLayout>()
@@ -23,15 +27,16 @@ class FileViewerObserver(arraySize: Int, fileViewerViewModel: FileViewerViewMode
 
     private fun addViewToMainLinearLayout(indexOfCurrentArray: Int, customFrameLayoutArg: CustomFrameLayout) {
         val customFrameLayout = CustomFrameLayout(
-                SessionState.activity,
+            activity,
 //                ScreenDimension(SessionState.activity),
-                customFrameLayoutArg.file,
-                customFrameLayoutArg.isFile,
-                customFrameLayoutArg.text
+            customFrameLayoutArg.file,
+            customFrameLayoutArg.isFile,
+            customFrameLayoutArg.text
         )
+        customFrameLayout.frameLayout.startAnimation(AnimationUtils.loadAnimation(SessionState.context, R.anim.custom_button_open_animation))
         customFrameLayout.isChosen = customFrameLayoutArg.isChosen
-        customFrameLayout.frameLayout.setOnClickListener(DirectoryOrFileOnClickListener(SessionState.activity, fileViewerViewModel, customFrameLayout))
-        customFrameLayout.frameLayout.setOnLongClickListener(DirectoryOrFileLongClickListener(SessionState.activity, fileViewerViewModel, customFrameLayout))
+        customFrameLayout.frameLayout.setOnClickListener(DirectoryOrFileOnClickListener(activity, fileViewerViewModel, customFrameLayout))
+        customFrameLayout.frameLayout.setOnLongClickListener(DirectoryOrFileLongClickListener(activity, fileViewerViewModel, customFrameLayout))
         currentCustomFrameLayouts[indexOfCurrentArray] = customFrameLayout
         linearLayouts[0]?.addView(customFrameLayout.frameLayout)
     }
@@ -41,7 +46,7 @@ class FileViewerObserver(arraySize: Int, fileViewerViewModel: FileViewerViewMode
         val spaceHeight: Int = spaceHeights[idLinearLayout]
         if (linearLayout != null) {
             linearLayout.removeAllViews()
-            val newSpace = Space(SessionState.activity)
+            val newSpace = Space(SessionState.context)
             newSpace.layoutParams = ViewGroup.LayoutParams(0, spaceHeight)
             linearLayout.addView(newSpace)
         }
@@ -57,15 +62,15 @@ class FileViewerObserver(arraySize: Int, fileViewerViewModel: FileViewerViewMode
 
     fun addChosenCustomFrameLayout(file: File) {
         val customFrameLayout = CustomFrameLayout(
-                SessionState.activity,
+            activity,
 //                ScreenDimension(SessionState.activity),
-                file,
-                file.isFile,
-                file.name
+            file,
+            file.isFile,
+            file.name
         )
         chosenCustomFrameLayouts.add(customFrameLayout)
         customFrameLayout.isChosen = true
-        customFrameLayout.frameLayout.setOnClickListener(DirectoryOrFileOnClickListener(SessionState.activity, fileViewerViewModel, customFrameLayout))
+        customFrameLayout.frameLayout.setOnClickListener(DirectoryOrFileOnClickListener(activity, fileViewerViewModel, customFrameLayout))
         linearLayouts[1]?.addView(customFrameLayout.frameLayout)
     }
 
@@ -91,7 +96,7 @@ class FileViewerObserver(arraySize: Int, fileViewerViewModel: FileViewerViewMode
         /**
          * TODO???
          */
-        val screenDimension = ScreenDimension(SessionState.activity)
+        val screenDimension = ScreenDimension(activity)
         removeAllAndAddSpaceToLinearLayout(0)
         mainLoop@for ((index, file) in fileArray.withIndex()) {
             for (value in tempListOfChosenCustomFrameLayouts) {
@@ -102,11 +107,11 @@ class FileViewerObserver(arraySize: Int, fileViewerViewModel: FileViewerViewMode
                 }
             }
             addViewToMainLinearLayout(index, CustomFrameLayout(
-                    SessionState.activity,
+                activity,
 //                    screenDimension,
-                    file,
-                    file.isFile,
-                    file.name
+                file,
+                file.isFile,
+                file.name
             ))
         }
     }

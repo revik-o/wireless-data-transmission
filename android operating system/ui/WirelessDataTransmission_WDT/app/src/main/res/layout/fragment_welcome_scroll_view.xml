@@ -27,6 +27,13 @@
                 android:layout_width="match_parent"
                 android:layout_height="70dp" />
 
+            <ImageView
+                android:id="@+id/imageView"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                app:srcCompat="@drawable/ic_logo"
+                tools:ignore="ContentDescription,VectorDrawableCompat" />
+
             <FrameLayout
                 android:id="@+id/welcomeActivitySendData"
                 android:layout_width="match_parent"
@@ -42,7 +49,7 @@
                     android:layout_marginEnd="-12dp"
                     android:rotation="40"
                     app:srcCompat="@drawable/ic_arrows"
-                    tools:ignore="RtlHardcoded,VectorDrawableCompat"/>
+                    tools:ignore="ContentDescription,RtlHardcoded,VectorDrawableCompat" />
 
                 <TextView
                     android:id="@+id/welcomeActivitySendDataTextView"
@@ -56,7 +63,7 @@
 
             </FrameLayout>
 
-            <FrameLayout
+            <!--<FrameLayout
                 android:id="@+id/welcomeActivitySendDataFromGoogleDrive"
                 android:layout_width="match_parent"
                 android:layout_height="135dp"
@@ -72,7 +79,7 @@
                     android:rotation="40"
                     app:srcCompat="@drawable/ic_arrows"
                     app:tint="@color/blue_a3d0e7"
-                    tools:ignore="RtlHardcoded,VectorDrawableCompat" />
+                    tools:ignore="ContentDescription,RtlHardcoded,VectorDrawableCompat" />
 
                 <TextView
                     android:id="@+id/welcomeActivitySendDataFromGoogleDriveTextView"
@@ -91,8 +98,8 @@
                     android:layout_marginStart="5dp"
                     android:layout_marginTop="95dp"
                     app:srcCompat="@drawable/ic_baseline_google_drive_24"
-                    tools:ignore="VectorDrawableCompat" />
-            </FrameLayout>
+                    tools:ignore="ContentDescription,VectorDrawableCompat" />
+            </FrameLayout>-->
 
             <FrameLayout
                 android:id="@+id/welcomeActivityGetClipboard"
@@ -128,7 +135,7 @@
         android:id="@+id/welcomeActivityAppBar"
         android:layout_width="match_parent"
         android:layout_height="55dp"
-        android:background="@drawable/gradient_for_appbar"
+        android:background="?attr/colorPrimary"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent">

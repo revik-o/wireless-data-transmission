@@ -1,17 +1,13 @@
 package ua.edu.onaft.wirelessdatatransmission_wdt
 
-import android.os.Build
 import android.os.Bundle
 import android.widget.FrameLayout
 import android.widget.ImageView
-import androidx.appcompat.app.ActionBarDrawerToggle
 import androidx.appcompat.app.AppCompatActivity
-import androidx.core.view.GravityCompat
-import androidx.core.view.updateMargins
-import ua.edu.onaft.wirelessdatatransmission_wdt.ActionView.WelcomeActivity.*
-import ua.edu.onaft.wirelessdatatransmission_wdt.Common.Constant
+import ua.edu.onaft.wirelessdatatransmission_wdt.ActionView.WelcomeActivity.GetClipboardClickListener
+import ua.edu.onaft.wirelessdatatransmission_wdt.ActionView.WelcomeActivity.SendDataClickListener
+import ua.edu.onaft.wirelessdatatransmission_wdt.ActionView.WelcomeActivity.SettingsMenuButtonOnClickListener
 import ua.edu.onaft.wirelessdatatransmission_wdt.Common.Method
-import ua.edu.onaft.wirelessdatatransmission_wdt.Common.ScreenDimension
 import ua.edu.onaft.wirelessdatatransmission_wdt.Common.SessionState
 
 class WelcomeActivity : AppCompatActivity() {
@@ -47,20 +43,14 @@ class WelcomeActivity : AppCompatActivity() {
 //        settingsMenuButton.setOnClickListener(SideMenuButtonClickListener(this, drawerLayout))
         settingsMenuButton.setOnClickListener(SettingsMenuButtonOnClickListener(this))
         sendDataFrameLayout.setOnClickListener(SendDataClickListener(this, sendDataFrameLayout))
-        sendDataFromGoogleDriveFrameLayout.setOnClickListener(SendDataFromGoogleDriveClickListener(this, sendDataFromGoogleDriveFrameLayout))
+//        sendDataFromGoogleDriveFrameLayout.setOnClickListener(SendDataFromGoogleDriveClickListener(this, sendDataFromGoogleDriveFrameLayout))
         getClipboardFrameLayout.setOnClickListener(GetClipboardClickListener(this, getClipboardFrameLayout))
 
         /**
          * adapting activity
          */
-        val screenDimension = ScreenDimension(this)
-//        var width: Int = screenDimension.width
-        var height: Int = screenDimension.height
         // appBar
 //        appBar.layoutParams.height = (height / 11.55).toInt()
-
-        Constant.usualSpace = (height / 11.55).toInt()
-        Constant.specialSpace = (Constant.usualSpace * 1.4).toInt()
 
         // sideMenuButton
 //        settingsMenuButton.layoutParams.width = (width / 12)
@@ -122,7 +112,7 @@ class WelcomeActivity : AppCompatActivity() {
 //        sendDataImageView = findViewById(R.id.welcomeActivitySendDataImageView)
 
         // Send Data From Google Drive
-        sendDataFromGoogleDriveFrameLayout = findViewById(R.id.welcomeActivitySendDataFromGoogleDrive)
+//        sendDataFromGoogleDriveFrameLayout = findViewById(R.id.welcomeActivitySendDataFromGoogleDrive)
 //        sendDataFromGoogleDriveImageView = findViewById(R.id.welcomeActivitySendDataFromGoogleDriveImageView)
 //        sendDataFromGoogleDriveImageViewGoogleDrive = findViewById(R.id.welcomeActivitySendDataFromGoogleDriveImageViewGoogleDrive)
 
@@ -136,19 +126,9 @@ class WelcomeActivity : AppCompatActivity() {
         /**
          * Update activity
          */
-        SessionState.activity = this
+        SessionState.context = this
 
         Method.cleanArrayOfFiles()
     }
-
-//    override fun onBackPressed() {
-//        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP_MR1) {
-//            if (drawerLayout.isDrawerOpen(GravityCompat.START))
-//                drawerLayout.closeDrawer(GravityCompat.START)
-//            else super.onBackPressed()
-//        }
-//        else
-//        super.onBackPressed()
-//    }
 
 }

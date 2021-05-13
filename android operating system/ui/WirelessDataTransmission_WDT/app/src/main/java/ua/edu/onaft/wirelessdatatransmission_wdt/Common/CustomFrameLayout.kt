@@ -4,25 +4,23 @@ import android.app.Activity
 import android.util.TypedValue
 import android.view.LayoutInflater
 import android.view.ViewGroup
-import android.widget.FrameLayout
 import android.widget.ImageView
 import android.widget.TextView
-
 import ua.edu.onaft.wirelessdatatransmission_wdt.R
 import java.io.File
 
 class CustomFrameLayout(
-        activity: Activity,
+    activity: Activity,
 //        screenDimension: ScreenDimension,
-        file: File,
-        isFile:
-        Boolean,
-        text: String) {
+    file: File,
+    isFile:
+    Boolean,
+    text: String) {
 
     val frameLayout: ViewGroup = LayoutInflater.from(activity).inflate(R.layout.layout_custom, null) as ViewGroup
 
     private val activity: Activity = activity
-//    private val screenDimension: ScreenDimension = screenDimension
+    //    private val screenDimension: ScreenDimension = screenDimension
     val file: File = file
     val isFile: Boolean = isFile
     val text: String = text
@@ -31,7 +29,7 @@ class CustomFrameLayout(
         set(value) {
             val typedValue = TypedValue()
             activity.runOnUiThread {
-                activity.theme.resolveAttribute(if (value) R.attr.colorSecondaryVariant else (R.attr.selectableItemBackground), typedValue, true)
+                activity.theme.resolveAttribute(if (value) R.attr.colorOnSurface else (R.attr.selectableItemBackground), typedValue, true)
                 frameLayout.setBackgroundColor(typedValue.data)
             }
             field = value

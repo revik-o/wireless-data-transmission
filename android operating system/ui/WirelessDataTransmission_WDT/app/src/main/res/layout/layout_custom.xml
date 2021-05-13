@@ -3,16 +3,15 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="wrap_content"
-    android:background="?selectableItemBackground">
-    -<ImageView
+    android:layout_height="wrap_content">
+    <ImageView
         android:id="@+id/folderImageView"
         android:layout_width="50dp"
         android:layout_height="50dp"
         android:layout_marginStart="5dp"
         app:srcCompat="@drawable/ic_baseline_folder_24"
-        app:tint="?attr/colorOnSecondary"
-        tools:ignore="VectorDrawableCompat" />
+        app:tint="?attr/colorOnBackground"
+        tools:ignore="ContentDescription,VectorDrawableCompat" />
 
     <TextView
         android:id="@+id/folderTextView"
@@ -23,7 +22,7 @@
         android:layout_marginTop="4dp"
         android:text="H9436"
         android:maxLines="1"
-        android:textColor="?attr/colorOnSecondary"
+        android:textColor="?attr/colorOnBackground"
         android:textSize="30sp"
-        tools:ignore="RtlHardcoded" />
+        tools:ignore="HardcodedText,RtlHardcoded" />
 </FrameLayout>

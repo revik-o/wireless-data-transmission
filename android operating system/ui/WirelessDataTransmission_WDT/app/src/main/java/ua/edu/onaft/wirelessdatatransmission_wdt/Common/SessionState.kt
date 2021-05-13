@@ -1,15 +1,15 @@
 package ua.edu.onaft.wirelessdatatransmission_wdt.Common
 
 import android.annotation.SuppressLint
-import android.app.Activity
+import android.content.Context
 import java.io.File
 
 @SuppressLint("StaticFieldLeak")
 object SessionState {
 
-    lateinit var activity: Activity
+    lateinit var context: Context
 
-    val choosenFiles = ArrayList<File>()
+    val chosenFiles = ArrayList<File>()
 
     var sendType = 0
 

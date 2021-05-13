@@ -15,11 +15,13 @@ interface IActionForSendType {
     /**
      *
      */
-    fun clientActionForSendType1(socket: Socket, fileSet: Set<File>)
+    fun clientActionForSendType1(socket: Socket, files: List<File>)
 
-    fun clientActionForSendType2(socket: Socket, fileSet: Set<File>)
+    fun clientActionForSendType2(socket: Socket, files: List<File>)
 
     fun clientActionForSendType3(socket: Socket)
+
+    fun clientActionForSendType4(socket: Socket)
 
     /**
      *
@@ -29,5 +31,7 @@ interface IActionForSendType {
     fun serverActionForSendType2(dataInputStream: DataInputStream, dataOutputStream: DataOutputStream, clientNameDevice: String, clientDeviceType: String, endMethod: IDelegateMethod)
 
     fun serverActionForSendType3(dataOutputStream: DataOutputStream, endMethod: IDelegateMethod)
+
+    fun serverActionForSendType4(dataInputStream: DataInputStream, endMethod: IDelegateMethod)
 
 }

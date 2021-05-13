@@ -2,11 +2,14 @@ package com.WDTComponents.ServerControll
 
 import com.WDTComponents.AppConfig
 import com.WDTComponents.AppOption
+
 import java.net.ServerSocket
 import java.util.concurrent.Semaphore
 
+@Deprecated("")
 class ServerSocketThread: Thread() {
 
+    @Deprecated("")
     object staticMethod {
         fun action() {
             val serverSocket = ServerSocket(AppOption.SOCKET_PORT)

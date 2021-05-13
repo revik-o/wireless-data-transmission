@@ -13,10 +13,15 @@ object FileData {
     /**
      *
      */
-    fun writeFile(inputStream: InputStream, outputStream: OutputStream) {
+    fun writeFile(inputStream: InputStream, outputStream: OutputStream, lengthFile: Long, iDelegateMethodDoubleArg: IDelegateMethodDoubleArg) {
         var countOfWrite: Int
         val byteArray = ByteArray(AppOption.BUFFER_SIZE_FOR_TRANSFER)
-        while (inputStream.read(byteArray).also { countOfWrite = it } > 0) outputStream.write(byteArray, 0, countOfWrite)
+        var length = 0
+        while (inputStream.read(byteArray).also { countOfWrite = it } > 0) {
+            length += countOfWrite
+            outputStream.write(byteArray, 0, countOfWrite)
+            iDelegateMethodDoubleArg.voidMethod(length.toDouble() / lengthFile)
+        }
         outputStream.flush()
     }
 

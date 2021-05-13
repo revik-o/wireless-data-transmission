@@ -18,6 +18,7 @@ object FileData {
         val byteArray = ByteArray(AppOption.BUFFER_SIZE_FOR_TRANSFER)
         var length = 0
         while (inputStream.read(byteArray).also { countOfWrite = it } > 0) {
+            length += countOfWrite
             outputStream.write(byteArray, 0, countOfWrite)
             iDelegateMethodDoubleArg.voidMethod(length.toDouble() / lengthFile)
         }

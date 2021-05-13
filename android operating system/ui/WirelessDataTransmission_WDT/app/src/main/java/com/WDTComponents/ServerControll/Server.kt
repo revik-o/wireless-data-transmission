@@ -1,5 +1,6 @@
 package com.WDTComponents.ServerControll
 
+import com.WDTComponents.AlertInterfaces.ILittleMessage
 import com.WDTComponents.AppConfig
 import com.WDTComponents.AppOption
 import java.io.BufferedInputStream
@@ -18,10 +19,16 @@ class Server: IServer {
      *
      */
     override fun startServerSocket() {
+        val littlemessage: ILittleMessage = AppConfig.AlertInterface.littleIMessage
+
         AppOption.SERVER_SOCKET_IS_ON = true
+//        AppConfig.ServerControllInterface.serverCondition =
+//            AppConfig.ServerControllInterface.serverReentrantLock.newCondition()
+//        AppConfig.ServerControllInterface.serverIsWorking = true
         Thread {
             val serverSocket = ServerSocket(AppOption.SOCKET_PORT)
-            println("Server start")
+//            littlemessage.showMessage("Server start")
+//            println("Server start")
             val semaphore = Semaphore(AppOption.MAX_COUNT_OF_CONNECT)
             while (AppOption.SERVER_SOCKET_IS_ON) {
                 semaphore.acquire()
@@ -29,7 +36,14 @@ class Server: IServer {
                 AppConfig.WorkingWithClientInterface.iWorkingWithClient.start(serverSocket.accept(), semaphore)
             }
             serverSocket.close()
-            println("Server is off")
+//            AppConfig.ServerControllInterface.serverIsWorking = false
+//            AppConfig.ServerControllInterface.serverReentrantLock.withLock {
+//                try {
+//                    AppConfig.ServerControllInterface.serverCondition.signalAll()
+//                } catch (E: Exception) {}
+//            }
+//            println("Server is off")
+            littlemessage.showMessage("Server is off")
         }.start()
     }
 
@@ -38,18 +52,26 @@ class Server: IServer {
      */
     override fun stopServerSocket() {
         AppOption.SERVER_SOCKET_IS_ON = false
-        try {
-            val socket = Socket("127.0.0.1", AppOption.SOCKET_PORT)
-            socket.getOutputStream().write(0)
+        Thread {
             try {
-                val dataInputStream = DataInputStream(BufferedInputStream(socket.getInputStream()))
-                dataInputStream.readUTF()
-                dataInputStream.readUTF()
-                dataInputStream.close()
-            } catch (e: Exception) { println("Can't accept data --is not necessary") }
-            socket.close()
-        }
-        catch (e: ConnectException) {}
+                /**
+                 * Address already in use
+                 */
+                val socket = Socket("127.0.0.1", AppOption.SOCKET_PORT)
+                socket.getOutputStream().write(0)
+                try {
+                    val dataInputStream =
+                        DataInputStream(BufferedInputStream(socket.getInputStream()))
+                    dataInputStream.readUTF()
+                    dataInputStream.readUTF()
+                    dataInputStream.close()
+                } catch (e: Exception) {
+                    println("Can't accept data --is not necessary")
+                }
+                socket.close()
+            }
+            catch (e: ConnectException) {}
+        }.start()
     }
 
 }

@@ -1,1 +1,1 @@
-java --module-path "javafx-sdk-11.0.2/lib" --add-modules javafx.controls,javafx.fxml -jar WirelessDataTransmission_WDTFX.jar
+java --module-path "javafx-sdk-16/lib" --add-modules javafx.controls,javafx.fxml,javafx.web,javafx.media,javafx.swing -jar WDTFX_jar2.jar

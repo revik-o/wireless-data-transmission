@@ -1,5 +1,6 @@
 package ua.edu.onaft.wirelessdatatransmission_wdt.ViewModel
 
+import android.app.Activity
 import android.os.Build
 import android.widget.LinearLayout
 import androidx.annotation.RequiresApi
@@ -9,9 +10,10 @@ import ua.edu.onaft.wirelessdatatransmission_wdt.Common.SessionState
 import ua.edu.onaft.wirelessdatatransmission_wdt.Observer.FileViewerObserver
 import java.io.File
 
-class FileViewerViewModel(arraySize: Int) {
+class FileViewerViewModel(activity: Activity, arraySize: Int) {
 
-    private val fileViewerObserver = FileViewerObserver(arraySize, this)
+    private val activity: Activity = activity
+    private val fileViewerObserver = FileViewerObserver(activity, arraySize, this)
     private var mainLinearLayout: LinearLayout? = null
     lateinit var currentFile: File
     var inMainExternalStorage = false
@@ -19,6 +21,7 @@ class FileViewerViewModel(arraySize: Int) {
     var onModeChoose = false
 
     private fun openDirectory(file: File) {
+        currentFile = file
         inMainExternalStorage = file == Constant.mainExternalStorageDirectory
         @Suppress("NULLABILITY_MISMATCH_BASED_ON_JAVA_ANNOTATIONS")
         fileViewerObserver.render(file.listFiles())
@@ -32,17 +35,16 @@ class FileViewerViewModel(arraySize: Int) {
     }
 
     fun addChosenFile(file: File) {
-        SessionState.choosenFiles.add(file)
+        SessionState.chosenFiles.add(file)
         fileViewerObserver.addChosenCustomFrameLayout(file)
     }
 
     fun removeChosenFile(file: File) {
-        SessionState.choosenFiles.remove(file)
+        SessionState.chosenFiles.remove(file)
         fileViewerObserver.removeChosenCustomFrameLayout(file)
     }
 
     fun open(file: File) {
-        currentFile = file
         if (file.exists()) {
             if (file.isDirectory) openDirectory(file)
             else openFile(file)
@@ -56,7 +58,7 @@ class FileViewerViewModel(arraySize: Int) {
             else {
                 inMainExternalStorage = false
                 Method.fillMainLinearLayoutForFileViewerFragment(
-                        SessionState.activity,
+                        activity,
 //                        ScreenDimension(SessionState.activity),
                         this,
                         mainLinearLayout!!
@@ -64,7 +66,7 @@ class FileViewerViewModel(arraySize: Int) {
             }
             true
         } else {
-            SessionState.choosenFiles.clear()
+            SessionState.chosenFiles.clear()
             false
         }
     }

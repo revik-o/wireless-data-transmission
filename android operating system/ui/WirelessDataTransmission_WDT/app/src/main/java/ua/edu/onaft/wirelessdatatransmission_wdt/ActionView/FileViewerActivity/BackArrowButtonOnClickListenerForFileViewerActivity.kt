@@ -9,7 +9,7 @@ class BackArrowButtonOnClickListenerForFileViewerActivity(activity: Activity): V
     private val activity: Activity = activity
 
     override fun onClick(v: View?) {
-        SessionState.choosenFiles.clear()
+        SessionState.chosenFiles.clear()
         activity.finish()
     }
 }

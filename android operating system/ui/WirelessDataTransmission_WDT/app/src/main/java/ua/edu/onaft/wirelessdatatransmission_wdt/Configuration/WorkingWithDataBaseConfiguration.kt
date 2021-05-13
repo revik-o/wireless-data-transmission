@@ -8,7 +8,7 @@ import com.WDTComponents.DataBase.FeedReaderContract
 import com.WDTComponents.DataBase.IWorkingWithDataBase
 import ua.edu.onaft.wirelessdatatransmission_wdt.Common.SessionState
 
-class WorkingWithDataBaseConfiguration: IWorkingWithDataBase, SQLiteOpenHelper(SessionState.activity.applicationContext, DATABASE_NAME, null, DATABASE_VERSION) {
+class WorkingWithDataBaseConfiguration: IWorkingWithDataBase, SQLiteOpenHelper(SessionState.context.applicationContext, DATABASE_NAME, null, DATABASE_VERSION) {
 
     override fun closeConnection() {}
 

@@ -1,19 +1,24 @@
 <resources xmlns:tools="http://schemas.android.com/tools">
     <!-- Base application theme. -->
-<!--    <style name="Theme.WirelessDataTransmission_WDT" parent="Theme.MaterialComponents.DayNight.NoActionBar">-->
-<!--        &lt;!&ndash; Primary brand color. &ndash;&gt;-->
-<!--        <item name="colorPrimary">@color/main_white</item>-->
-<!--        <item name="colorPrimaryVariant">#d0d0d0</item>-->
-<!--        <item name="colorOnPrimary">#808080</item>-->
-<!--        &lt;!&ndash; Secondary brand color. &ndash;&gt;-->
-<!--        <item name="colorSecondary">@color/green_01ac8a</item>-->
-<!--        <item name="colorSecondaryVariant">@color/teal_700</item>-->
-<!--        <item name="colorOnSecondary">@color/black</item>-->
-<!--        &lt;!&ndash; Status bar color. &ndash;&gt;-->
-<!--        <item name="android:statusBarColor" tools:targetApi="N">?attr/colorPrimaryVariant</item>-->
-<!--        <item name="android:navigationBarColor" tools:targetApi="N">?attr/colorPrimaryVariant</item>-->
-<!--        &lt;!&ndash; Customize your theme here. &ndash;&gt;-->
-<!--    </style>-->
+    <style name="Theme.WirelessDataTransmission_WDT" parent="Theme.MaterialComponents.DayNight.NoActionBar">
+        <!-- Primary brand color. -->
+        <item name="colorPrimary">@color/main_black</item>
+        <item name="colorPrimaryVariant">#d0d0d0</item>
+        <item name="colorOnPrimary">#808080</item>
+        <!-- Secondary brand color. -->
+        <item name="colorSecondary">@color/green_01ac8a</item>
+        <item name="colorSecondaryVariant">@color/blue_a3d0e7</item>
+        <item name="colorOnSecondary">@color/blue_294e61</item>
 
-<!--    <style name="SplashScreen" parent="Theme.MaterialComponents.DayNight.NoActionBar"/>-->
+        <item name="colorOnBackground">@color/black_bg</item>
+
+        <item name="colorOnSurface">@color/dark_blue_234455</item>
+        <!-- Status bar color. -->
+        <item name="android:windowBackground">?attr/colorPrimary</item>
+        <item name="android:statusBarColor" tools:targetApi="N">?attr/colorPrimary</item>
+        <item name="android:navigationBarColor" tools:targetApi="N">?attr/colorPrimary</item>
+        <!-- Customize your theme here. -->
+    </style>
+
+    <style name="SplashScreen" parent="Theme.MaterialComponents.DayNight.NoActionBar"/>
 </resources>

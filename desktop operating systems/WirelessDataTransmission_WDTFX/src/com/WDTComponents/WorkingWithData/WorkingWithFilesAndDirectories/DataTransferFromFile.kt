@@ -10,7 +10,7 @@ import java.io.FileOutputStream
 
 object DataTransferFromFile {
 
-    fun sendDataFromFile(file: File, dataOutputStream: DataOutputStream, dataInputStream: DataInputStream, iDelegateMethodStringArg: IDelegateMethodStringArg) {
+    fun sendDataFromFile(file: File, dataOutputStream: DataOutputStream, dataInputStream: DataInputStream, iDelegateMethodStringArg: IDelegateMethodStringArg, iDelegateMethodDoubleArg: IDelegateMethodDoubleArg) {
         /**
          * Change Text in Load Stage Message
          */
@@ -19,8 +19,9 @@ object DataTransferFromFile {
          * Start send file
          */
         dataOutputStream.writeUTF(file.name)
-        dataOutputStream.writeLong(file.length())
-        FileData.writeFile(FileInputStream(file), dataOutputStream)
+        val lengthFile: Long = file.length()
+        dataOutputStream.writeLong(lengthFile)
+        FileData.writeFile(FileInputStream(file), dataOutputStream, lengthFile, iDelegateMethodDoubleArg)
 //    if (!dataInputStream.readBoolean()) {} /////////////////// ?
         println(dataInputStream.read()) //////////////////////////////////////////
     }

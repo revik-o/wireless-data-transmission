@@ -8,17 +8,10 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.FrameLayout
 import android.widget.LinearLayout
-import android.widget.ScrollView
-import android.widget.Space
 import androidx.fragment.app.Fragment
-import ua.edu.onaft.wirelessdatatransmission_wdt.Common.Constant
-import ua.edu.onaft.wirelessdatatransmission_wdt.Common.CustomFrameLayout
 import ua.edu.onaft.wirelessdatatransmission_wdt.Common.ScreenDimension
-import ua.edu.onaft.wirelessdatatransmission_wdt.Common.SessionState
-
 import ua.edu.onaft.wirelessdatatransmission_wdt.R
 import ua.edu.onaft.wirelessdatatransmission_wdt.ViewModel.FileViewerViewModel
-import java.io.File
 
 class FileViewerListOfSelectedFilesFragment(activity: Activity, fileViewerViewModel: FileViewerViewModel, linearLayout: LinearLayout): Fragment() {
 

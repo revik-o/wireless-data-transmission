@@ -147,6 +147,35 @@ object ActionForSendType: IActionForSendType {
         )
     }
 
+    override fun clientActionForSendType4(socket: Socket) {
+        val internetProtocolAddress: String = socket.inetAddress.toString().substring(1)
+        DataTransfer.sendDataFromClient(
+            InetSocketAddress(internetProtocolAddress, socket.port),
+            4,
+            object : IDelegateMethodSocketAction {
+                override fun voidMethod(
+                    nameDevice: String,
+                    typeDevice: String,
+                    dataInputStream: DataInputStream,
+                    dataOutputStream: DataOutputStream,
+                    socket: Socket
+                ) {
+                    AppConfig.DataBase.ModelDAOInterface
+                        .iDeviceModelDAO
+                        .addNewDeviceToDatabaseWithUsingFilter(
+                            internetProtocolAddress, nameDevice, typeDevice
+                        )
+                    try {
+                        dataOutputStream.writeUTF(AppConfig.SystemClipboard.iSystemClipboard.getContent())
+                    }
+                    catch (E: Exception) {
+                        E.printStackTrace()
+                    }
+                }
+            }
+        )
+    }
+
     override fun serverActionForSendType1(dataInputStream: DataInputStream, dataOutputStream: DataOutputStream, clientNameDevice: String, clientDeviceType: String, endMethod: IDelegateMethod) {
         val fileSetSize = dataInputStream.read()
         AppConfig.AlertInterface.iMessage.showMessageLikeQuestion(
@@ -232,7 +261,12 @@ object ActionForSendType: IActionForSendType {
     }
 
     override fun serverActionForSendType3(dataOutputStream: DataOutputStream, endMethod: IDelegateMethod) {
-        dataOutputStream.writeUTF(AppConfig.SystemClipboard.iSystemClipboard.getContent() as String)
+        dataOutputStream.writeUTF(AppConfig.SystemClipboard.iSystemClipboard.getContent())
+        endMethod.voidMethod()
+    }
+
+    override fun serverActionForSendType4(dataInputStream: DataInputStream, endMethod: IDelegateMethod) {
+        AppConfig.SystemClipboard.iSystemClipboard.setContent(dataInputStream.readUTF())
         endMethod.voidMethod()
     }
 

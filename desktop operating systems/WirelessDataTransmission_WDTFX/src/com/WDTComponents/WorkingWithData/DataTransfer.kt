@@ -28,6 +28,7 @@ object DataTransfer {
     }
 
     fun sendDataFromClient(socketAddress: InetSocketAddress, sendType: Int, action: IDelegateMethodSocketAction) {
+        println(socketAddress.address.toString().substring(1))
         val socket = Socket()
         try
         {
@@ -49,7 +50,7 @@ object DataTransfer {
         }
         catch (E: Exception)
         {
-            println("Can't connect to ${socketAddress.address.toString().substring(1)}")
+            AppConfig.AlertInterface.littleIMessage.showMessage("Can't connect to ${socketAddress.address.toString().substring(1)}")
             try { socket.close() } catch (E2: IOException) {}
         }
     }
@@ -79,12 +80,14 @@ object DataTransfer {
          * sendType == 1 - accept files
          * sendType == 2 - accept directories & files
          * sendType == 3 - send Clipboard
+         * sendType == 4 - get Clipboard
          */
         if (!AppOption.DIRECTORY_FOR_DOWNLOAD_FILES.exists()) AppOption.DIRECTORY_FOR_DOWNLOAD_FILES.mkdirs()
         when (sendType) {
             1 -> AppConfig.Action.SendTypeInterface.iActionForSendType.serverActionForSendType1(dataInputStream, dataOutputStream, clientNameDevice, clientDeviceType, closeAllForThisConnection)
             2 -> AppConfig.Action.SendTypeInterface.iActionForSendType.serverActionForSendType2(dataInputStream, dataOutputStream, clientNameDevice, clientDeviceType, closeAllForThisConnection)
             3 -> AppConfig.Action.SendTypeInterface.iActionForSendType.serverActionForSendType3(dataOutputStream, closeAllForThisConnection)
+            4 -> AppConfig.Action.SendTypeInterface.iActionForSendType.serverActionForSendType4(dataInputStream, closeAllForThisConnection)
             else -> closeAllForThisConnection.voidMethod()
         }
     }

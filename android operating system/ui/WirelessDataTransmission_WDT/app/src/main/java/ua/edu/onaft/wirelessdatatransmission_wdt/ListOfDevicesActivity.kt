@@ -7,7 +7,6 @@ import android.widget.Button
 import android.widget.FrameLayout
 import android.widget.ProgressBar
 import androidx.appcompat.app.AppCompatActivity
-import androidx.core.view.updateMargins
 import com.WDTComponents.AppConfig
 import com.WDTComponents.DelegateMethods.IDelegateMethodIntegerArg
 import com.WDTComponents.DelegateMethods.IDelegateMethodSocketAction
@@ -15,9 +14,7 @@ import com.WDTComponents.WorkingWithDevices.ScanDevicesIPVersion4
 import ua.edu.onaft.wirelessdatatransmission_wdt.ActionView.ListOfDevicesActivity.CancelButtonOnClickListener
 import ua.edu.onaft.wirelessdatatransmission_wdt.ActionView.ListOfDevicesActivity.DeviceButtonOnClickListener
 import ua.edu.onaft.wirelessdatatransmission_wdt.Common.Action.BackArrowButtonOnClickListener
-import ua.edu.onaft.wirelessdatatransmission_wdt.Common.Constant
 import ua.edu.onaft.wirelessdatatransmission_wdt.Common.DeviceButton
-import ua.edu.onaft.wirelessdatatransmission_wdt.Common.ScreenDimension
 import ua.edu.onaft.wirelessdatatransmission_wdt.Common.SessionState
 import java.io.DataInputStream
 import java.io.DataOutputStream
@@ -41,18 +38,27 @@ class ListOfDevicesActivity : AppCompatActivity() {
         return deviceButton
     }
 
-    fun mode(modeId: Int): IDelegateMethodSocketAction {
+    private fun mode(modeId: Int): IDelegateMethodSocketAction {
         return when (modeId) {
-            0 -> object : IDelegateMethodSocketAction {
+            0 -> object : IDelegateMethodSocketAction { // files
                 override fun voidMethod(nameDevice: String, typeDevice: String, dataInputStream: DataInputStream, dataOutputStream: DataOutputStream, socket: Socket) {
                     createButton(typeDevice, nameDevice).setOnClickListener(DeviceButtonOnClickListener(socket))
                 }
             }
-            1 -> object : IDelegateMethodSocketAction {
+            1 -> object : IDelegateMethodSocketAction { // get clipboard
                 override fun voidMethod(nameDevice: String, typeDevice: String, dataInputStream: DataInputStream, dataOutputStream: DataOutputStream, socket: Socket) {
                     createButton(typeDevice, nameDevice).setOnClickListener {
                         Thread {
                             AppConfig.Action.SendTypeInterface.iActionForSendType.clientActionForSendType3(socket)
+                        }.start()
+                    }
+                }
+            }
+            2 -> object : IDelegateMethodSocketAction { // set clipboard
+                override fun voidMethod(nameDevice: String, typeDevice: String, dataInputStream: DataInputStream, dataOutputStream: DataOutputStream, socket: Socket) {
+                    createButton(typeDevice, nameDevice).setOnClickListener {
+                        Thread {
+                            AppConfig.Action.SendTypeInterface.iActionForSendType.clientActionForSendType4(socket)
                         }.start()
                     }
                 }
@@ -74,9 +80,9 @@ class ListOfDevicesActivity : AppCompatActivity() {
     }
 
     override fun onStart() {
-        val screenDimension = ScreenDimension(this)
-        val height = screenDimension.height
-        val width = screenDimension.width
+//        val screenDimension = ScreenDimension(this)
+//        val height = screenDimension.height
+//        val width = screenDimension.width
 
 //        frameLayoutAppBar.layoutParams.height = (height / 14.55).toInt()
 //        backArrowButton.layoutParams.height = (frameLayoutAppBar.layoutParams.height / 1.375).toInt()
@@ -109,10 +115,11 @@ class ListOfDevicesActivity : AppCompatActivity() {
         /**
          * Update activity
          */
-        SessionState.activity = this
+        SessionState.context = this
     }
 
     override fun onBackPressed() {
+        SessionState.chosenFiles.clear()
         finish()
     }
 }

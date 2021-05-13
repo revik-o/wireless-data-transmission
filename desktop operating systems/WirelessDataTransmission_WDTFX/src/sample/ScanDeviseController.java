@@ -1,12 +1,7 @@
 package sample;
 
-import java.io.*;
-import java.net.Socket;
-import java.net.URL;
-import java.util.ResourceBundle;
-import java.util.Set;
-import java.util.TreeSet;
-
+import com.WDTComponents.AppConfig;
+import com.WDTComponents.WorkingWithDevices.ScanDevicesIPVersion4;
 import javafx.application.Platform;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
@@ -14,16 +9,19 @@ import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.layout.AnchorPane;
 import javafx.stage.Stage;
-import com.WDTComponents.AppConfig;
-import com.WDTComponents.WorkingWithDevices.ScanDevicesIPVersion4;
 
-/*import sample.Platform.DataBase.DataBaseConfigKt;
-import sample.lib.BUTTON_ACTION;
-import sample.lib.DeviceWork.ScanDevices;*/
+import java.io.File;
+import java.io.IOException;
+import java.net.Socket;
+import java.net.URL;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.ResourceBundle;
+import java.util.Set;
 
 public class ScanDeviseController {
 
-    private Set<File> fileSet = new TreeSet<>();
+    private List<File> fileSet = new ArrayList<>();
 
     @FXML
     private ResourceBundle resources;
@@ -70,7 +68,7 @@ public class ScanDeviseController {
         initScanDevise(stage);
     }
 
-    ScanDeviseController(Stage stage, Set<File> fileSet) {
+    ScanDeviseController(Stage stage, List<File> fileSet) {
         this.fileSet = fileSet;
         initScanDevise(stage);
     }

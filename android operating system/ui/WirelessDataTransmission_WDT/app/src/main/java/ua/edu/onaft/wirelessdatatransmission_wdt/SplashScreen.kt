@@ -1,28 +1,40 @@
 package ua.edu.onaft.wirelessdatatransmission_wdt
 
 import android.content.Intent
+import android.net.Uri
 import android.os.Build
 import android.os.Bundle
 import android.os.Environment
+import android.widget.Toast
 import androidx.annotation.RequiresApi
 import androidx.appcompat.app.AppCompatActivity
 import ua.edu.onaft.wirelessdatatransmission_wdt.Common.Constant
 import ua.edu.onaft.wirelessdatatransmission_wdt.Common.Method
+import ua.edu.onaft.wirelessdatatransmission_wdt.Common.ScreenDimension
 import ua.edu.onaft.wirelessdatatransmission_wdt.Common.SessionState
 import ua.edu.onaft.wirelessdatatransmission_wdt.Configuration.DefaultApplicationConfig
+import ua.edu.onaft.wirelessdatatransmission_wdt.Configuration.SystemClipboardConfiguration
+import java.io.File
+import java.util.concurrent.locks.Condition
+import java.util.concurrent.locks.ReentrantLock
+import kotlin.concurrent.withLock
 
 class SplashScreen : AppCompatActivity() {
 
-    @RequiresApi(Build.VERSION_CODES.R)
+    val lock = ReentrantLock()
+    val condition: Condition = lock.newCondition()
+    var checkIntentAction = false
+
+    @RequiresApi(Build.VERSION_CODES.N)
     private fun config() {
         /**
          * Update activity
          */
-        SessionState.activity = this
+        SessionState.context = this
         /**
          * Check Permissions
          */
-        Method.checkPermissions()
+        Method.checkPermissions(this)
         /**
          * External Storage
          */
@@ -31,18 +43,70 @@ class SplashScreen : AppCompatActivity() {
         else
             applicationContext.getExternalFilesDir("/")
         /**
+         * adapting activity
+         */
+        ScreenDimension(this).also {
+            Constant.usualSpace = (it.height / 11.55).toInt()
+            Constant.specialSpace = (Constant.usualSpace * 2)
+        }
+        /**
          * Start Service
          */
         DefaultApplicationConfig()
+        Intent(this, BGService::class.java).also { startService(it) }
+        /**
+         * Intent actions
+         */
+        if (intent.action.equals(Intent.ACTION_SEND_MULTIPLE)) {
+            intent.getParcelableArrayListExtra<Uri>(Intent.EXTRA_STREAM)?.forEach { processUriFile(it) }
+            checkChosenFiles()
+        } else if (intent.action.equals(Intent.ACTION_SEND)) {
+            SessionState.sendType = 2
+            intent.getStringExtra(Intent.EXTRA_TEXT)?.also {
+                checkIntentAction = true
+                SystemClipboardConfiguration().setContent(it)
+                startActivity(Intent(this, ListOfDevicesActivity::class.java))
+            }
+            intent.getParcelableExtra<Uri>(Intent.EXTRA_STREAM)?.also {
+                processUriFile(it)
+                checkChosenFiles()
+            }
+        }
+        lock.withLock { condition.signal() }
     }
 
-    @RequiresApi(Build.VERSION_CODES.R)
+    private fun processUriFile(uri: Uri) {
+        val path: String = Uri.decode(uri.path)
+        val file = File(path.substring(path.indexOf("://") + 3))
+        if (file.exists()) SessionState.chosenFiles.add(file)
+    }
+
+    private fun checkChosenFiles() {
+        if (SessionState.chosenFiles.isEmpty()) {
+            Toast.makeText(this, "Don't have file", Toast.LENGTH_SHORT).show()
+            finish()
+        } else {
+            checkIntentAction = true
+            SessionState.sendType = 0
+            startActivity(Intent(this, ListOfDevicesActivity::class.java))
+        }
+    }
+
+    @RequiresApi(Build.VERSION_CODES.N)
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_splash_screen)
-        SessionState.activity = this
+        Thread {
+            lock.withLock {
+                condition.await()
+                if (!checkIntentAction) {
+                    runOnUiThread {
+                        startActivity(Intent(this, WelcomeActivity::class.java))
+                    }
+                }
+            }
+        }.start()
         config()
-        startActivity(Intent(this, WelcomeActivity::class.java))
     }
 
 }

@@ -9,6 +9,7 @@
     <color name="white">#FFFFFFFF</color>
 
     <color name="main_white">#ededed</color>
+    <color name="main_black">#152933</color>
     <color name="green_01ac8a">#01ac8a</color>
 
     <!--  SEND DATA VIEW COLORS  -->
@@ -24,4 +25,6 @@
     <color name="blue_455761">#455761</color> <!-- MAIN COLOR -->
     <color name="blue_8ca2ad">#8ca2ad</color>
     <color name="blue_a9d7ee">#a9d7ee</color>
+
+    <color name="black_bg">#8A8FAB</color>
 </resources>

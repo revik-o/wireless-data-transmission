@@ -1,11 +1,11 @@
 package ua.edu.onaft.wirelessdatatransmission_wdt
 
 import android.annotation.SuppressLint
-import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.view.View
 import android.widget.Button
 import android.widget.Switch
+import androidx.appcompat.app.AppCompatActivity
 import com.WDTComponents.AppOption
 import ua.edu.onaft.wirelessdatatransmission_wdt.Common.Action.BackArrowButtonOnClickListener
 import ua.edu.onaft.wirelessdatatransmission_wdt.Common.Method
@@ -44,7 +44,7 @@ class ParametersActivity : AppCompatActivity() {
         /**
          * Update activity
          */
-        SessionState.activity = this
+        SessionState.context = this
 
         Method.cleanArrayOfFiles()
     }

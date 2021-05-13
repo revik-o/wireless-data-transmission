@@ -14,6 +14,7 @@ import sample.Platform.RealizeAlertInterface;
 
 import java.io.File;
 
+@Deprecated
 public class Main extends Application {
 
     /*@Override

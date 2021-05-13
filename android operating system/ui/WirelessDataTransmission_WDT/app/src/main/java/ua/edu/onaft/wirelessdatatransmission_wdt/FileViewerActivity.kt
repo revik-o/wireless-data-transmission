@@ -1,5 +1,6 @@
 package ua.edu.onaft.wirelessdatatransmission_wdt
 
+import android.content.Intent
 import android.os.Build
 import android.os.Bundle
 import androidx.annotation.RequiresApi
@@ -25,11 +26,14 @@ class FileViewerActivity : AppCompatActivity() {
         /**
          * Check Permissions
          */
-        Method.checkPermissions()
+        Method.checkPermissions(this)
 
         val viewPagerAdapter: FragmentStateAdapter = FileViewerViewPagerAdapter(this, this)
-        fileViewerViewModel = FileViewerViewModel(viewPagerAdapter.itemCount)
-        fileViewerViewModel.currentFile = Constant.mainExternalStorageDirectory!!
+        fileViewerViewModel = FileViewerViewModel(this, viewPagerAdapter.itemCount)
+        if (Constant.mainExternalStorageDirectory != null)
+            fileViewerViewModel.currentFile = Constant.mainExternalStorageDirectory!!
+        else
+            startActivity(Intent(this, SplashScreen::class.java))
         fileViewerViewModel.inMainExternalStorage = false
 
         (viewPagerAdapter as FileViewerViewPagerAdapter).fileViewerViewModel = fileViewerViewModel
@@ -53,7 +57,7 @@ class FileViewerActivity : AppCompatActivity() {
         /**
          * Update activity
          */
-        SessionState.activity = this
+        SessionState.context = this
 
         SessionState.sendType = 0
     }

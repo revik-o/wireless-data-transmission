@@ -1,16 +1,15 @@
 package ua.edu.onaft.wirelessdatatransmission_wdt.ActionView.FileViewerActivity.ActionFragment
 
 import android.app.Activity
-import android.util.TypedValue
 import android.view.View
-import android.widget.Toast
+import android.view.animation.AnimationUtils
 import ua.edu.onaft.wirelessdatatransmission_wdt.Common.CustomFrameLayout
 import ua.edu.onaft.wirelessdatatransmission_wdt.R
 import ua.edu.onaft.wirelessdatatransmission_wdt.ViewModel.FileViewerViewModel
 
 class DirectoryOrFileOnClickListener(activity: Activity, fileViewerViewModel: FileViewerViewModel, customFrameLayout: CustomFrameLayout): View.OnClickListener {
 
-//    private val activity: Activity = activity
+    private val activity: Activity = activity
     private val fileViewerViewModel: FileViewerViewModel = fileViewerViewModel
     private val customFrameLayout: CustomFrameLayout = customFrameLayout
 
@@ -23,8 +22,10 @@ class DirectoryOrFileOnClickListener(activity: Activity, fileViewerViewModel: Fi
                 fileViewerViewModel.addChosenFile(customFrameLayout.file)
                 customFrameLayout.isChosen = true
             }
-        } else
+        } else {
+            customFrameLayout.frameLayout.startAnimation(AnimationUtils.loadAnimation(activity, R.anim.custom_button_click_animation))
             fileViewerViewModel.open(customFrameLayout.file)
+        }
     }
 
 }

@@ -9,26 +9,28 @@ import java.io.File
 
 object DataTransferFromDirectory {
 
-    fun sendDataFromDirectory(directory: File, rootDirectory: File, dataOutputStream: DataOutputStream, dataInputStream: DataInputStream, iDelegateMethodStringArg: IDelegateMethodStringArg) {
+    fun sendDataFromDirectory(directory: File, rootDirectory: File, dataOutputStream: DataOutputStream, dataInputStream: DataInputStream, iDelegateMethodStringArg: IDelegateMethodStringArg, iDelegateMethodDoubleArg: IDelegateMethodDoubleArg) {
         val listDirectories: ArrayList<File> = ArrayList()
         val listFiles: ArrayList<File> = ArrayList()
         for (file in directory.listFiles()) { if (file.isFile) listFiles.add(file) else listDirectories.add(file) }
         dataOutputStream.writeUTF(directory.absolutePath.substring(rootDirectory.absolutePath.length - rootDirectory.name.length))
         dataOutputStream.write(listFiles.size)
         listFiles.forEach { DataTransferFromFile.sendDataFromFile(
-            it,
-            dataOutputStream,
-            dataInputStream,
-            iDelegateMethodStringArg
+                it,
+                dataOutputStream,
+                dataInputStream,
+                iDelegateMethodStringArg,
+                iDelegateMethodDoubleArg
         ) }
         dataOutputStream.write(listDirectories.size)
         listDirectories.forEach {
             this.sendDataFromDirectory(
-                File(it.absolutePath),
-                rootDirectory,
-                dataOutputStream,
-                dataInputStream,
-                iDelegateMethodStringArg
+                    File(it.absolutePath),
+                    rootDirectory,
+                    dataOutputStream,
+                    dataInputStream,
+                    iDelegateMethodStringArg,
+                    iDelegateMethodDoubleArg
             )
         }
     }
@@ -39,19 +41,19 @@ object DataTransferFromDirectory {
         val countOfFiles: Int = dataInputStream.read()
         for (i in 0 until countOfFiles)
             DataTransferFromFile.acceptDataFromFile(
-                dataInputStream,
-                dataOutputStream,
-                "${AppOption.DIRECTORY_FOR_DOWNLOAD_FILES.absolutePath}/$path",
-                iDelegateMethodStringArg,
-                iDelegateMethodDoubleArg
+                    dataInputStream,
+                    dataOutputStream,
+                    "${AppOption.DIRECTORY_FOR_DOWNLOAD_FILES.absolutePath}/$path",
+                    iDelegateMethodStringArg,
+                    iDelegateMethodDoubleArg
             )
         val countOfDirectories: Int = dataInputStream.read()
         for (i in 0 until countOfDirectories)
             this.acceptDataFromDirectory(
-                dataInputStream,
-                dataOutputStream,
-                iDelegateMethodStringArg,
-                iDelegateMethodDoubleArg
+                    dataInputStream,
+                    dataOutputStream,
+                    iDelegateMethodStringArg,
+                    iDelegateMethodDoubleArg
             )
     }
 

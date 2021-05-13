@@ -12,7 +12,7 @@ class FloatingActionButtonClickListener(activity: Activity): View.OnClickListene
     private val activity: Activity = activity
 
     override fun onClick(v: View?) {
-        if (SessionState.choosenFiles.size != 0)
+        if (SessionState.chosenFiles.size != 0)
             activity.startActivity(Intent(activity, ListOfDevicesActivity::class.java))
     }
 

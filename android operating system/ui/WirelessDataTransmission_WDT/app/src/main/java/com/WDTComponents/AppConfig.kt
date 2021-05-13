@@ -2,7 +2,7 @@ package com.WDTComponents
 
 import com.WDTComponents.Action.SendType.IActionForSendType
 import com.WDTComponents.AlertInterfaces.ILoadAlert
-import com.WDTComponents.AlertInterfaces.IMainMessage
+import com.WDTComponents.AlertInterfaces.ILittleMessage
 import com.WDTComponents.AlertInterfaces.IMessage
 import com.WDTComponents.DataBase.IWorkingWithDataBase
 import com.WDTComponents.DataBase.ModelDAO.IDeviceModelDAO
@@ -23,13 +23,13 @@ object AppOption {
 
     var SOCKET_TIMEOUT = 500
 
-    val BUFFER_SIZE_FOR_TRANSFER = 1024 * 8
+    const val BUFFER_SIZE_FOR_TRANSFER = 1024 * 8
 
     lateinit var LOCAL_DEVICE_NAME: String
 
     lateinit var DEVICE_TYPE: String
 
-    var SERVER_SOCKET_IS_ON = true
+    var SERVER_SOCKET_IS_ON = false
 
     lateinit var DIRECTORY_FOR_DOWNLOAD_FILES: File
 
@@ -52,13 +52,13 @@ object AppConfig {
 
     object AlertInterface {
 
-        lateinit var errorIMessage: IMainMessage
+        lateinit var errorIMessage: ILittleMessage
 
         lateinit var iLoadAlert: Class<ILoadAlert>
 
         lateinit var iMessage: IMessage
 
-        lateinit var littleIMessage: IMainMessage
+        lateinit var littleIMessage: ILittleMessage
 
     }
 

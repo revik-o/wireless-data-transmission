@@ -6,8 +6,8 @@ import java.net.Socket
 
 interface IDelegateMethodSocketAction {
     fun voidMethod(
-        string: String,
-        string2: String,
+        nameDevice: String,
+        typeDevice: String,
         dataInputStream: DataInputStream,
         dataOutputStream: DataOutputStream,
         socket: Socket
