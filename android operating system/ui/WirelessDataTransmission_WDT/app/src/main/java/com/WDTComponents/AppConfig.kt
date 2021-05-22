@@ -6,6 +6,7 @@ import com.WDTComponents.AlertInterfaces.ILittleMessage
 import com.WDTComponents.AlertInterfaces.IMessage
 import com.WDTComponents.DataBase.IWorkingWithDataBase
 import com.WDTComponents.DataBase.ModelDAO.IDeviceModelDAO
+import com.WDTComponents.DataBase.ModelDAO.IFileModelDAO
 import com.WDTComponents.IPWork.IPackageIP
 import com.WDTComponents.ServerControll.IServer
 import com.WDTComponents.SystemClipboard.ISystemClipboard
@@ -73,6 +74,8 @@ object AppConfig {
         object ModelDAOInterface {
 
             lateinit var iDeviceModelDAO: IDeviceModelDAO
+
+            lateinit var iFileModelDAO: IFileModelDAO
 
         }
 

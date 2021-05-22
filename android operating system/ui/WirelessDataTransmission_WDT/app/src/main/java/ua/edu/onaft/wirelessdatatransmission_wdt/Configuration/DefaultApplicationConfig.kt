@@ -5,6 +5,7 @@ import com.WDTComponents.Action.SendType.ActionForSendType
 import com.WDTComponents.AppConfig
 import com.WDTComponents.AppOption
 import com.WDTComponents.DataBase.ModelDAO.DeviceModelDAO
+import com.WDTComponents.DataBase.ModelDAO.FileModelDAO
 import com.WDTComponents.IPWork.IPV4.PackageIPVersion4
 import com.WDTComponents.ServerControll.Server
 import com.WDTComponents.TypeDeviceENUM
@@ -38,6 +39,7 @@ class DefaultApplicationConfig {
          */
         AppConfig.Action.SendTypeInterface.iActionForSendType = ActionForSendType
         AppConfig.DataBase.ModelDAOInterface.iDeviceModelDAO = DeviceModelDAO(AppConfig.DataBase.WorkWithDataBaseInterface.iWorkingWithDataBase)
+        AppConfig.DataBase.ModelDAOInterface.iFileModelDAO = FileModelDAO(AppConfig.DataBase.WorkWithDataBaseInterface.iWorkingWithDataBase)
         AppConfig.IPWorkInterface.IPV4.iIP = PackageIPVersion4()
         AppConfig.WorkingWithClientInterface.iWorkingWithClient = StartForWorkingWithClient()
         AppConfig.ServerControllInterface.iServer = Server()

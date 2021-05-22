@@ -34,10 +34,12 @@ class WorkingWithDataBaseConfiguration: IWorkingWithDataBase, SQLiteOpenHelper(S
 
     override fun onCreate(db: SQLiteDatabase?) {
         db?.execSQL(FeedReaderContract.SQL_CREATE_DEVICE)
+        db?.execSQL(FeedReaderContract.SQL_CREATE_FILE)
     }
 
     override fun onUpgrade(db: SQLiteDatabase?, oldVersion: Int, newVersion: Int) {
         db?.execSQL(FeedReaderContract.SQL_DROP_DEVICE)
+        db?.execSQL(FeedReaderContract.SQL_DROP_FILE)
         onCreate(db)
     }
 

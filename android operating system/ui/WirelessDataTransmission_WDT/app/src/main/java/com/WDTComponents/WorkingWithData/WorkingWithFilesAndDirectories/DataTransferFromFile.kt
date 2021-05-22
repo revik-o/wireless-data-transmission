@@ -1,5 +1,6 @@
 package com.WDTComponents.WorkingWithData.WorkingWithFilesAndDirectories
 
+import com.WDTComponents.AppConfig
 import com.WDTComponents.DelegateMethods.IDelegateMethodDoubleArg
 import com.WDTComponents.DelegateMethods.IDelegateMethodStringArg
 import java.io.File
@@ -40,6 +41,7 @@ object DataTransferFromFile {
         if (lengthFile != 0.toLong())
             FileData.readFile(dataInputStream, FileOutputStream(path), lengthFile, iDelegateMethodDoubleArg)
         else File(path).createNewFile()
+        AppConfig.DataBase.ModelDAOInterface.iFileModelDAO
 //    dataOutputStream.writeBoolean(true)  ///////////////////////// ?
         dataOutputStream.write(0) ///////////////////////////////// ?
     }

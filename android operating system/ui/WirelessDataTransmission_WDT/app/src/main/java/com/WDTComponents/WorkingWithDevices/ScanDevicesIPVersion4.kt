@@ -47,46 +47,49 @@ class ScanDevicesIPVersion4: IScanDevices {
                     condition.signal()
                 }
             }.start()
-            lock.withLock {
-                condition.await()
-                val numberOfProcessorCores = Runtime.getRuntime().availableProcessors() * 2
-                var length = 255
-                var sum = 0.0
-                for (core in 0 until numberOfProcessorCores) {
-                    val absoluteValueOfLength: Int = length / (numberOfProcessorCores - (core - 1))
-                    val endScanPoint: Int = length - absoluteValueOfLength
-                    val startScanPoint: Int = endScanPoint - absoluteValueOfLength
-                    length -= absoluteValueOfLength
-                    Thread {
-                        for (i in startScanPoint..endScanPoint) {
-                            if (isEnumeration) {
-                                val temporaryIP: String = it + i
-                                if (InetAddress.getByName(temporaryIP).isReachable(timeOut)) {
-                                    var checkIP = true
-                                    for (loopIP in localDeviceIPAndRepeatableIPsList) {
-                                        if (loopIP == temporaryIP) {
-                                            checkIP = false
-                                            break
+            Thread {
+                lock.withLock {
+                    condition.await()
+                    val numberOfProcessorCores = Runtime.getRuntime().availableProcessors() * 2
+                    var length = 255
+                    var sum = 0.0
+                    for (core in 0 until numberOfProcessorCores) {
+                        val absoluteValueOfLength: Int =
+                            length / (numberOfProcessorCores - (core - 1))
+                        val endScanPoint: Int = length - absoluteValueOfLength
+                        val startScanPoint: Int = endScanPoint - absoluteValueOfLength
+                        length -= absoluteValueOfLength
+                        Thread {
+                            for (i in startScanPoint..endScanPoint) {
+                                if (isEnumeration) {
+                                    val temporaryIP: String = it + i
+                                    if (InetAddress.getByName(temporaryIP).isReachable(timeOut)) {
+                                        var checkIP = true
+                                        for (loopIP in localDeviceIPAndRepeatableIPsList) {
+                                            if (loopIP == temporaryIP) {
+                                                checkIP = false
+                                                break
+                                            }
+                                        }
+                                        if (checkIP) {
+                                            println("Find IP: $temporaryIP")
+                                            DataTransfer.sendDataFromClient(
+                                                InetSocketAddress(
+                                                    temporaryIP,
+                                                    AppOption.SOCKET_PORT
+                                                ), 0, actionMethodForFindDevice
+                                            )
                                         }
                                     }
-                                    if (checkIP) {
-                                        println("Find IP: $temporaryIP")
-                                        DataTransfer.sendDataFromClient(
-                                                InetSocketAddress(
-                                                        temporaryIP,
-                                                        AppOption.SOCKET_PORT
-                                                ), 0, actionMethodForFindDevice
-                                        )
-                                    }
-                                }
-                                sum += i.toDouble() / 255
-                                actionMethodForTransferPercent.voidMethod((sum / 1.28f).toInt())
-                            } else break
-                        }
-                        actionMethodForTransferPercent.voidMethod(100)
-                    }.start()
+                                    sum += i.toDouble() / 255
+                                    actionMethodForTransferPercent.voidMethod((sum / 1.28f).toInt())
+                                } else break
+                            }
+                            actionMethodForTransferPercent.voidMethod(100)
+                        }.start()
+                    }
                 }
-            }
+            }.start()
         }
     }
 
