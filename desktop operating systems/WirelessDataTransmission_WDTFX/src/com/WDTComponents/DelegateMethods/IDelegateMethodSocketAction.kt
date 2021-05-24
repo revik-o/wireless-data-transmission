@@ -8,6 +8,7 @@ interface IDelegateMethodSocketAction {
     fun voidMethod(
         nameDevice: String,
         typeDevice: String,
+        ipStaring: String,
         dataInputStream: DataInputStream,
         dataOutputStream: DataOutputStream,
         socket: Socket

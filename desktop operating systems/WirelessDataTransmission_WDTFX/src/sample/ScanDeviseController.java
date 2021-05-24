@@ -14,10 +14,7 @@ import java.io.File;
 import java.io.IOException;
 import java.net.Socket;
 import java.net.URL;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.ResourceBundle;
-import java.util.Set;
+import java.util.*;
 
 public class ScanDeviseController {
 
@@ -83,11 +80,11 @@ public class ScanDeviseController {
     private void ScanDevise_() {
         addDev.getChildren().clear();
         scanDevices_ = new ScanDevicesIPVersion4(
-                (nameDevice, typeDevice, dataInputStream, dataOutputStream, socket) -> {
+                (nameDevice, typeDevice, ipString, dataInputStream, dataOutputStream, socket) -> {
                     try {
                         Platform.runLater(() -> {
                             Button button = new Button(nameDevice);
-                            button.setOnMouseClicked(mouseEvent -> buttonMouseClicked_(socket));
+                            button.setOnMouseClicked(mouseEvent -> buttonMouseClicked_(socket, ipString));
                             addDev.getChildren().add(button);
                         });
                         socket.close();
@@ -99,7 +96,7 @@ public class ScanDeviseController {
         );
     }
 
-    private void buttonMouseClicked_(Socket socket) {
+    private void buttonMouseClicked_(Socket socket, String ipString) {
         scanDevices_.stopScanDevices();
         if (status == 3) {
             this.stage.close();

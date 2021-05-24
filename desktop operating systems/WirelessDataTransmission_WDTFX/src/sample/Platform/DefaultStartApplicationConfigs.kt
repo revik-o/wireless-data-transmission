@@ -1,23 +1,17 @@
 package com.WDTComponents.StartApplicationConfigs
 
-import javafx.application.Platform
-
-import com.WDTComponents.DataBase.IWorkingWithDataBase
-import com.WDTComponents.DataBase.ModelDAO.DeviceModelDAO
 import com.WDTComponents.Action.SendType.ActionForSendType
 import com.WDTComponents.AlertInterfaces.ILoadAlert
 import com.WDTComponents.AlertInterfaces.IMessage
 import com.WDTComponents.AppConfig
 import com.WDTComponents.AppOption
-import com.WDTComponents.DelegateMethods.IDelegateMethod
+import com.WDTComponents.DataBase.IWorkingWithDataBase
+import com.WDTComponents.DataBase.ModelDAO.*
 import com.WDTComponents.IPWork.IPV4.PackageIPVersion4
 import com.WDTComponents.ServerControll.Server
 import com.WDTComponents.SystemClipboard.ISystemClipboard
-import com.WDTComponents.ThreadType.IUnusualThread
-import com.WDTComponents.ThreadType.IUsualThread
 import com.WDTComponents.WorkingWithClient.StartForWorkingWithClient
 import sample.Platform.lM
-
 import java.awt.Toolkit
 import java.awt.datatransfer.DataFlavor
 import java.awt.datatransfer.StringSelection
@@ -62,9 +56,15 @@ class DefaultStartApplicationConfigs {
          */
         AppConfig.Action.SendTypeInterface.iActionForSendType = ActionForSendType
         AppConfig.DataBase.ModelDAOInterface.iDeviceModelDAO = DeviceModelDAO(AppConfig.DataBase.WorkWithDataBaseInterface.iWorkingWithDataBase)
+        AppConfig.DataBase.ModelDAOInterface.iFileModelDAO = FileModelDAO(AppConfig.DataBase.WorkWithDataBaseInterface.iWorkingWithDataBase)
+        AppConfig.DataBase.ModelDAOInterface.iTrustedDeviceModelDAO = TrustedDeviceModelModelDAO(AppConfig.DataBase.WorkWithDataBaseInterface.iWorkingWithDataBase)
+        AppConfig.DataBase.ModelDAOInterface.iAcceptedFilesHistoryModelDAO = AcceptedFilesHistoryModelDAO(AppConfig.DataBase.WorkWithDataBaseInterface.iWorkingWithDataBase)
+        AppConfig.DataBase.ModelDAOInterface.iTransferredFilesHistoryModelDAO =TransferredFilesHistoryModelDAO(AppConfig.DataBase.WorkWithDataBaseInterface.iWorkingWithDataBase)
         AppConfig.IPWorkInterface.IPV4.iIP = PackageIPVersion4()
         AppConfig.WorkingWithClientInterface.iWorkingWithClient = StartForWorkingWithClient()
         AppConfig.ServerControllInterface.iServer = Server()
+        AppConfig.IPWorkInterface.IPV4.iIP.getListOfIP()
+//        AppConfig.ServerControllInterface.iServer.startServerSocket()
     }
 
     /**

@@ -5,7 +5,7 @@ package com.WDTComponents.DataBase.Model
  */
 class DeviceModel {
 
-    var id : Long? = null
+    var id : Int? = null
     var deviceName : String? = null
     var deviceType : String? = null
     var ipAddress : String? = null
@@ -18,11 +18,13 @@ class DeviceModel {
         this.ipAddress = ipAddress
     }
 
-    constructor(id: Long?, deviceName: String?, deviceType: String?, ipAddress: String?) {
+    constructor(id: Int?, deviceName: String?, deviceType: String?, ipAddress: String?) {
         this.id = id
         this.deviceName = deviceName
         this.deviceType = deviceType
         this.ipAddress = ipAddress
     }
+
+    override fun toString(): String = "{ id=$id, deviceName=$deviceName, deviceType=$deviceType, ipAddress=$ipAddress }"
 
 }

@@ -30,7 +30,9 @@ class PlatformDataBase: IWorkingWithDataBase {
     override fun executeQuery(SQLQuery: String): Boolean = try {
         statement.executeUpdate(SQLQuery)
         true
-    } catch (E: Exception) {false}
+    } catch (E: Exception) {
+        E.printStackTrace()
+        false}
 
     override fun executeRowQuery(SQLQuery: String): ArrayList<Array<String>> {
         val arrayList: ArrayList<Array<String>> = ArrayList()

@@ -5,7 +5,7 @@ import com.WDTComponents.AlertInterfaces.ILoadAlert
 import com.WDTComponents.AlertInterfaces.ILittleMessage
 import com.WDTComponents.AlertInterfaces.IMessage
 import com.WDTComponents.DataBase.IWorkingWithDataBase
-import com.WDTComponents.DataBase.ModelDAO.IDeviceModelDAO
+import com.WDTComponents.DataBase.ModelDAO.*
 import com.WDTComponents.IPWork.IPackageIP
 import com.WDTComponents.ServerControll.IServer
 import com.WDTComponents.SystemClipboard.ISystemClipboard
@@ -32,6 +32,8 @@ object AppOption {
     var SERVER_SOCKET_IS_ON = false
 
     lateinit var DIRECTORY_FOR_DOWNLOAD_FILES: File
+
+    val DEBUG_MODE = true
 
 }
 
@@ -73,6 +75,14 @@ object AppConfig {
         object ModelDAOInterface {
 
             lateinit var iDeviceModelDAO: IDeviceModelDAO
+
+            lateinit var iFileModelDAO: IFileModelDAO
+
+            lateinit var iTrustedDeviceModelDAO: ITrustedDeviceModelDAO
+
+            lateinit var iAcceptedFilesHistoryModelDAO: IAcceptedFilesHistoryModelDAO
+
+            lateinit var iTransferredFilesHistoryModelDAO: ITransferredFilesHistoryModelDAO
 
         }
 
