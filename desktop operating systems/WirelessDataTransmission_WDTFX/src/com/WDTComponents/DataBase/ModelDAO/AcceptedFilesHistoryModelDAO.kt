@@ -41,7 +41,7 @@ class AcceptedFilesHistoryModelDAO(iWorkingWithDataBase: IWorkingWithDataBase): 
                             "UPDATE ${acceptedFilesHistoryTable.TABLE_NAME} " +
                                     "SET ${acceptedFilesHistoryTable.DEVICE_ID} = '${acceptedFilesHistoryModel.deviceId}', " +
                                     "${acceptedFilesHistoryTable.FILE_ID} = '${acceptedFilesHistoryModel.fileId}', " +
-                                    "${acceptedFilesHistoryTable.DATE_OF_ADOPTION} = '${acceptedFilesHistoryModel.dateOfAdoption}', " +
+                                    "${acceptedFilesHistoryTable.DATE_OF_ADOPTION} = '${acceptedFilesHistoryModel.dateOfAdoption}' " +
                                     "WHERE ${acceptedFilesHistoryTable.ID} = '${it[0][0]}';"
                     )
                 }

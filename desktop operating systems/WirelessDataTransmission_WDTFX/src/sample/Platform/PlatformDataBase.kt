@@ -27,14 +27,14 @@ class PlatformDataBase: IWorkingWithDataBase {
         return false
     }
 
-    override fun executeQuery(SQLQuery: String): Boolean = try {
+    @Synchronized override fun executeQuery(SQLQuery: String): Boolean = try {
         statement.executeUpdate(SQLQuery)
         true
     } catch (E: Exception) {
         E.printStackTrace()
         false}
 
-    override fun executeRowQuery(SQLQuery: String): ArrayList<Array<String>> {
+    @Synchronized override fun executeRowQuery(SQLQuery: String): ArrayList<Array<String>> {
         val arrayList: ArrayList<Array<String>> = ArrayList()
         val resultSet: ResultSet = statement.executeQuery(SQLQuery)
         while (resultSet.next()) {

@@ -23,7 +23,7 @@ object AppOption {
 
     var SOCKET_TIMEOUT = 500
 
-    const val BUFFER_SIZE_FOR_TRANSFER = 1024 * 8
+    const val BUFFER_SIZE_FOR_TRANSFER = 0x12C
 
     lateinit var LOCAL_DEVICE_NAME: String
 

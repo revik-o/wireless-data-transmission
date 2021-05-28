@@ -1,11 +1,5 @@
 package sample.Platform;
 
-//import javafx.application.Platform;
-//import javafx.concurrent.Task;
-//import javafx.scene.control.Alert;
-//import javafx.scene.control.ButtonBar;
-//import javafx.scene.control.ButtonType;
-//import javafx.stage.StageStyle;
 import javafx.application.Platform;
 import javafx.concurrent.Task;
 import javafx.scene.control.Alert;
@@ -19,8 +13,6 @@ public class Message implements IMessage {
 
     @Override
     public void showMessage(String strMessage) {
-//        JOptionPane.showMessageDialog(null, strMessage, "Message", JOptionPane.INFORMATION_MESSAGE);
-
         new Thread(new Task() {
             @Override
             protected Object call() throws Exception {

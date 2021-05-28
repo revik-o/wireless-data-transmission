@@ -8,11 +8,11 @@ import com.WDTComponents.DataBase.FeedReaderContract
 import com.WDTComponents.DataBase.IWorkingWithDataBase
 import ua.edu.onaft.wirelessdatatransmission_wdt.Common.SessionState
 
-class WorkingWithDataBaseConfiguration: IWorkingWithDataBase, SQLiteOpenHelper(SessionState.context.applicationContext, DATABASE_NAME, null, DATABASE_VERSION) {
+class WorkingWithDataBaseConfiguration: IWorkingWithDataBase, SQLiteOpenHelper(SessionState.context, DATABASE_NAME, null, DATABASE_VERSION) {
 
-    override fun closeConnection() {}
+    override fun closeConnection() { close() }
 
-    override fun createDataBase(): Boolean { return true }
+    override fun createDataBase(): Boolean = true
 
     override fun executeQuery(SQLQuery: String): Boolean = try {
         this.writableDatabase.execSQL(SQLQuery)

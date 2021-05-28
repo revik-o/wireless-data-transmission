@@ -31,10 +31,9 @@ public class Main extends Application {
 
     @Override
     public void start(Stage primaryStage) throws Exception {
-//        if (!new File(PlatformDataBaseKt.getCOMMON_DIRECTORY()).exists()) new File(PlatformDataBaseKt.getCOMMON_DIRECTORY()).mkdirs();
-//        DefaultStartApplicationConfigs configs = new DefaultStartApplicationConfigs(new RealizeAlertInterface(), new Message(), new PlatformDataBase(), new File(System.getProperty("user.home") + "/Downloads/WirelessDataTransmission_WDTFX"));
-//        configs.start();
-//        configs = null;
+        if (!new File(PlatformDataBaseKt.getCOMMON_DIRECTORY()).exists()) new File(PlatformDataBaseKt.getCOMMON_DIRECTORY()).mkdirs();
+        DefaultStartApplicationConfigs configs = new DefaultStartApplicationConfigs(new RealizeAlertInterface(), new Message(), new PlatformDataBase(), new File(System.getProperty("user.home") + "/Downloads/WirelessDataTransmission_WDTFX"));
+        configs.start();
         Parent root = FXMLLoader.load(getClass().getResource("sample.fxml"));
         primaryStage.setTitle(AppInfoKt.APPLICATION_NAME);
         primaryStage.setScene(new Scene(root));

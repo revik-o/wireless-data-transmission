@@ -54,8 +54,7 @@ class ScanDevicesIPVersion4: IScanDevices {
                     var length = 255
                     var sum = 0.0
                     for (core in 0 until numberOfProcessorCores) {
-                        val absoluteValueOfLength: Int =
-                            length / (numberOfProcessorCores - (core - 1))
+                        val absoluteValueOfLength: Int = length / (numberOfProcessorCores - (core - 1))
                         val endScanPoint: Int = length - absoluteValueOfLength
                         val startScanPoint: Int = endScanPoint - absoluteValueOfLength
                         length -= absoluteValueOfLength

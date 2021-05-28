@@ -12,13 +12,14 @@ import com.WDTComponents.DelegateMethods.IDelegateMethodStringArg
 import com.WDTComponents.WorkingWithData.DataTransfer
 import com.WDTComponents.WorkingWithData.WorkingWithFilesAndDirectories.DataTransferFromDirectory
 import com.WDTComponents.WorkingWithData.WorkingWithFilesAndDirectories.DataTransferFromFile
-
+import java.awt.Desktop
 import java.io.DataInputStream
 import java.io.DataOutputStream
 import java.io.File
 import java.io.IOException
 import java.net.InetSocketAddress
 import java.net.Socket
+import java.net.URI
 
 /**
  *
@@ -191,81 +192,18 @@ object ActionForSendType: IActionForSendType {
             endMethod: IDelegateMethod
     ) {
         val fileSetSize = dataInputStream.read()
-        val startSendDataMethod: IDelegateMethod = IfYesMethod(
-                object : IDelegateMethod {
-                    override fun voidMethod() {
-                        val iLoadAlert = AppConfig.AlertInterface.iLoadAlert.getConstructor().newInstance()
-                        iLoadAlert.showAlert()
-                        for (i in 0 until fileSetSize)
-                            DataTransferFromFile.acceptDataFromFile(dataInputStream, dataOutputStream, AppOption.DIRECTORY_FOR_DOWNLOAD_FILES.absolutePath,
-                                    object : IDelegateMethodStringArg {
-                                        override fun voidMethod(text: String) {
-                                            iLoadAlert.setContentText(text)
-                                        }
-                                    }, object : IDelegateMethodDoubleArg {
-                                override fun voidMethod(double: Double) {
-                                    iLoadAlert.setPercentageOfDownload(double)
-                                }
-                            }
-                            )
-                        iLoadAlert.closeAlert()
-                    }
-                },
-                endMethod,
-                true
-        )
-        val deviceId: Int = AppConfig.DataBase.ModelDAOInterface.iDeviceModelDAO.getDeviceId(DeviceModel(clientNameDevice, clientDeviceType, clientIP))
-        AppConfig.DataBase.ModelDAOInterface.iTrustedDeviceModelDAO.getTrustedDevice(TrustedDeviceModel(deviceId, "")).also {
-            if (it.id != 0)
-                startSendDataMethod.voidMethod()
-            else {
-                AppConfig.AlertInterface.iMessage.showMessageLikeQuestion(
-                        "Do you want accept files? " +
-                                "\nNumber of files: $fileSetSize " +
-                                "\nDevice name: $clientNameDevice " +
-                                "\nDevice type: $clientDeviceType",
-                        ifYesAction = startSendDataMethod,
-                        ifNoAction = endMethod
-                )
-                AppConfig.AlertInterface.iMessage.showMessageLikeQuestion(
-                        "Do you want add this device like Trusted?\n" +
-                                "Name: $clientNameDevice\n" +
-                                "Type device: $clientDeviceType\n",
-                        object : IDelegateMethod {
-                            override fun voidMethod() {
-                                AppConfig.DataBase.ModelDAOInterface.iTrustedDeviceModelDAO.addNewTrustedDevice(
-                                        TrustedDeviceModel(deviceId, "")
-                                )
-                            }
-                        },
-                        object : IDelegateMethod { override fun voidMethod() {} }
-                )
-            }
-        }
-
-        /*if()
-            trustedDeviceMessageAlert(
-                    clientNameDevice,
-                    clientDeviceType,
-                    object : IDelegateMethod {
-                        override fun voidMethod() {
-                            AppConfig.DataBase.ModelDAOInterface.iTrustedDeviceModelDAO.addNewTrustedDevice()
-                        }
-                    },
-                    object : IDelegateMethod { override fun voidMethod() {} }
-            )
-        AppConfig.AlertInterface.iMessage.showMessageLikeQuestion(
-                "Do you want accept files? " +
-                        "\nNumber of files: $fileSetSize " +
-                        "\nDevice name: $clientNameDevice " +
-                        "\nDevice type: $clientDeviceType",
+        commonFunc(
                 IfYesMethod(
                         object : IDelegateMethod {
                             override fun voidMethod() {
                                 val iLoadAlert = AppConfig.AlertInterface.iLoadAlert.getConstructor().newInstance()
                                 iLoadAlert.showAlert()
                                 for (i in 0 until fileSetSize)
-                                    DataTransferFromFile.acceptDataFromFile(dataInputStream, dataOutputStream, AppOption.DIRECTORY_FOR_DOWNLOAD_FILES.absolutePath,
+                                    DataTransferFromFile.acceptDataFromFile(dataInputStream, dataOutputStream,
+                                            clientNameDevice,
+                                            clientDeviceType,
+                                            clientIP,
+                                            AppOption.DIRECTORY_FOR_DOWNLOAD_FILES.absolutePath,
                                             object : IDelegateMethodStringArg {
                                                 override fun voidMethod(text: String) {
                                                     iLoadAlert.setContentText(text)
@@ -282,8 +220,12 @@ object ActionForSendType: IActionForSendType {
                         endMethod,
                         true
                 ),
-                ifNoAction = endMethod
-        )*/
+                clientNameDevice,
+                clientDeviceType,
+                clientIP,
+                fileSetSize,
+                endMethod
+        )
     }
 
     override fun serverActionForSendType2(
@@ -295,11 +237,7 @@ object ActionForSendType: IActionForSendType {
             endMethod: IDelegateMethod
     ) {
         val fileSetSize = dataInputStream.read()
-        AppConfig.AlertInterface.iMessage.showMessageLikeQuestion(
-                "Do you want accept directories with files? " +
-                        "\nNumber of data: $fileSetSize " +
-                        "\nDevice name: $clientNameDevice " +
-                        "\nDevice type: $clientDeviceType",
+        commonFunc(
                 IfYesMethod(
                         object : IDelegateMethod {
                             override fun voidMethod() {
@@ -309,6 +247,9 @@ object ActionForSendType: IActionForSendType {
                                     val isDirectoryData = dataInputStream.readBoolean()
                                     if (isDirectoryData)
                                         DataTransferFromDirectory.acceptDataFromDirectory(dataInputStream, dataOutputStream,
+                                                clientNameDevice,
+                                                clientDeviceType,
+                                                clientIP,
                                                 object : IDelegateMethodStringArg {
                                                     override fun voidMethod(text: String) {
                                                         iLoadAlert.setContentText(text)
@@ -322,6 +263,9 @@ object ActionForSendType: IActionForSendType {
                                     else
                                         DataTransferFromFile.acceptDataFromFile(dataInputStream,
                                                 dataOutputStream,
+                                                clientNameDevice,
+                                                clientDeviceType,
+                                                clientIP,
                                                 AppOption.DIRECTORY_FOR_DOWNLOAD_FILES.absolutePath,
                                                 object : IDelegateMethodStringArg {
                                                     override fun voidMethod(text: String) {
@@ -341,7 +285,11 @@ object ActionForSendType: IActionForSendType {
                         endMethod,
                         true
                 ),
-                ifNoAction = endMethod
+                clientNameDevice,
+                clientDeviceType,
+                clientIP,
+                fileSetSize,
+                endMethod
         )
     }
 
@@ -363,8 +311,54 @@ object ActionForSendType: IActionForSendType {
             clientIP: String,
             endMethod: IDelegateMethod
     ) {
+//        Desktop.getDesktop().browse(URI(dataInputStream.readUTF()))
         AppConfig.SystemClipboard.iSystemClipboard.setContent(dataInputStream.readUTF())
         endMethod.voidMethod()
+    }
+
+    private fun commonFunc(
+            iDelegateMethod: IDelegateMethod,
+            clientNameDevice: String,
+            clientDeviceType: String,
+            clientIP: String,
+            fileSetSize: Int,
+            endMethod: IDelegateMethod
+    ) {
+        val deviceId: Int = AppConfig.DataBase.ModelDAOInterface.iDeviceModelDAO.getDeviceId(DeviceModel(clientNameDevice, clientDeviceType, clientIP))
+        AppConfig.DataBase.ModelDAOInterface.iTrustedDeviceModelDAO.getTrustedDevice(TrustedDeviceModel(deviceId, "")).also {
+            if (it.id != 0) {
+                iDelegateMethod.voidMethod()
+            } else {
+                AppConfig.AlertInterface.iMessage.showMessageLikeQuestion(
+                        "Do you want accept files? " +
+                                "\nNumber of files: $fileSetSize " +
+                                "\nDevice name: $clientNameDevice " +
+                                "\nDevice type: $clientDeviceType",
+                        ifYesAction = object : IDelegateMethod {
+                            override fun voidMethod() {
+                                AppConfig.AlertInterface.iMessage.showMessageLikeQuestion(
+                                        "Do you want add this device like Trusted?\n" +
+                                                "Name: $clientNameDevice\n" +
+                                                "Type device: $clientDeviceType\n",
+                                        object : IDelegateMethod {
+                                            override fun voidMethod() {
+                                                AppConfig.DataBase.ModelDAOInterface.iTrustedDeviceModelDAO
+                                                        .addNewTrustedDevice(
+                                                        TrustedDeviceModel(deviceId, "")
+                                                )
+                                            }
+                                        },
+                                        object : IDelegateMethod {
+                                            override fun voidMethod() {}
+                                        }
+                                )
+                                Thread { iDelegateMethod.voidMethod() }.start()
+                            }
+                        },
+                        ifNoAction = endMethod
+                )
+            }
+        }
     }
 
     /**

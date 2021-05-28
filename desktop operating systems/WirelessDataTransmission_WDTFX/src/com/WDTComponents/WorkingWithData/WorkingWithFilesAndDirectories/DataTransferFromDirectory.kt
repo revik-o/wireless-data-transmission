@@ -9,7 +9,14 @@ import java.io.File
 
 object DataTransferFromDirectory {
 
-    fun sendDataFromDirectory(directory: File, rootDirectory: File, dataOutputStream: DataOutputStream, dataInputStream: DataInputStream, iDelegateMethodStringArg: IDelegateMethodStringArg, iDelegateMethodDoubleArg: IDelegateMethodDoubleArg) {
+    fun sendDataFromDirectory(
+            directory: File,
+            rootDirectory: File,
+            dataOutputStream: DataOutputStream,
+            dataInputStream: DataInputStream,
+            iDelegateMethodStringArg: IDelegateMethodStringArg,
+            iDelegateMethodDoubleArg: IDelegateMethodDoubleArg
+    ) {
         val listDirectories: ArrayList<File> = ArrayList()
         val listFiles: ArrayList<File> = ArrayList()
         for (file in directory.listFiles()) { if (file.isFile) listFiles.add(file) else listDirectories.add(file) }
@@ -35,7 +42,15 @@ object DataTransferFromDirectory {
         }
     }
 
-    fun acceptDataFromDirectory(dataInputStream: DataInputStream, dataOutputStream: DataOutputStream, iDelegateMethodStringArg: IDelegateMethodStringArg, iDelegateMethodDoubleArg: IDelegateMethodDoubleArg) {
+    fun acceptDataFromDirectory(
+            dataInputStream: DataInputStream,
+            dataOutputStream: DataOutputStream,
+            deviceName: String,
+            deviceType: String,
+            ipAddress: String,
+            iDelegateMethodStringArg: IDelegateMethodStringArg,
+            iDelegateMethodDoubleArg: IDelegateMethodDoubleArg
+    ) {
         val path: String = dataInputStream.readUTF()
         File("${AppOption.DIRECTORY_FOR_DOWNLOAD_FILES.absolutePath}/$path").mkdirs()
         val countOfFiles: Int = dataInputStream.read()
@@ -43,6 +58,9 @@ object DataTransferFromDirectory {
             DataTransferFromFile.acceptDataFromFile(
                     dataInputStream,
                     dataOutputStream,
+                    deviceName,
+                    deviceType,
+                    ipAddress,
                     "${AppOption.DIRECTORY_FOR_DOWNLOAD_FILES.absolutePath}/$path",
                     iDelegateMethodStringArg,
                     iDelegateMethodDoubleArg
@@ -52,6 +70,9 @@ object DataTransferFromDirectory {
             this.acceptDataFromDirectory(
                     dataInputStream,
                     dataOutputStream,
+                    deviceName,
+                    deviceType,
+                    ipAddress,
                     iDelegateMethodStringArg,
                     iDelegateMethodDoubleArg
             )
