@@ -8,10 +8,9 @@ import android.os.Environment
 import android.widget.Toast
 import androidx.annotation.RequiresApi
 import androidx.appcompat.app.AppCompatActivity
-import ua.edu.onaft.wirelessdatatransmission_wdt.Common.Constant
-import ua.edu.onaft.wirelessdatatransmission_wdt.Common.Method
-import ua.edu.onaft.wirelessdatatransmission_wdt.Common.ScreenDimension
-import ua.edu.onaft.wirelessdatatransmission_wdt.Common.SessionState
+import androidx.documentfile.provider.DocumentFile
+import com.WDTComponents.ArgClass.FileInfo
+import ua.edu.onaft.wirelessdatatransmission_wdt.Common.*
 import ua.edu.onaft.wirelessdatatransmission_wdt.Configuration.DefaultApplicationConfig
 import ua.edu.onaft.wirelessdatatransmission_wdt.Configuration.SystemClipboardConfiguration
 import java.io.File
@@ -77,19 +76,38 @@ class SplashScreen : AppCompatActivity() {
 
     private fun processUriFile(uri: Uri) {
         val path: String = Uri.decode(uri.path)
-        val file = File(path.substring(path.indexOf("://") + 3))
-        if (file.exists()) SessionState.chosenFiles.add(file)
+        if (path.contains("/enc")) {
+            SessionState.sendType = 3
+            val file: DocumentFile? = DocumentFile.fromSingleUri(this, uri)
+            if (file != null && file.isFile)
+                file.name?.let { fileName -> contentResolver.openInputStream(uri)?.let { inputStream ->
+                    SessionState.fileInfoArrayList.add(FileInfo(fileName, "/enc/$fileName", file.length(), inputStream))
+                } }
+        } else {
+            val file = File(path.substring(path.indexOf("://") + 3))
+            if (file.exists()) SessionState.chosenFiles.add(file)
+        }
+    }
+    private fun checkChosenFiles() {
+        when (true) {
+            SessionState.chosenFiles.isNotEmpty() -> {
+                startListOfDevicesActivity()
+            }
+            SessionState.fileInfoArrayList.isNotEmpty() -> {
+                startListOfDevicesActivity()
+            }
+            else -> {
+                Toast.makeText(this, "Don't have file", Toast.LENGTH_SHORT).show()
+                finish()
+            }
+        }
     }
 
-    private fun checkChosenFiles() {
-        if (SessionState.chosenFiles.isEmpty()) {
-            Toast.makeText(this, "Don't have file", Toast.LENGTH_SHORT).show()
-            finish()
-        } else {
-            checkIntentAction = true
+    private fun startListOfDevicesActivity() {
+        checkIntentAction = true
+        if (SessionState.sendType != 3)
             SessionState.sendType = 0
-            startActivity(Intent(this, ListOfDevicesActivity::class.java))
-        }
+        startActivity(Intent(this, ListOfDevicesActivity::class.java))
     }
 
     @RequiresApi(Build.VERSION_CODES.N)

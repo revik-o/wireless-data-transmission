@@ -98,7 +98,7 @@ public class ScanDeviseController {
 
     private void buttonMouseClicked_(Socket socket, String ipString) {
         scanDevices_.stopScanDevices();
-        if (status == 3) {
+        if (status == 4) {
             this.stage.close();
             AppConfig.Action.SendTypeInterface.iActionForSendType.clientActionForSendType3(socket);
         } else {

@@ -4,11 +4,11 @@ import javafx.embed.swing.JFXPanel;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
-import sample.AppInfoKt;
 import sample.Platform.Message;
 import sample.Platform.PlatformDataBase;
 import sample.Platform.PlatformDataBaseKt;
 import sample.Platform.RealizeAlertInterface;
+import sampleimagePath.AppInfoKt;
 
 import java.awt.*;
 import java.awt.event.WindowAdapter;
@@ -20,6 +20,8 @@ import java.util.Objects;
 public class FMain {
 
     public static void main(String[] args) {
+        AppInfoKt.ICON = (FMain.class.getResource("ic_launcher_round.png")).getFile();
+        System.out.println(AppInfoKt.ICON);
         final Frame frame = new Frame();
         Dimension dimension = Toolkit.getDefaultToolkit().getScreenSize();
         int width = dimension.width / 2;
@@ -47,6 +49,7 @@ public class FMain {
                 try {
                     Parent root = FXMLLoader.load(Objects.requireNonNull(FMain.class.getResource("sample/sample.fxml")));
                     jfxPanel.setScene(new Scene(root));
+//                    new sample.Platform.lM().showMessage("that's all data");
                 } catch (IOException e) {
                     e.printStackTrace();
                 }

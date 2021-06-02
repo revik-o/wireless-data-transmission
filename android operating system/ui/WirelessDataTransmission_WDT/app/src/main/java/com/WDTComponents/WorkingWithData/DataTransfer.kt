@@ -19,16 +19,17 @@ object DataTransfer {
     fun sendDataFromClient(socketAddress: InetSocketAddress, sendType: Int, action: IDelegateMethodSocketAction, localDeviceIPAndRepeatableIPsList: ArrayList<String>) {
         this.sendDataFromClient(socketAddress, sendType, object : IDelegateMethodSocketAction {
 
-            override fun voidMethod(nameDevice: String, typeDevice: String, dataInputStream: DataInputStream, dataOutputStream: DataOutputStream, socket: Socket) {
+            override fun voidMethod(nameDevice: String, typeDevice: String, ipStaring: String, dataInputStream: DataInputStream, dataOutputStream: DataOutputStream, socket: Socket) {
                 localDeviceIPAndRepeatableIPsList.add(socketAddress.address.toString().substring(1))
-                action.voidMethod(nameDevice, typeDevice, dataInputStream, dataOutputStream, socket)
+                action.voidMethod(nameDevice, typeDevice, ipStaring, dataInputStream, dataOutputStream, socket)
             }
 
         })
     }
 
     fun sendDataFromClient(socketAddress: InetSocketAddress, sendType: Int, action: IDelegateMethodSocketAction) {
-        println(socketAddress.address.toString().substring(1))
+        val ipString: String = socketAddress.address.toString().substring(1)
+        println(ipString)
         val socket = Socket()
         try
         {
@@ -40,7 +41,7 @@ object DataTransfer {
             dataOutputStream.writeUTF(AppOption.LOCAL_DEVICE_NAME)
             dataOutputStream.writeUTF(AppOption.DEVICE_TYPE)
             dataOutputStream.write(sendType)
-            action.voidMethod(nameDevice, typeDevice, dataInputStream, dataOutputStream, socket)
+            action.voidMethod(nameDevice, typeDevice, ipString, dataInputStream, dataOutputStream, socket)
             socket.close()
         }
         catch (E: ConnectException)
@@ -74,6 +75,7 @@ object DataTransfer {
         dataOutputStream.writeUTF(AppOption.DEVICE_TYPE)
         val clientNameDevice: String = dataInputStream.readUTF()
         val clientDeviceType: String = dataInputStream.readUTF()
+        val clientIP: String = (socket.remoteSocketAddress as InetSocketAddress).address.toString().substring(1)
         AppConfig.DataBase.ModelDAOInterface.iDeviceModelDAO.addNewDeviceToDatabaseWithUsingFilter(socket.inetAddress.toString().substring(1), clientNameDevice, clientDeviceType)
         val sendType = dataInputStream.read()
         /**
@@ -84,10 +86,10 @@ object DataTransfer {
          */
         if (!AppOption.DIRECTORY_FOR_DOWNLOAD_FILES.exists()) AppOption.DIRECTORY_FOR_DOWNLOAD_FILES.mkdirs()
         when (sendType) {
-            1 -> AppConfig.Action.SendTypeInterface.iActionForSendType.serverActionForSendType1(dataInputStream, dataOutputStream, clientNameDevice, clientDeviceType, closeAllForThisConnection)
-            2 -> AppConfig.Action.SendTypeInterface.iActionForSendType.serverActionForSendType2(dataInputStream, dataOutputStream, clientNameDevice, clientDeviceType, closeAllForThisConnection)
-            3 -> AppConfig.Action.SendTypeInterface.iActionForSendType.serverActionForSendType3(dataOutputStream, closeAllForThisConnection)
-            4 -> AppConfig.Action.SendTypeInterface.iActionForSendType.serverActionForSendType4(dataInputStream, closeAllForThisConnection)
+            1 -> AppConfig.Action.SendTypeInterface.iActionForSendType.serverActionForSendType1(dataInputStream, dataOutputStream, clientNameDevice, clientDeviceType, clientIP, closeAllForThisConnection)
+            2 -> AppConfig.Action.SendTypeInterface.iActionForSendType.serverActionForSendType2(dataInputStream, dataOutputStream, clientNameDevice, clientDeviceType, clientIP, closeAllForThisConnection)
+            3 -> AppConfig.Action.SendTypeInterface.iActionForSendType.serverActionForSendType3(dataOutputStream, clientNameDevice, clientDeviceType, clientIP, closeAllForThisConnection)
+            4 -> AppConfig.Action.SendTypeInterface.iActionForSendType.serverActionForSendType4(dataInputStream, clientNameDevice, clientDeviceType, clientIP, closeAllForThisConnection)
             else -> closeAllForThisConnection.voidMethod()
         }
     }

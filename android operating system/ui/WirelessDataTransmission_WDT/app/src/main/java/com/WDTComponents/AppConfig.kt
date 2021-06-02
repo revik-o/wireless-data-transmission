@@ -5,9 +5,9 @@ import com.WDTComponents.AlertInterfaces.ILoadAlert
 import com.WDTComponents.AlertInterfaces.ILittleMessage
 import com.WDTComponents.AlertInterfaces.IMessage
 import com.WDTComponents.DataBase.IWorkingWithDataBase
-import com.WDTComponents.DataBase.ModelDAO.IDeviceModelDAO
-import com.WDTComponents.DataBase.ModelDAO.IFileModelDAO
+import com.WDTComponents.DataBase.ModelDAO.*
 import com.WDTComponents.IPWork.IPackageIP
+import com.WDTComponents.DelegateMethods.IOpenDataMethod
 import com.WDTComponents.ServerControll.IServer
 import com.WDTComponents.SystemClipboard.ISystemClipboard
 import com.WDTComponents.WorkingWithClient.IWorkingWithClient
@@ -24,7 +24,7 @@ object AppOption {
 
     var SOCKET_TIMEOUT = 500
 
-    const val BUFFER_SIZE_FOR_TRANSFER = 1024 * 8
+    const val BUFFER_SIZE_FOR_TRANSFER = 0x4B000
 
     lateinit var LOCAL_DEVICE_NAME: String
 
@@ -33,6 +33,8 @@ object AppOption {
     var SERVER_SOCKET_IS_ON = false
 
     lateinit var DIRECTORY_FOR_DOWNLOAD_FILES: File
+
+    val DEBUG_MODE = true
 
 }
 
@@ -61,6 +63,8 @@ object AppConfig {
 
         lateinit var littleIMessage: ILittleMessage
 
+        lateinit var messageForNotifyAboutCompleteDownloadProcess: ILittleMessage
+
     }
 
     object DataBase {
@@ -77,6 +81,12 @@ object AppConfig {
 
             lateinit var iFileModelDAO: IFileModelDAO
 
+            lateinit var iTrustedDeviceModelDAO: ITrustedDeviceModelDAO
+
+            lateinit var iAcceptedFilesHistoryModelDAO: IAcceptedFilesHistoryModelDAO
+
+            lateinit var iTransferredFilesHistoryModelDAO: ITransferredFilesHistoryModelDAO
+
         }
 
     }
@@ -88,6 +98,12 @@ object AppConfig {
             lateinit var iIP: IPackageIP
 
         }
+
+    }
+
+    object OpenDataMethod {
+
+        lateinit var iOpenDataMethod: IOpenDataMethod
 
     }
 

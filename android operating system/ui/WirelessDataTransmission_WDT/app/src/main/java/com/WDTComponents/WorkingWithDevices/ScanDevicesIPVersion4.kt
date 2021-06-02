@@ -41,20 +41,23 @@ class ScanDevicesIPVersion4: IScanDevices {
         AppConfig.IPWorkInterface.IPV4.iIP.getEnumerableListOfIP().forEach {
             val lock = ReentrantLock()
             val condition = lock.newCondition()
+            var isWorkingWithDB = true
             Thread {
                 lock.withLock {
                     AppConfig.DataBase.ModelDAOInterface.iDeviceModelDAO.selectWhereIPLike(it).forEach { com.WDTComponents.WorkingWithData.DataTransfer.sendDataFromClient(InetSocketAddress(it[3], com.WDTComponents.AppOption.SOCKET_PORT), 0, actionMethodForFindDevice, localDeviceIPAndRepeatableIPsList) }
+                    isWorkingWithDB = false
                     condition.signal()
                 }
             }.start()
             Thread {
                 lock.withLock {
-                    condition.await()
+                    if (isWorkingWithDB) condition.await()
                     val numberOfProcessorCores = Runtime.getRuntime().availableProcessors() * 2
                     var length = 255
                     var sum = 0.0
                     for (core in 0 until numberOfProcessorCores) {
-                        val absoluteValueOfLength: Int = length / (numberOfProcessorCores - (core - 1))
+                        val absoluteValueOfLength: Int =
+                            length / (numberOfProcessorCores - (core - 1))
                         val endScanPoint: Int = length - absoluteValueOfLength
                         val startScanPoint: Int = endScanPoint - absoluteValueOfLength
                         length -= absoluteValueOfLength

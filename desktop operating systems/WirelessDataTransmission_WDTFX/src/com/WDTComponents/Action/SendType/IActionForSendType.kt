@@ -1,10 +1,13 @@
 package com.WDTComponents.Action.SendType
 
+import com.WDTComponents.ArgClass.FileInfo
+import com.WDTComponents.DataBase.Model.FileModel
 import com.WDTComponents.DelegateMethods.IDelegateMethod
 
 import java.io.DataInputStream
 import java.io.DataOutputStream
 import java.io.File
+import java.io.InputStream
 import java.net.Socket
 
 /**
@@ -22,6 +25,8 @@ interface IActionForSendType {
     fun clientActionForSendType3(socket: Socket)
 
     fun clientActionForSendType4(socket: Socket)
+
+    fun clientActionForSendType5(socket: Socket, fileInfoList: List<FileInfo>)
 
     /**
      *

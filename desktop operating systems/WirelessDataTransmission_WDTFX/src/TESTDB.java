@@ -6,8 +6,10 @@ import sample.Platform.PlatformDataBase;
 import sample.Platform.PlatformDataBaseKt;
 
 import java.io.File;
+import java.text.SimpleDateFormat;
 import java.time.LocalDate;
 import java.util.Arrays;
+import java.util.Date;
 
 public class TESTDB {
 
@@ -37,13 +39,14 @@ public class TESTDB {
 //        ));
 //        ((IDAO) AppConfig.DataBase.ModelDAOInterface.iAcceptedFilesHistoryModelDAO).selectAll().forEach(strings -> System.out.println(Arrays.toString(strings))); // correct
 
-        AppConfig.DataBase.ModelDAOInterface.iTransferredFilesHistoryModelDAO.addNewTransferredFileOrUpdate(
-                new TransferredFilesHistoryModel(
-                        fileModelDAO.getFileId(new FileModel("kek.txt", "/oleg/path/kek1.txt", 10)),
-                        LocalDate.now().toString()
-                )
-        );
-        ((IDAO) AppConfig.DataBase.ModelDAOInterface.iTransferredFilesHistoryModelDAO).selectAll().forEach(strings -> System.out.println(Arrays.toString(strings))); // correct
+//        AppConfig.DataBase.ModelDAOInterface.iTransferredFilesHistoryModelDAO.addNewTransferredFileOrUpdate(
+//                new TransferredFilesHistoryModel(
+//                        fileModelDAO.getFileId(new FileModel("kek.txt", "/oleg/path/kek1.txt", 10)),
+//                        LocalDate.now().toString()
+//                )
+//        );
+//        ((IDAO) AppConfig.DataBase.ModelDAOInterface.iTransferredFilesHistoryModelDAO).selectAll().forEach(strings -> System.out.println(Arrays.toString(strings))); // correct
+        System.out.println(new SimpleDateFormat("yyyy-MM-dd").format(new Date()));
     }
 
 }

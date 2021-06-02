@@ -8,10 +8,13 @@ import com.WDTComponents.AppOption
 import com.WDTComponents.DataBase.IWorkingWithDataBase
 import com.WDTComponents.DataBase.ModelDAO.*
 import com.WDTComponents.IPWork.IPV4.PackageIPVersion4
+import com.WDTComponents.DelegateMethods.IOpenDataMethod
 import com.WDTComponents.ServerControll.Server
 import com.WDTComponents.SystemClipboard.ISystemClipboard
 import com.WDTComponents.WorkingWithClient.StartForWorkingWithClient
+import sample.Platform.MessageForNotifyAboutCompleteDownloadProcess
 import sample.Platform.lM
+import java.awt.Desktop
 import java.awt.Toolkit
 import java.awt.datatransfer.DataFlavor
 import java.awt.datatransfer.StringSelection
@@ -38,6 +41,7 @@ class DefaultStartApplicationConfigs {
         AppConfig.AlertInterface.iLoadAlert = iLoadAlert.javaClass
         AppConfig.AlertInterface.iMessage = iMessage
         AppConfig.AlertInterface.littleIMessage = lM()
+        AppConfig.AlertInterface.messageForNotifyAboutCompleteDownloadProcess = MessageForNotifyAboutCompleteDownloadProcess()
         AppConfig.SystemClipboard.iSystemClipboard = object : ISystemClipboard {
 
             override fun setContent(string: String) {
@@ -61,6 +65,25 @@ class DefaultStartApplicationConfigs {
         AppConfig.DataBase.ModelDAOInterface.iAcceptedFilesHistoryModelDAO = AcceptedFilesHistoryModelDAO(AppConfig.DataBase.WorkWithDataBaseInterface.iWorkingWithDataBase)
         AppConfig.DataBase.ModelDAOInterface.iTransferredFilesHistoryModelDAO =TransferredFilesHistoryModelDAO(AppConfig.DataBase.WorkWithDataBaseInterface.iWorkingWithDataBase)
         AppConfig.IPWorkInterface.IPV4.iIP = PackageIPVersion4()
+        AppConfig.OpenDataMethod.iOpenDataMethod = object : IOpenDataMethod {
+            override fun processForSendType4(data: String) {
+                if (data.contains("http")) {
+                    Runtime.getRuntime().exec("xdg-open $data")
+                }
+            }
+
+            override fun openFile(path: String) {
+                Desktop.getDesktop().open(File(path))
+            }
+
+            override fun openFolderInFileManager(path: String) {
+                Desktop.getDesktop().open(File(path))
+            }
+
+            override fun openDownloadFolder() {
+                Desktop.getDesktop().open(AppOption.DIRECTORY_FOR_DOWNLOAD_FILES)
+            }
+        }
         AppConfig.WorkingWithClientInterface.iWorkingWithClient = StartForWorkingWithClient()
         AppConfig.ServerControllInterface.iServer = Server()
         AppConfig.IPWorkInterface.IPV4.iIP.getListOfIP()

@@ -1,7 +1,7 @@
 package sample.Platform
 
-import sample.APPLICATION_NAME
 import com.WDTComponents.DataBase.IWorkingWithDataBase
+import sampleimagePath.APPLICATION_NAME
 import java.io.File
 import java.sql.Connection
 import java.sql.Statement

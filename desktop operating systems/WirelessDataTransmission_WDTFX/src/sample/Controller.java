@@ -85,7 +85,7 @@ public class Controller {
     void GetClipboard(ActionEvent event) throws IOException {
         FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("scanDevise.fxml"));
         Stage stage = new Stage();
-        fxmlLoader.setController(new ScanDeviseController(stage, 3));
+        fxmlLoader.setController(new ScanDeviseController(stage, 4));
         Parent root = fxmlLoader.load();
         stage.setTitle("Scan Devices");
         stage.setScene(new Scene(root));

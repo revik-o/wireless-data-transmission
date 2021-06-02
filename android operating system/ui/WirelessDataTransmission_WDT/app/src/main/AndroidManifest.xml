@@ -44,6 +44,10 @@
                 <data android:mimeType="image/*" />
                 <data android:mimeType="text/*" />
             </intent-filter>
+            <intent-filter>
+                <action android:name="android.intent.action.GET_CONTENT" />
+                <data android:mimeType="*/*" />
+            </intent-filter>
         </activity>
         <activity android:name=".ListOfDevicesActivity" />
         <activity android:name=".FileViewerActivity" />

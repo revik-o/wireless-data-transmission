@@ -1,16 +1,18 @@
 import com.WDTComponents.StartApplicationConfigs.DefaultStartApplicationConfigs
+import com.sun.javafx.webkit.theme.PopupMenuImpl
 import javafx.application.Platform
 import javafx.embed.swing.JFXPanel
 import javafx.fxml.FXMLLoader
 import javafx.scene.Parent
 import javafx.scene.Scene
-import sample.APPLICATION_NAME
+import javafx.scene.control.ContextMenu
 import sample.Platform.COMMON_DIRECTORY
 import sample.Platform.Message
 import sample.Platform.PlatformDataBase
 import sample.Platform.RealizeAlertInterface
-import java.awt.Dimension
-import java.awt.Toolkit
+import sampleimagePath.APPLICATION_NAME
+import sampleimagePath.ICON
+import java.awt.*
 import java.awt.event.WindowAdapter
 import java.awt.event.WindowEvent
 import java.io.File
@@ -54,4 +56,20 @@ fun main() {
     }.start()
     frame.pack()
     frame.isVisible = true
+    addToSysTray()
+}
+
+fun addToSysTray() {
+    ICON = FMain::class.java.getResource("ic_launcher_round.png").file
+//    print(ICON)
+    val systemTray: SystemTray = SystemTray.getSystemTray()
+    val image = Toolkit.getDefaultToolkit().getImage(FMain::class.java.getResource("ic_launcher_round.png"))
+    val popup = PopupMenu()
+    val activity = MenuItem("Launch")
+//    activity.addActionListener {  }
+    popup.add(activity)
+    val trayIcon = TrayIcon(image, "WDT", popup)
+    trayIcon.isImageAutoSize = true
+    systemTray.add(trayIcon)
+    trayIcon.displayMessage("Hi", "message", TrayIcon.MessageType.INFO)
 }

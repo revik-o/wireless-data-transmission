@@ -13,7 +13,7 @@ class DeviceModelDAO(iWorkingWithDataBase: IWorkingWithDataBase): IDAO, IDeviceM
 
     init {
         if (!iWorkingWithDataBase.createDataBase()) println("Database didn't create")
-        if (!iWorkingWithDataBase.executeQuery(FeedReaderContract.SQL_CREATE_DEVICE)) println("Table in Database didn't create")
+        if (!iWorkingWithDataBase.executeQuery(FeedReaderContract.SQL_CREATE_DEVICE)) println("Table \"${FeedReaderContract.FeedDevice.TABLE_NAME}\" in Database didn't create")
     }
 
     fun insert(deviceModel: DeviceModel) {
@@ -59,12 +59,28 @@ class DeviceModelDAO(iWorkingWithDataBase: IWorkingWithDataBase): IDAO, IDeviceM
         }
     }
 
+    private fun buildQueryForSelect(deviceModel: DeviceModel): String = "SELECT ${deviceTable.ID} FROM ${deviceTable.TABLE_NAME} " +
+            "WHERE ${if (deviceModel.id != null) "${deviceTable.ID} = '${deviceModel.id}' AND " else ""}" +
+            "${deviceTable.DEVICE_NAME} = '${deviceModel.deviceName}' AND " +
+            "${deviceTable.DEVICE_TYPE} = '${deviceModel.deviceType}' AND " +
+            "${deviceTable.IP_ADDRESS} = '${deviceModel.ipAddress}';"
+
+    override fun getDeviceId(deviceModel: DeviceModel): Int {
+        iWorkingWithDataBase.executeRowQuery(buildQueryForSelect(deviceModel)).also {
+            return when (it.size) {
+                0 -> 0
+                1 -> it[0][0].toInt()
+                else -> it[it.size - 1][0].toInt()
+            }
+        }
+    }
+
     override fun deleteTable() {
         iWorkingWithDataBase.executeQuery(FeedReaderContract.SQL_DROP_DEVICE)
     }
 
     override fun selectAll(): ArrayList<Array<String>> = iWorkingWithDataBase.executeRowQuery("SELECT * FROM ${deviceTable.TABLE_NAME};")
 
-    override fun selectAllWithRowId(): ArrayList<Array<String>> = iWorkingWithDataBase.executeRowQuery("SELECT keyid, ${deviceTable.ID}, ${deviceTable.DEVICE_NAME}, ${deviceTable.DEVICE_TYPE}, ${deviceTable.IP_ADDRESS} FROM ${deviceTable.TABLE_NAME};")
+//    override fun selectAllWithRowId(): ArrayList<Array<String>> = iWorkingWithDataBase.executeRowQuery("SELECT keyid, ${deviceTable.ID}, ${deviceTable.DEVICE_NAME}, ${deviceTable.DEVICE_TYPE}, ${deviceTable.IP_ADDRESS} FROM ${deviceTable.TABLE_NAME};")
 
 }

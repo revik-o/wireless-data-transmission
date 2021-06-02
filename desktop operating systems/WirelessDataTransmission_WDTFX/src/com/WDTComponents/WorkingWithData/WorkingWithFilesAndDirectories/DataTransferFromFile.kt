@@ -10,44 +10,56 @@ import java.io.*
 object DataTransferFromFile {
 
     fun sendDataFromFile(
-            file: File,
-            dataOutputStream: DataOutputStream,
-            dataInputStream: DataInputStream,
-            iDelegateMethodStringArg: IDelegateMethodStringArg,
-            iDelegateMethodDoubleArg: IDelegateMethodDoubleArg
+        name: String,
+        length: Long,
+        absolutePath: String,
+        fileInputStream: InputStream,
+        dataOutputStream: DataOutputStream,
+        dataInputStream: DataInputStream,
+        iDelegateMethodStringArg: IDelegateMethodStringArg,
+        iDelegateMethodDoubleArg: IDelegateMethodDoubleArg
     ) {
         /**
          * Change Text in Load Stage Message
          */
-        iDelegateMethodStringArg.voidMethod(file.name)
+        iDelegateMethodStringArg.voidMethod(name)
         /**
          * Add file to Data Base
          */
-        addToDataBaseTransferredFile(file)
+        addToDataBaseTransferredFile(name, absolutePath, length)
         /**
          * Start send file
          */
-        dataOutputStream.writeUTF(file.name)
-        val lengthFile: Long = file.length()
+        dataOutputStream.writeUTF(name)
+        val lengthFile: Long = length
         dataOutputStream.writeLong(lengthFile)
-        FileData.writeFile(FileInputStream(file), dataOutputStream, lengthFile, iDelegateMethodDoubleArg)
-//    if (!dataInputStream.readBoolean()) {} /////////////////// ?
-        println(dataInputStream.read()) //////////////////////////////////////////
+        FileData.writeFile(
+            fileInputStream,
+            dataOutputStream,
+            lengthFile,
+            iDelegateMethodDoubleArg
+        )
+        dataInputStream.read()
     }
 
     fun acceptDataFromFile(
-            dataInputStream: DataInputStream,
-            dataOutputStream: DataOutputStream,
-            deviceName: String,
-            deviceType: String,
-            ipAddress: String,
-            outputPath: String,
-            iDelegateMethodStringArg: IDelegateMethodStringArg,
-            iDelegateMethodDoubleArg: IDelegateMethodDoubleArg
+        dataInputStream: DataInputStream,
+        dataOutputStream: DataOutputStream,
+        deviceName: String,
+        deviceType: String,
+        ipAddress: String,
+        outputPath: String,
+        iDelegateMethodStringArg: IDelegateMethodStringArg,
+        iDelegateMethodDoubleArg: IDelegateMethodDoubleArg,
+        iDelegateMethodFileName: IDelegateMethodStringArg
     ) {
         val nameFile: String = dataInputStream.readUTF()
         val lengthFile: Long = dataInputStream.readLong()
         val path = "$outputPath/$nameFile"
+        /**
+         * Set file name
+         */
+        iDelegateMethodFileName.voidMethod(path)
         /**
          * Change Text in Load Stage Message
          */
@@ -63,8 +75,7 @@ object DataTransferFromFile {
             FileData.readFile(dataInputStream, FileOutputStream(path), lengthFile, iDelegateMethodDoubleArg)
         else File(path).createNewFile()
         AppConfig.DataBase.ModelDAOInterface.iFileModelDAO
-//    dataOutputStream.writeBoolean(true)  ///////////////////////// ?
-        dataOutputStream.write(0) ///////////////////////////////// ?
+        dataOutputStream.write(0)
     }
 
 }

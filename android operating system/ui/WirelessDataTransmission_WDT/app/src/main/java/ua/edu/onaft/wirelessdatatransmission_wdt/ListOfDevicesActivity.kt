@@ -41,12 +41,26 @@ class ListOfDevicesActivity : AppCompatActivity() {
     private fun mode(modeId: Int): IDelegateMethodSocketAction {
         return when (modeId) {
             0 -> object : IDelegateMethodSocketAction { // files
-                override fun voidMethod(nameDevice: String, typeDevice: String, dataInputStream: DataInputStream, dataOutputStream: DataOutputStream, socket: Socket) {
+                override fun voidMethod(
+                    nameDevice: String,
+                    typeDevice: String,
+                    ipStaring: String,
+                    dataInputStream: DataInputStream,
+                    dataOutputStream: DataOutputStream,
+                    socket: Socket
+                ) {
                     createButton(typeDevice, nameDevice).setOnClickListener(DeviceButtonOnClickListener(socket))
                 }
             }
             1 -> object : IDelegateMethodSocketAction { // get clipboard
-                override fun voidMethod(nameDevice: String, typeDevice: String, dataInputStream: DataInputStream, dataOutputStream: DataOutputStream, socket: Socket) {
+                override fun voidMethod(
+                    nameDevice: String,
+                    typeDevice: String,
+                    ipStaring: String,
+                    dataInputStream: DataInputStream,
+                    dataOutputStream: DataOutputStream,
+                    socket: Socket
+                ) {
                     createButton(typeDevice, nameDevice).setOnClickListener {
                         Thread {
                             AppConfig.Action.SendTypeInterface.iActionForSendType.clientActionForSendType3(socket)
@@ -55,7 +69,14 @@ class ListOfDevicesActivity : AppCompatActivity() {
                 }
             }
             2 -> object : IDelegateMethodSocketAction { // set clipboard
-                override fun voidMethod(nameDevice: String, typeDevice: String, dataInputStream: DataInputStream, dataOutputStream: DataOutputStream, socket: Socket) {
+                override fun voidMethod(
+                    nameDevice: String,
+                    typeDevice: String,
+                    ipStaring: String,
+                    dataInputStream: DataInputStream,
+                    dataOutputStream: DataOutputStream,
+                    socket: Socket
+                ) {
                     createButton(typeDevice, nameDevice).setOnClickListener {
                         Thread {
                             AppConfig.Action.SendTypeInterface.iActionForSendType.clientActionForSendType4(socket)
@@ -63,8 +84,24 @@ class ListOfDevicesActivity : AppCompatActivity() {
                     }
                 }
             }
-            else -> object : IDelegateMethodSocketAction {
-                override fun voidMethod(nameDevice: String, typeDevice: String, dataInputStream: DataInputStream, dataOutputStream: DataOutputStream, socket: Socket) {}
+            else -> object : IDelegateMethodSocketAction { // work with InputStream
+                override fun voidMethod(
+                    nameDevice: String,
+                    typeDevice: String,
+                    ipStaring: String,
+                    dataInputStream: DataInputStream,
+                    dataOutputStream: DataOutputStream,
+                    socket: Socket
+                ) {
+                    createButton(typeDevice, nameDevice).setOnClickListener { // TODO
+                        Thread {
+                            AppConfig.Action.SendTypeInterface.iActionForSendType.clientActionForSendType5(
+                                socket,
+                                SessionState.fileInfoArrayList
+                            )
+                        }.start()
+                    }
+                }
             }
         }
     }
@@ -120,6 +157,7 @@ class ListOfDevicesActivity : AppCompatActivity() {
 
     override fun onBackPressed() {
         SessionState.chosenFiles.clear()
+        SessionState.fileInfoArrayList.clear()
         finish()
     }
 }

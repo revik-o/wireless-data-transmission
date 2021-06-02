@@ -1,0 +1,2 @@
+gcc -Wall -O2 -I "include" -fPIC -c main.c -o main.o
+gcc -shared -lnotify main.o -o libWDTMessageForNotifyAboutCompleteDownloadProcess.so -s

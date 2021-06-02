@@ -3,23 +3,16 @@ package com.WDTComponents.Action.SendType
 import com.WDTComponents.AlertInterfaces.ILoadAlert
 import com.WDTComponents.AppConfig
 import com.WDTComponents.AppOption
+import com.WDTComponents.ArgClass.FileInfo
 import com.WDTComponents.DataBase.Model.DeviceModel
 import com.WDTComponents.DataBase.Model.TrustedDeviceModel
-import com.WDTComponents.DelegateMethods.IDelegateMethod
-import com.WDTComponents.DelegateMethods.IDelegateMethodDoubleArg
-import com.WDTComponents.DelegateMethods.IDelegateMethodSocketAction
-import com.WDTComponents.DelegateMethods.IDelegateMethodStringArg
+import com.WDTComponents.DelegateMethods.*
 import com.WDTComponents.WorkingWithData.DataTransfer
 import com.WDTComponents.WorkingWithData.WorkingWithFilesAndDirectories.DataTransferFromDirectory
 import com.WDTComponents.WorkingWithData.WorkingWithFilesAndDirectories.DataTransferFromFile
-import java.awt.Desktop
-import java.io.DataInputStream
-import java.io.DataOutputStream
-import java.io.File
-import java.io.IOException
+import java.io.*
 import java.net.InetSocketAddress
 import java.net.Socket
-import java.net.URI
 
 /**
  *
@@ -43,32 +36,33 @@ object ActionForSendType: IActionForSendType {
         DataTransfer.sendDataFromClient(
                 InetSocketAddress(internetProtocolAddress, socket.port),
                 1,
-                object: IDelegateMethodSocketAction {
-                    override fun voidMethod(
-                            nameDevice: String,
-                            typeDevice: String,
-                            ipStaring: String,
-                            dataInputStream: DataInputStream,
-                            dataOutputStream: DataOutputStream,
-                            socket: Socket
-                    ) {
-                        AppConfig.DataBase.ModelDAOInterface.iDeviceModelDAO.addNewDeviceToDatabaseWithUsingFilter(internetProtocolAddress, nameDevice, typeDevice)
-                        try {
-                            dataOutputStream.write(files.size)
-                            val iLoadAlert: ILoadAlert = AppConfig.AlertInterface.iLoadAlert.getConstructor().newInstance()
-                            iLoadAlert.showAlert()
-                            files.forEach { file -> DataTransferFromFile.sendDataFromFile(
-                                    file,
-                                    dataOutputStream,
-                                    dataInputStream,
-                                    setTextForLoadAlert(iLoadAlert),
-                                    setPercentageOfDownloadForLoadAlert(iLoadAlert)
-                            )}
-                            iLoadAlert.closeAlert()
+                CommonSendType1(
+                        internetProtocolAddress,
+                        files.size,
+                        object : IDelegateMethodSocketActionWithLoadAlert {
+                            override fun voidMethod(
+                                    loadAlert: ILoadAlert,
+                                    nameDevice: String,
+                                    typeDevice: String,
+                                    ipStaring: String,
+                                    dataInputStream: DataInputStream,
+                                    dataOutputStream: DataOutputStream,
+                                    socket: Socket
+                            ) {
+                                files.forEach { file -> DataTransferFromFile.sendDataFromFile(
+                                        file.name,
+                                        file.length(),
+                                        file.absolutePath,
+                                        FileInputStream(file),
+                                        dataOutputStream,
+                                        dataInputStream,
+                                        setTextForLoadAlert(loadAlert),
+                                        setPercentageOfDownloadForLoadAlert(loadAlert)
+                                )
+                                }
+                            }
                         }
-                        catch (E: IOException) { E.printStackTrace() }
-                    }
-                }
+                )
         )
     }
 
@@ -109,7 +103,10 @@ object ActionForSendType: IActionForSendType {
                                         try {
                                             dataOutputStream.writeBoolean(false)
                                             DataTransferFromFile.sendDataFromFile(
-                                                    file,
+                                                    file.name,
+                                                    file.length(),
+                                                    file.absolutePath,
+                                                    FileInputStream(file),
                                                     dataOutputStream,
                                                     dataInputStream,
                                                     setTextForLoadAlert(iLoadAlert),
@@ -183,6 +180,41 @@ object ActionForSendType: IActionForSendType {
         )
     }
 
+    override fun clientActionForSendType5(socket: Socket, fileInfoList: List<FileInfo>) {
+        val internetProtocolAddress: String = socket.inetAddress.toString().substring(1)
+        DataTransfer.sendDataFromClient(
+                InetSocketAddress(internetProtocolAddress, socket.port),
+                1,
+                CommonSendType1(
+                        internetProtocolAddress,
+                        fileInfoList.size,
+                        object : IDelegateMethodSocketActionWithLoadAlert {
+                            override fun voidMethod(
+                                    loadAlert: ILoadAlert,
+                                    nameDevice: String,
+                                    typeDevice: String,
+                                    ipStaring: String,
+                                    dataInputStream: DataInputStream,
+                                    dataOutputStream: DataOutputStream,
+                                    socket: Socket
+                            ) {
+                                fileInfoList.forEach { file -> DataTransferFromFile.sendDataFromFile(
+                                        file.fileName,
+                                        file.fileSize,
+                                        file.filePath,
+                                        file.inputStream,
+                                        dataOutputStream,
+                                        dataInputStream,
+                                        setTextForLoadAlert(loadAlert),
+                                        setPercentageOfDownloadForLoadAlert(loadAlert)
+                                )
+                                }
+                            }
+                        }
+                )
+        )
+    }
+
     override fun serverActionForSendType1(
             dataInputStream: DataInputStream,
             dataOutputStream: DataOutputStream,
@@ -198,6 +230,8 @@ object ActionForSendType: IActionForSendType {
                             override fun voidMethod() {
                                 val iLoadAlert = AppConfig.AlertInterface.iLoadAlert.getConstructor().newInstance()
                                 iLoadAlert.showAlert()
+                                var filePath = ""
+                                val isOneFile = fileSetSize == 1
                                 for (i in 0 until fileSetSize)
                                     DataTransferFromFile.acceptDataFromFile(dataInputStream, dataOutputStream,
                                             clientNameDevice,
@@ -208,13 +242,24 @@ object ActionForSendType: IActionForSendType {
                                                 override fun voidMethod(text: String) {
                                                     iLoadAlert.setContentText(text)
                                                 }
-                                            }, object : IDelegateMethodDoubleArg {
-                                        override fun voidMethod(double: Double) {
-                                            iLoadAlert.setPercentageOfDownload(double)
-                                        }
-                                    }
+                                            },
+                                            object : IDelegateMethodDoubleArg {
+                                                override fun voidMethod(double: Double) {
+                                                    iLoadAlert.setPercentageOfDownload(double)
+                                                }
+                                            },
+                                            object : IDelegateMethodStringArg {
+                                                override fun voidMethod(text: String) {
+                                                    if (isOneFile)
+                                                        filePath = text
+                                                }
+                                            }
                                     )
                                 iLoadAlert.closeAlert()
+                                if (filePath != "")
+                                    AppConfig.OpenDataMethod.iOpenDataMethod.openFile(filePath)
+                                else if (!isOneFile)
+                                    AppConfig.OpenDataMethod.iOpenDataMethod.openDownloadFolder()
                             }
                         },
                         endMethod,
@@ -243,6 +288,8 @@ object ActionForSendType: IActionForSendType {
                             override fun voidMethod() {
                                 val iLoadAlert = AppConfig.AlertInterface.iLoadAlert.getConstructor().newInstance()
                                 iLoadAlert.showAlert()
+                                val isOneDirectory = fileSetSize == 1
+                                var directoryPath = ""
                                 for (i in 0 until fileSetSize) {
                                     val isDirectoryData = dataInputStream.readBoolean()
                                     if (isDirectoryData)
@@ -254,11 +301,18 @@ object ActionForSendType: IActionForSendType {
                                                     override fun voidMethod(text: String) {
                                                         iLoadAlert.setContentText(text)
                                                     }
-                                                }, object : IDelegateMethodDoubleArg {
-                                            override fun voidMethod(double: Double) {
-                                                iLoadAlert.setPercentageOfDownload(double)
-                                            }
-                                        }
+                                                },
+                                                object : IDelegateMethodDoubleArg {
+                                                    override fun voidMethod(double: Double) {
+                                                        iLoadAlert.setPercentageOfDownload(double)
+                                                    }
+                                                },
+                                                object : IDelegateMethodStringArg {
+                                                    override fun voidMethod(text: String) {
+                                                        if (isOneDirectory)
+                                                            directoryPath = text
+                                                    }
+                                                }
                                         )
                                     else
                                         DataTransferFromFile.acceptDataFromFile(dataInputStream,
@@ -276,10 +330,17 @@ object ActionForSendType: IActionForSendType {
                                                     override fun voidMethod(double: Double) {
                                                         iLoadAlert.setPercentageOfDownload(double)
                                                     }
+                                                },
+                                                object : IDelegateMethodStringArg {
+                                                    override fun voidMethod(text: String) {}
                                                 }
                                         )
                                 }
                                 iLoadAlert.closeAlert()
+                                if (directoryPath != "")
+                                    AppConfig.OpenDataMethod.iOpenDataMethod.openFolderInFileManager(directoryPath)
+                                else if (!isOneDirectory)
+                                    AppConfig.OpenDataMethod.iOpenDataMethod.openDownloadFolder()
                             }
                         },
                         endMethod,
@@ -301,6 +362,7 @@ object ActionForSendType: IActionForSendType {
             endMethod: IDelegateMethod
     ) {
         dataOutputStream.writeUTF(AppConfig.SystemClipboard.iSystemClipboard.getContent())
+        AppConfig.AlertInterface.littleIMessage.showMessage("Sent new data to clipboard")
         endMethod.voidMethod()
     }
 
@@ -311,8 +373,10 @@ object ActionForSendType: IActionForSendType {
             clientIP: String,
             endMethod: IDelegateMethod
     ) {
-//        Desktop.getDesktop().browse(URI(dataInputStream.readUTF()))
-        AppConfig.SystemClipboard.iSystemClipboard.setContent(dataInputStream.readUTF())
+        val buffClipboardData: String = dataInputStream.readUTF()
+        AppConfig.SystemClipboard.iSystemClipboard.setContent(buffClipboardData)
+        AppConfig.AlertInterface.littleIMessage.showMessage("Added new data to clipboard")
+        AppConfig.OpenDataMethod.iOpenDataMethod.processForSendType4(buffClipboardData)
         endMethod.voidMethod()
     }
 
@@ -344,8 +408,8 @@ object ActionForSendType: IActionForSendType {
                                             override fun voidMethod() {
                                                 AppConfig.DataBase.ModelDAOInterface.iTrustedDeviceModelDAO
                                                         .addNewTrustedDevice(
-                                                        TrustedDeviceModel(deviceId, "")
-                                                )
+                                                                TrustedDeviceModel(deviceId, "")
+                                                        )
                                             }
                                         },
                                         object : IDelegateMethod {
@@ -372,10 +436,52 @@ object ActionForSendType: IActionForSendType {
 
         override fun voidMethod() {
             method.voidMethod()
-            if (showMessage) AppConfig.AlertInterface.iMessage.showMessage("That's all data")
+            if (showMessage) AppConfig.AlertInterface.messageForNotifyAboutCompleteDownloadProcess
+                    .showMessage("That's all data")
             endMethod.voidMethod()
         }
 
+    }
+
+    /**
+     *
+     */
+    private class CommonSendType1(
+            internetProtocolAddress: String,
+            listSize: Int,
+            iDelegateMethod: IDelegateMethodSocketActionWithLoadAlert
+    ): IDelegateMethodSocketAction {
+
+        val internetProtocolAddress: String = internetProtocolAddress
+        val listSize: Int = listSize
+        val iDelegateMethod: IDelegateMethodSocketActionWithLoadAlert = iDelegateMethod
+
+        override fun voidMethod(
+                nameDevice: String,
+                typeDevice: String,
+                ipStaring: String,
+                dataInputStream: DataInputStream,
+                dataOutputStream: DataOutputStream,
+                socket: Socket
+        ) {
+            AppConfig.DataBase.ModelDAOInterface.iDeviceModelDAO
+                    .addNewDeviceToDatabaseWithUsingFilter(
+                            internetProtocolAddress,
+                            nameDevice,
+                            typeDevice
+                    )
+            try {
+                dataOutputStream.write(listSize)
+                val iLoadAlert: ILoadAlert = AppConfig.AlertInterface.iLoadAlert
+                        .getConstructor().newInstance()
+                iLoadAlert.showAlert()
+                iDelegateMethod.voidMethod(
+                        iLoadAlert, nameDevice, typeDevice, ipStaring, dataInputStream, dataOutputStream, socket
+                )
+                iLoadAlert.closeAlert()
+            }
+            catch (E: IOException) { E.printStackTrace() }
+        }
     }
 
 }

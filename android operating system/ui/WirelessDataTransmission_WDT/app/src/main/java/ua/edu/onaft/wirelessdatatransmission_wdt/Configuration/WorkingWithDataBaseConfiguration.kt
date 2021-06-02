@@ -8,7 +8,9 @@ import com.WDTComponents.DataBase.FeedReaderContract
 import com.WDTComponents.DataBase.IWorkingWithDataBase
 import ua.edu.onaft.wirelessdatatransmission_wdt.Common.SessionState
 
-class WorkingWithDataBaseConfiguration: IWorkingWithDataBase, SQLiteOpenHelper(SessionState.context, DATABASE_NAME, null, DATABASE_VERSION) {
+class WorkingWithDataBaseConfiguration(startCreate: Boolean): IWorkingWithDataBase, SQLiteOpenHelper(SessionState.context, DATABASE_NAME, null, DATABASE_VERSION) {
+
+    private val startCreate: Boolean = startCreate
 
     override fun closeConnection() { close() }
 
@@ -33,8 +35,13 @@ class WorkingWithDataBaseConfiguration: IWorkingWithDataBase, SQLiteOpenHelper(S
     }
 
     override fun onCreate(db: SQLiteDatabase?) {
-        db?.execSQL(FeedReaderContract.SQL_CREATE_DEVICE)
-        db?.execSQL(FeedReaderContract.SQL_CREATE_FILE)
+        if (startCreate) {
+            db?.execSQL(FeedReaderContract.SQL_CREATE_DEVICE)
+            db?.execSQL(FeedReaderContract.SQL_CREATE_FILE)
+            db?.execSQL(FeedReaderContract.SQL_CREATE_TRUSTED_DEVICE)
+            db?.execSQL(FeedReaderContract.SQL_CREATE_TRANSFERRED_FILES_HISTORY)
+            db?.execSQL(FeedReaderContract.SQL_CREATE_ACCEPTED_FILES_HISTORY)
+        }
     }
 
     override fun onUpgrade(db: SQLiteDatabase?, oldVersion: Int, newVersion: Int) {

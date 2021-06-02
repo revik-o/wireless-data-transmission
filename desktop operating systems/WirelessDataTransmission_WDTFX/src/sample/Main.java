@@ -1,7 +1,6 @@
 package sample;
 
 import com.WDTComponents.StartApplicationConfigs.DefaultStartApplicationConfigs;
-import com.sun.javafx.application.LauncherImpl;
 import javafx.application.Application;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
@@ -11,6 +10,7 @@ import sample.Platform.Message;
 import sample.Platform.PlatformDataBase;
 import sample.Platform.PlatformDataBaseKt;
 import sample.Platform.RealizeAlertInterface;
+import sampleimagePath.AppInfoKt;
 
 import java.io.File;
 

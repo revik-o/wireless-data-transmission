@@ -6,6 +6,7 @@ import com.WDTComponents.DelegateMethods.IDelegateMethodStringArg
 import java.io.DataInputStream
 import java.io.DataOutputStream
 import java.io.File
+import java.io.FileInputStream
 
 object DataTransferFromDirectory {
 
@@ -23,7 +24,10 @@ object DataTransferFromDirectory {
         dataOutputStream.writeUTF(directory.absolutePath.substring(rootDirectory.absolutePath.length - rootDirectory.name.length))
         dataOutputStream.write(listFiles.size)
         listFiles.forEach { DataTransferFromFile.sendDataFromFile(
-                it,
+                it.name,
+                it.length(),
+                it.absolutePath,
+                FileInputStream(it),
                 dataOutputStream,
                 dataInputStream,
                 iDelegateMethodStringArg,
@@ -49,10 +53,16 @@ object DataTransferFromDirectory {
             deviceType: String,
             ipAddress: String,
             iDelegateMethodStringArg: IDelegateMethodStringArg,
-            iDelegateMethodDoubleArg: IDelegateMethodDoubleArg
+            iDelegateMethodDoubleArg: IDelegateMethodDoubleArg,
+            iDelegateMethodOpenDirectory: IDelegateMethodStringArg
     ) {
         val path: String = dataInputStream.readUTF()
-        File("${AppOption.DIRECTORY_FOR_DOWNLOAD_FILES.absolutePath}/$path").mkdirs()
+        val absolutePath = "${AppOption.DIRECTORY_FOR_DOWNLOAD_FILES.absolutePath}/$path"
+        /**
+         * Set
+         */
+        iDelegateMethodOpenDirectory.voidMethod(absolutePath)
+        File(absolutePath).mkdirs()
         val countOfFiles: Int = dataInputStream.read()
         for (i in 0 until countOfFiles)
             DataTransferFromFile.acceptDataFromFile(
@@ -61,10 +71,13 @@ object DataTransferFromDirectory {
                     deviceName,
                     deviceType,
                     ipAddress,
-                    "${AppOption.DIRECTORY_FOR_DOWNLOAD_FILES.absolutePath}/$path",
+                    absolutePath,
                     iDelegateMethodStringArg,
-                    iDelegateMethodDoubleArg
-            )
+                    iDelegateMethodDoubleArg,
+                    object : IDelegateMethodStringArg {
+                        override fun voidMethod(text: String) {}
+                    }
+                    )
         val countOfDirectories: Int = dataInputStream.read()
         for (i in 0 until countOfDirectories)
             this.acceptDataFromDirectory(
@@ -74,7 +87,8 @@ object DataTransferFromDirectory {
                     deviceType,
                     ipAddress,
                     iDelegateMethodStringArg,
-                    iDelegateMethodDoubleArg
+                    iDelegateMethodDoubleArg,
+                    iDelegateMethodOpenDirectory
             )
     }
 
