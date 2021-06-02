@@ -20,6 +20,7 @@ import java.awt.datatransfer.DataFlavor
 import java.awt.datatransfer.StringSelection
 import java.io.File
 import java.net.InetAddress
+import java.net.URI
 
 /**
  *
@@ -68,7 +69,10 @@ class DefaultStartApplicationConfigs {
         AppConfig.OpenDataMethod.iOpenDataMethod = object : IOpenDataMethod {
             override fun processForSendType4(data: String) {
                 if (data.contains("http")) {
-                    Runtime.getRuntime().exec("xdg-open $data")
+                    if (System.getProperty("os.name").toLowerCase().contains("linux"))
+                        Runtime.getRuntime().exec("xdg-open $data")
+                    else
+                        Desktop.getDesktop().browse(URI(data))
                 }
             }
 
