@@ -10,7 +10,10 @@ import androidx.annotation.RequiresApi
 import androidx.appcompat.app.AppCompatActivity
 import androidx.documentfile.provider.DocumentFile
 import com.WDTComponents.ArgClass.FileInfo
-import ua.edu.onaft.wirelessdatatransmission_wdt.Common.*
+import ua.edu.onaft.wirelessdatatransmission_wdt.Common.Constant
+import ua.edu.onaft.wirelessdatatransmission_wdt.Common.Method
+import ua.edu.onaft.wirelessdatatransmission_wdt.Common.ScreenDimension
+import ua.edu.onaft.wirelessdatatransmission_wdt.Common.SessionState
 import ua.edu.onaft.wirelessdatatransmission_wdt.Configuration.DefaultApplicationConfig
 import ua.edu.onaft.wirelessdatatransmission_wdt.Configuration.SystemClipboardConfiguration
 import java.io.File
@@ -76,18 +79,19 @@ class SplashScreen : AppCompatActivity() {
 
     private fun processUriFile(uri: Uri) {
         val path: String = Uri.decode(uri.path)
-        if (path.contains("/enc")) {
+        if (path.contains("file://")) {
+            val file = File(path.substring(path.indexOf("://") + 3))
+            if (file.exists()) SessionState.chosenFiles.add(file)
+        } else {
             SessionState.sendType = 3
             val file: DocumentFile? = DocumentFile.fromSingleUri(this, uri)
             if (file != null && file.isFile)
                 file.name?.let { fileName -> contentResolver.openInputStream(uri)?.let { inputStream ->
                     SessionState.fileInfoArrayList.add(FileInfo(fileName, "/enc/$fileName", file.length(), inputStream))
-                } }
-        } else {
-            val file = File(path.substring(path.indexOf("://") + 3))
-            if (file.exists()) SessionState.chosenFiles.add(file)
+                }}
         }
     }
+
     private fun checkChosenFiles() {
         when (true) {
             SessionState.chosenFiles.isNotEmpty() -> {

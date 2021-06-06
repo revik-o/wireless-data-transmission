@@ -10,6 +10,7 @@ import sample.Platform.PlatformDataBaseKt;
 import sample.Platform.RealizeAlertInterface;
 import sampleimagePath.AppInfoKt;
 
+import javax.imageio.ImageIO;
 import java.awt.*;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
@@ -19,7 +20,7 @@ import java.util.Objects;
 
 public class FMain {
 
-    public static void main(String[] args) {
+    public static void main(String[] args) throws IOException {
         AppInfoKt.ICON = (FMain.class.getResource("ic_launcher_round.png")).getFile();
         System.out.println(AppInfoKt.ICON);
         final Frame frame = new Frame();
@@ -38,6 +39,7 @@ public class FMain {
                 System.exit(0);
             }
         });
+        frame.setIconImage(ImageIO.read(Objects.requireNonNull(FMain.class.getResource("ic_launcher_round.png"))));
         frame.pack();
         frame.setVisible(true);
         new Thread(() -> {
