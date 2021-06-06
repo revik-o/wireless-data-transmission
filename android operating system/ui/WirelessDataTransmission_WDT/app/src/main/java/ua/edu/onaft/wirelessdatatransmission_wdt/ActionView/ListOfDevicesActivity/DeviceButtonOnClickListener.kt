@@ -20,7 +20,6 @@ class DeviceButtonOnClickListener(socket: Socket): View.OnClickListener {
             else sendType = 1
         }
         val tempFiles = ArrayList<File>(SessionState.chosenFiles)
-        SessionState.chosenFiles.clear()
         if (sendType == 1) {
             Thread {
                 AppConfig.Action.SendTypeInterface.iActionForSendType.clientActionForSendType1(socket, tempFiles)

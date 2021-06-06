@@ -2,7 +2,7 @@ package com.WDTComponents.DelegateMethods
 
 interface IOpenDataMethod {
 
-    fun processForSendType4(data: String)
+    fun processForClipboard(data: String)
 
     fun openFile(path: String)
 

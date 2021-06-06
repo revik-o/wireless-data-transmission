@@ -10,6 +10,8 @@ import com.WDTComponents.DataBase.ModelDAO.*
 import com.WDTComponents.IPWork.IPV4.PackageIPVersion4
 import com.WDTComponents.DelegateMethods.IOpenDataMethod
 import com.WDTComponents.ServerControll.Server
+import com.WDTComponents.SystemClipboard.ClipboardFile
+import com.WDTComponents.SystemClipboard.ContentType
 import com.WDTComponents.SystemClipboard.ISystemClipboard
 import com.WDTComponents.WorkingWithClient.StartForWorkingWithClient
 import sample.Platform.MessageForNotifyAboutCompleteDownloadProcess
@@ -49,8 +51,15 @@ class DefaultStartApplicationConfigs {
                 Toolkit.getDefaultToolkit().systemClipboard.setContents(StringSelection(string), null)
             }
 
-            override fun getContent(): String = Toolkit.getDefaultToolkit().systemClipboard.getData(DataFlavor.stringFlavor) as String
+            override fun getTypeContent(): String = Toolkit.getDefaultToolkit().systemClipboard.getData(DataFlavor.stringFlavor) as String
 
+            override fun getTextContent(): String {
+                return ContentType.TEXT
+            }
+
+            override fun getContentFile(): ClipboardFile {
+                return ClipboardFile()
+            }
         }
         AppConfig.DataBase.WorkWithDataBaseInterface.iWorkingWithDataBase =  iWorkingWithDataBase
         AppOption.DIRECTORY_FOR_DOWNLOAD_FILES = directoryForDownloadFiles
@@ -67,7 +76,7 @@ class DefaultStartApplicationConfigs {
         AppConfig.DataBase.ModelDAOInterface.iTransferredFilesHistoryModelDAO =TransferredFilesHistoryModelDAO(AppConfig.DataBase.WorkWithDataBaseInterface.iWorkingWithDataBase)
         AppConfig.IPWorkInterface.IPV4.iIP = PackageIPVersion4()
         AppConfig.OpenDataMethod.iOpenDataMethod = object : IOpenDataMethod {
-            override fun processForSendType4(data: String) {
+            override fun processForClipboard(data: String) {
                 if (data.contains("http")) {
                     if (System.getProperty("os.name").toLowerCase().contains("linux"))
                         Runtime.getRuntime().exec("xdg-open $data")

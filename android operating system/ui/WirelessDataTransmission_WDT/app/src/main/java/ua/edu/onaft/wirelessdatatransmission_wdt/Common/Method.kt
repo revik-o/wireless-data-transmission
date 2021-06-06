@@ -50,14 +50,12 @@ object Method {
     @RequiresApi(Build.VERSION_CODES.N)
     fun fillMainLinearLayoutForFileViewerFragment(
         activity: Activity,
-//            screenDimension: ScreenDimension,
         fileViewerViewModel: FileViewerViewModel,
         linearLayout: ViewGroup
     ) {
         if (Constant.mainExternalStorageDirectory != null) {
             val mainDirectory = CustomFrameLayout(
                 activity,
-//                    screenDimension,
                 Constant.mainExternalStorageDirectory!!,
                 false,
                 Build.MODEL

@@ -32,37 +32,37 @@ interface IActionForSendType {
      *
      */
     fun serverActionForSendType1(
-            dataInputStream: DataInputStream,
-            dataOutputStream: DataOutputStream,
-            clientNameDevice: String,
-            clientDeviceType: String,
-            clientIP: String,
-            endMethod: IDelegateMethod
+        dataInputStream: DataInputStream,
+        dataOutputStream: DataOutputStream,
+        clientNameDevice: String,
+        clientDeviceType: String,
+        clientIP: String,
+        endMethod: IDelegateMethod
     )
 
     fun serverActionForSendType2(
-            dataInputStream: DataInputStream,
-            dataOutputStream: DataOutputStream,
-            clientNameDevice: String,
-            clientDeviceType: String,
-            clientIP: String,
-            endMethod: IDelegateMethod
+        dataInputStream: DataInputStream,
+        dataOutputStream: DataOutputStream,
+        clientNameDevice: String,
+        clientDeviceType: String,
+        clientIP: String,
+        endMethod: IDelegateMethod
     )
 
     fun serverActionForSendType3(
-            dataOutputStream: DataOutputStream,
-            clientNameDevice: String,
-            clientDeviceType: String,
-            clientIP: String,
-            endMethod: IDelegateMethod
+        dataOutputStream: DataOutputStream,
+        clientNameDevice: String,
+        clientDeviceType: String,
+        clientIP: String,
+        endMethod: IDelegateMethod
     )
 
     fun serverActionForSendType4(
-            dataInputStream: DataInputStream,
-            clientNameDevice: String,
-            clientDeviceType: String,
-            clientIP: String,
-            endMethod: IDelegateMethod
+        dataInputStream: DataInputStream,
+        clientNameDevice: String,
+        clientDeviceType: String,
+        clientIP: String,
+        endMethod: IDelegateMethod
     )
 
 }

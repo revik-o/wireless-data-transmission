@@ -21,8 +21,16 @@ class FileViewerActivity : AppCompatActivity() {
     lateinit var floatingActionButton: FloatingActionButton
     lateinit var fileViewerViewModel: FileViewerViewModel
 
-    @RequiresApi(Build.VERSION_CODES.R)
-    override fun onStart() {
+    @RequiresApi(Build.VERSION_CODES.N)
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        setContentView(R.layout.activity_file_viewer)
+        /**
+         * Getting activity things
+         */
+        viewPager = findViewById(R.id.fileViewerActivityViewPager)
+        floatingActionButton = findViewById(R.id.fileViewerActivityFloatingActionButton)
+
         /**
          * Check Permissions
          */
@@ -39,17 +47,6 @@ class FileViewerActivity : AppCompatActivity() {
         (viewPagerAdapter as FileViewerViewPagerAdapter).fileViewerViewModel = fileViewerViewModel
         viewPager.adapter = viewPagerAdapter
         floatingActionButton.setOnClickListener(FloatingActionButtonClickListener(this))
-        super.onStart()
-    }
-
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_file_viewer)
-        /**
-         * Getting activity things
-         */
-        viewPager = findViewById(R.id.fileViewerActivityViewPager)
-        floatingActionButton = findViewById(R.id.fileViewerActivityFloatingActionButton)
     }
 
     override fun onResume() {

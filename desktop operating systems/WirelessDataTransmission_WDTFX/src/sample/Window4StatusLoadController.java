@@ -32,10 +32,18 @@ public class Window4StatusLoadController {
     }
 
     public void setParam1(String str) {
-        if (textBox != null)
-            Platform.runLater(() ->{
-                textBox.setText(str);
-            });
+        new Thread(() -> {
+            try {
+                Thread.sleep(1000);
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
+            if (textBox != null)
+                Platform.runLater(() ->{
+                    textBox.setText(str);
+                });
+        }).start();
+
     }
     public void setParam2(Double param2) {
         new Thread(new Task() {

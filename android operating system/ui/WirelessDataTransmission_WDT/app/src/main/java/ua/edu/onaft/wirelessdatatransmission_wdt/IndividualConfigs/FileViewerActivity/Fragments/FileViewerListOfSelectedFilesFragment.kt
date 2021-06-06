@@ -21,14 +21,13 @@ class FileViewerListOfSelectedFilesFragment(activity: Activity, fileViewerViewMo
     private lateinit var constraintLayout: ViewGroup
     private lateinit var frameLayoutAppBar: FrameLayout
     private val mainLinearLayout: ViewGroup = linearLayout
-//    private lateinit var space: View
 
     override fun onStart() {
-        val screenDimension = ScreenDimension(activity)
-        val height = screenDimension.height
+//        val screenDimension = ScreenDimension(activity)
+//        val height = screenDimension.height
 //        val width = screenDimension.width
 
-        frameLayoutAppBar.layoutParams.height = (height / 14.55).toInt()
+//        frameLayoutAppBar.layoutParams.height = (height / 14.55).toInt()
 
 //        space.layoutParams.height = Constant.usualSpace
 //        mainLinearLayout.removeAllViews()
@@ -39,7 +38,6 @@ class FileViewerListOfSelectedFilesFragment(activity: Activity, fileViewerViewMo
 //        (mainLinearLayout as LinearLayout).orientation = LinearLayout.VERTICAL
 //        mainLinearLayout.addView(space)
 
-        scrollView.addView(mainLinearLayout)
 
         super.onStart()
     }
@@ -49,8 +47,9 @@ class FileViewerListOfSelectedFilesFragment(activity: Activity, fileViewerViewMo
         constraintLayout = layoutInflater.inflate(R.layout.fragment_file_viewer_list_of_selected_files, null) as ViewGroup
         frameLayoutAppBar = constraintLayout.findViewById(R.id.selectedFileViewerFrameLayoutAppBar)
         scrollView = constraintLayout.findViewById(R.id.selectedFileViewerFragmentMainScrollView)
-//        mainLinearLayout = constraintLayout.findViewById(R.id.selectedFileViewerFragmentMainLinearLayout)
-//        space = constraintLayout.findViewById(R.id.selectedFileViewerFragmentSpace)
+
+        scrollView.addView(mainLinearLayout)
+
         return constraintLayout
     }
 

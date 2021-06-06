@@ -29,6 +29,7 @@ class ListOfDevicesActivity : AppCompatActivity() {
     private lateinit var progressBar: ProgressBar
     private lateinit var cancelButton: View
     private lateinit var scanDeviceService: ScanDevicesIPVersion4
+    private var isSentFileArray: Boolean = false
 
     private fun createButton(typeDevice: String, nameDevice: String): Button {
         val deviceButton: Button = DeviceButton(this@ListOfDevicesActivity, typeDevice, nameDevice).button
@@ -49,6 +50,7 @@ class ListOfDevicesActivity : AppCompatActivity() {
                     dataOutputStream: DataOutputStream,
                     socket: Socket
                 ) {
+                    isSentFileArray = true
                     createButton(typeDevice, nameDevice).setOnClickListener(DeviceButtonOnClickListener(socket))
                 }
             }
@@ -93,7 +95,7 @@ class ListOfDevicesActivity : AppCompatActivity() {
                     dataOutputStream: DataOutputStream,
                     socket: Socket
                 ) {
-                    createButton(typeDevice, nameDevice).setOnClickListener { // TODO
+                    createButton(typeDevice, nameDevice).setOnClickListener {
                         Thread {
                             AppConfig.Action.SendTypeInterface.iActionForSendType.clientActionForSendType5(
                                 socket,
@@ -116,25 +118,6 @@ class ListOfDevicesActivity : AppCompatActivity() {
         }
     }
 
-    override fun onStart() {
-//        val screenDimension = ScreenDimension(this)
-//        val height = screenDimension.height
-//        val width = screenDimension.width
-
-//        frameLayoutAppBar.layoutParams.height = (height / 14.55).toInt()
-//        backArrowButton.layoutParams.height = (frameLayoutAppBar.layoutParams.height / 1.375).toInt()
-//        backArrowButton.layoutParams.width = backArrowButton.layoutParams.height
-//        (backArrowButton.layoutParams as FrameLayout.LayoutParams).updateMargins(left = width / 45, bottom = frameLayoutAppBar.layoutParams.height / 11)
-//        progressBar.progress = 0
-//        space.layoutParams.height = Constant.usualSpace
-
-        backArrowButton.setOnClickListener(BackArrowButtonOnClickListener(this))
-
-        scanDeviceService = ScanDevicesIPVersion4(mode(SessionState.sendType), progressBarProgress())
-        cancelButton.setOnClickListener(CancelButtonOnClickListener(scanDeviceService))
-        super.onStart()
-    }
-
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_list_of_devices)
@@ -145,6 +128,11 @@ class ListOfDevicesActivity : AppCompatActivity() {
         space = findViewById(R.id.deviceListSpace)
 
         cancelButton = findViewById(R.id.deviceListCancelButton)
+
+        backArrowButton.setOnClickListener(BackArrowButtonOnClickListener(this))
+
+        scanDeviceService = ScanDevicesIPVersion4(mode(SessionState.sendType), progressBarProgress())
+        cancelButton.setOnClickListener(CancelButtonOnClickListener(scanDeviceService))
     }
 
     override fun onResume() {
@@ -156,8 +144,9 @@ class ListOfDevicesActivity : AppCompatActivity() {
     }
 
     override fun onBackPressed() {
-        SessionState.chosenFiles.clear()
         SessionState.fileInfoArrayList.clear()
+        if (isSentFileArray)
+            SessionState.chosenFiles.clear()
         finish()
     }
 }
