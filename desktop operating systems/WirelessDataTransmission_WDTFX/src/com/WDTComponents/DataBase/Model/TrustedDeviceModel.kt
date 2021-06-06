@@ -1,6 +1,7 @@
 package com.WDTComponents.DataBase.Model
 
-import java.time.LocalDate
+import java.text.SimpleDateFormat
+import java.util.*
 
 class TrustedDeviceModel {
 
@@ -20,14 +21,14 @@ class TrustedDeviceModel {
     constructor(device_id: Int, title: String) {
         this.device_id = device_id
         this.title = title
-        this.trust_date = LocalDate.now().toString()
+        this.trust_date = SimpleDateFormat("yyyy-MM-dd").format(Date())
     }
 
     constructor(id: Int, device_id: Int, title: String) {
         this.id = id
         this.device_id = device_id
         this.title = title
-        this.trust_date = LocalDate.now().toString()
+        this.trust_date = SimpleDateFormat("yyyy-MM-dd").format(Date())
     }
 
     constructor(device_id: Int, title: String, trust_date: String) {

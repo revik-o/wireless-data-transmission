@@ -12,39 +12,30 @@ import ua.edu.onaft.wirelessdatatransmission_wdt.R
 
 class LoadAlertConfiguration: ILoadAlert {
 
-    private lateinit var notificationManager: NotificationManager
-    private lateinit var notificationBuilder: NotificationCompat.Builder
-    private lateinit var notificationChannel: NotificationChannel
+    private var notificationManager: NotificationManager? = null
+    private var notificationBuilder: NotificationCompat.Builder? = null
+    private var notificationChannel: NotificationChannel? = null
 
     override fun closeAlert() {
-//        SessionState.context.runOnUiThread {
-        notificationManager.cancel(100)
-//        }
+        notificationManager?.cancel(100)
     }
 
     override fun setContentText(text: String) {
-//        SessionState.context.runOnUiThread {
-        notificationBuilder.setContentText(text)
-        notificationManager.notify(100, notificationBuilder.build())
-//        }
+        notificationBuilder?.setContentText(text)
+        notificationManager?.notify(100, notificationBuilder?.build())
     }
 
     override fun setPercentageOfDownload(percent: Double) {
-//        SessionState.context.runOnUiThread {
-        notificationBuilder.setProgress(100, (percent * 100).toInt(), false)
-        notificationManager.notify(100, notificationBuilder.build())
-//        }
+        notificationBuilder?.setProgress(100, (percent * 100).toInt(), false)
+        notificationManager?.notify(100, notificationBuilder?.build())
     }
 
     override fun setTitleAlert(title: String) {
-//        SessionState.context.runOnUiThread {
-        notificationBuilder.setContentTitle(title)
-        notificationManager.notify(100, notificationBuilder.build())
-//        }
+        notificationBuilder?.setContentTitle(title)
+        notificationManager?.notify(100, notificationBuilder?.build())
     }
 
     override fun showAlert() {
-//        SessionState.context.runOnUiThread {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
             notificationManager = SessionState.context.getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
             notificationChannel = NotificationChannel("LoadAlertChannel".intern(), "ch 1", NotificationManager.IMPORTANCE_LOW)
@@ -56,9 +47,8 @@ class LoadAlertConfiguration: ILoadAlert {
                 setProgress(100, 0, false)
             }
 
-            notificationManager.createNotificationChannel(notificationChannel)
-            notificationManager.notify(100, notificationBuilder.build())
-//            }
+            notificationManager?.createNotificationChannel(notificationChannel!!)
+            notificationManager?.notify(100, notificationBuilder!!.build())
         }
     }
 

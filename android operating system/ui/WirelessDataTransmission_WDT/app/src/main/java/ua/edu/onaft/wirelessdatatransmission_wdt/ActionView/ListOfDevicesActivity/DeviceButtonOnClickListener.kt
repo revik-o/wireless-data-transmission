@@ -20,15 +20,14 @@ class DeviceButtonOnClickListener(socket: Socket): View.OnClickListener {
             else sendType = 1
         }
         val tempFiles = ArrayList<File>(SessionState.chosenFiles)
-        if (sendType == 1) {
+        if (sendType == 1)
             Thread {
                 AppConfig.Action.SendTypeInterface.iActionForSendType.clientActionForSendType1(socket, tempFiles)
             }.start()
-        } else if (sendType == 2) {
+        else if (sendType == 2)
             Thread {
                 AppConfig.Action.SendTypeInterface.iActionForSendType.clientActionForSendType2(socket, tempFiles)
             }.start()
-        }
     }
 
 }
