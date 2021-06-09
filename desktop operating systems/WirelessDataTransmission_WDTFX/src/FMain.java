@@ -44,7 +44,8 @@ public class FMain {
         frame.setVisible(true);
         new Thread(() -> {
             final JFXPanel jfxPanel = new JFXPanel();
-            if (!new File(PlatformDataBaseKt.getCOMMON_DIRECTORY()).exists()) new File(PlatformDataBaseKt.getCOMMON_DIRECTORY()).mkdirs();
+            if (!new File(PlatformDataBaseKt.getCOMMON_DIRECTORY()).exists()) 
+            	new File(PlatformDataBaseKt.getCOMMON_DIRECTORY()).mkdirs();
             DefaultStartApplicationConfigs configs = new DefaultStartApplicationConfigs(new RealizeAlertInterface(), new Message(), new PlatformDataBase(), new File(System.getProperty("user.home") + "/Downloads/WirelessDataTransmission_WDTFX"));
             configs.start();
             Platform.runLater(() -> {
