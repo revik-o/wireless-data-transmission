@@ -41,7 +41,7 @@ public class LoadAlertConfiguration implements ILoadAlert {
     @Override
     public void setPercentageOfDownload(double percent) {
         if (loadAlertController != null)
-            loadAlertController.setProgress(percent / 100d);
+            loadAlertController.setProgress(percent);
     }
 
     @Override
@@ -51,8 +51,7 @@ public class LoadAlertConfiguration implements ILoadAlert {
 
     @Override
     public void setContentText(String text) {
-        if (loadAlertController != null)
-            loadAlertController.setText(text);
+        Platform.runLater(() -> loadAlertController.setText(text));
     }
 
 }

@@ -37,7 +37,7 @@ public class JavaFXStarter extends Thread {
                 TypeDeviceENUM.INSTANCE::getCOMPUTER,
                 () -> {
                     try {
-                        return System.getProperty("user.name") + System.getProperty("os.name") + InetAddress.getLocalHost().getHostName();
+                        return System.getProperty("user.name")+ " " + System.getProperty("os.name") + " " + InetAddress.getLocalHost().getHostName();
                     } catch (UnknownHostException e) {
                         e.printStackTrace();
                     }
