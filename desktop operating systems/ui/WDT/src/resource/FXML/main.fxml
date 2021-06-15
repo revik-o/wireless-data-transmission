@@ -57,7 +57,7 @@
          <center>
             <ScrollPane hbarPolicy="NEVER" prefHeight="461.0" prefWidth="489.0" style="-fx-background-color: white;" BorderPane.alignment="CENTER">
                <content>
-                  <AnchorPane fx:id="anchorPaneForContent" onDragDropped="#dragDropped" onDragOver="#dragOver" prefHeight="363.0" prefWidth="510.0" style="-fx-background-color: white;">
+                  <AnchorPane fx:id="anchorPaneForContent" onDragDropped="#dragDropped" onDragOver="#dragOver" onMouseClicked="#anchorPaneMouseClicked" prefHeight="363.0" prefWidth="510.0" style="-fx-background-color: white;">
                      <children>
                         <Text fill="#0000007e" layoutX="137.0" layoutY="187.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Transfer your files or dirs to this place" textAlignment="CENTER" />
                      </children>

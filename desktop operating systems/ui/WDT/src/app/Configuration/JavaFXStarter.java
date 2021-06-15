@@ -1,6 +1,7 @@
 package app.Configuration;
 
 import app.Common.Options;
+import app.Controller.MainController;
 import app.Main;
 import com.WDTComponents.AlertInterfaces.ILoadAlert;
 import com.WDTComponents.Configuration.WDTMinDefaultConfiguration;

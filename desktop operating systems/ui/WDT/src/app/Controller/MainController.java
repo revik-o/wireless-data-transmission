@@ -10,11 +10,14 @@ import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Node;
+import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.ProgressBar;
 import javafx.scene.input.DragEvent;
+import javafx.scene.input.MouseEvent;
 import javafx.scene.input.TransferMode;
 import javafx.scene.layout.AnchorPane;
+import javafx.stage.FileChooser;
 
 import java.io.File;
 import java.io.IOException;
@@ -59,32 +62,11 @@ public class MainController {
 
     @FXML
     void dragDropped(DragEvent event) {
-        List<File> files = Session.INSTANCE.getFileArray();
-        files.clear();
+        Session.INSTANCE.getFileArray().clear();
         anchorPaneForContent.getChildren().clear();
         layoutXForDragDropped = 0;
-        for (File file : event.getDragboard().getFiles()) {
-            files.add(file);
-            FXMLLoader fxmlLoader = new FXMLLoader(
-                    getClass().getClassLoader()
-                            .getResource("resource/FXML/template/file_or_directory_template.fxml")
-            );
-            fxmlLoader.setController(new FolderOrDirectoryController(
-                    file.getName(),
-                    (file.isFile()) ? "resource/IMG/document.png" : "resource/IMG/folder.png"
-            ));
-            Platform.runLater(() -> {
-                try {
-                    Node node = fxmlLoader.load();
-                    node.setLayoutX(20);
-                    node.setLayoutY(layoutXForDragDropped);
-                    layoutXForDragDropped += 80;
-                    anchorPaneForContent.getChildren().add(node);
-                } catch (IOException e) {
-                    e.printStackTrace();
-                }
-            });
-        }
+        for (File file : event.getDragboard().getFiles())
+            addFile(file);
     }
 
     @FXML
@@ -92,6 +74,18 @@ public class MainController {
         if (MAIN_MODE == 1)
             if (event.getDragboard().hasFiles())
                 event.acceptTransferModes(TransferMode.ANY);
+    }
+
+    @FXML
+    void anchorPaneMouseClicked(MouseEvent event) {
+        if (MAIN_MODE == 1 && Session.INSTANCE.getFileArray().isEmpty()) {
+            layoutXForDragDropped = 0;
+            anchorPaneForContent.getChildren().clear();
+            FileChooser fileChooser = new FileChooser();
+            File file = fileChooser.showOpenDialog(anchorPaneForContent.getScene().getWindow());
+            if (file != null)
+                addFile(file);
+        }
     }
 
     @FXML
@@ -125,6 +119,29 @@ public class MainController {
         nextButton.setOnAction(actionEvent -> {
             if (!Session.INSTANCE.getFileArray().isEmpty())
                 ScanDevices.INSTANCE.startScanDevice(anchorPaneForContent, progressBar, 1);
+        });
+    }
+
+    private void addFile(File file) {
+        Session.INSTANCE.getFileArray().add(file);
+        FXMLLoader fxmlLoader = new FXMLLoader(
+                getClass().getClassLoader()
+                        .getResource("resource/FXML/template/file_or_directory_template.fxml")
+        );
+        fxmlLoader.setController(new FolderOrDirectoryController(
+                file.getName(),
+                (file.isFile()) ? "resource/IMG/document.png" : "resource/IMG/folder.png"
+        ));
+        Platform.runLater(() -> {
+            try {
+                Node node = fxmlLoader.load();
+                node.setLayoutX(20);
+                node.setLayoutY(layoutXForDragDropped);
+                layoutXForDragDropped += 80;
+                anchorPaneForContent.getChildren().add(node);
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
         });
     }
 
