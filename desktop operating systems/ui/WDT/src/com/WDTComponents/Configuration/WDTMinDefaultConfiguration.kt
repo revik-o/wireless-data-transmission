@@ -15,8 +15,6 @@ import com.WDTComponents.IPWork.IPV4.PackageIPVersion4
 import com.WDTComponents.ServerControll.Server
 import com.WDTComponents.SystemClipboard.ISystemClipboard
 import com.WDTComponents.WorkingWithClient.StartForWorkingWithClient
-import java.io.File
-import kotlin.reflect.jvm.internal.impl.load.kotlin.JvmType
 
 class WDTMinDefaultConfiguration(
     errorMessageConfig: ILittleMessage,

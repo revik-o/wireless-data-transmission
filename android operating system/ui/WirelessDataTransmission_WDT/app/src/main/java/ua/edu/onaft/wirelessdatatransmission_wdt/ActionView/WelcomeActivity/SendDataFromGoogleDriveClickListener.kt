@@ -7,6 +7,7 @@ import android.view.animation.AnimationUtils
 
 import ua.edu.onaft.wirelessdatatransmission_wdt.R
 
+@Deprecated("")
 class SendDataFromGoogleDriveClickListener(activity: Activity, viewGroup: ViewGroup): View.OnClickListener {
 
     val activity: Activity = activity

@@ -3,6 +3,7 @@ package app.Configuration;
 import com.WDTComponents.SystemClipboard.ClipboardFile;
 import com.WDTComponents.SystemClipboard.ContentType;
 import com.WDTComponents.SystemClipboard.ISystemClipboard;
+import com.WDTComponents.TypeDeviceENUM;
 
 import java.awt.*;
 import java.awt.datatransfer.DataFlavor;
@@ -19,19 +20,17 @@ public class SystemClipboardConfiguration implements ISystemClipboard {
 
     @Override
     public String getTypeContent() {
-        try {
-            return (String) Toolkit.getDefaultToolkit().getSystemClipboard().getData(DataFlavor.stringFlavor);
-        } catch (UnsupportedFlavorException e) {
-            e.printStackTrace();
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-        return "";
+        return ContentType.INSTANCE.getTEXT();
     }
 
     @Override
     public String getTextContent() {
-        return ContentType.INSTANCE.getTEXT();
+        try {
+            return (String) Toolkit.getDefaultToolkit().getSystemClipboard().getData(DataFlavor.stringFlavor);
+        } catch (UnsupportedFlavorException | IOException e) {
+            e.printStackTrace();
+        }
+        return "";
     }
 
     @Override

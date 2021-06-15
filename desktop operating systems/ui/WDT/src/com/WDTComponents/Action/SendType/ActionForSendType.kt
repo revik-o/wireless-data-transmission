@@ -514,7 +514,7 @@ object ActionForSendType: IActionForSendType {
                         dataOutputStream.writeUTF(AppConfig.SystemClipboard.iSystemClipboard.getTextContent())
                         AppConfig.AlertInterface.littleIMessage.showMessage("Sent new data to clipboard")
                     }
-                    else -> {
+                    ContentType.FILE -> {
                         methodWithLoadAlert(
                             object : IDelegateMethodSocketActionWithLoadAlert {
                                 override fun voidMethod(
@@ -570,7 +570,7 @@ object ActionForSendType: IActionForSendType {
                         AppConfig.AlertInterface.littleIMessage.showMessage("Added new data to clipboard")
                         AppConfig.OpenDataMethod.iOpenDataMethod.processForClipboard(data)
                     }
-                    else -> {
+                    ContentType.FILE -> {
                         methodWithLoadAlert(
                             object : IDelegateMethodSocketActionWithLoadAlert {
                                 override fun voidMethod(
