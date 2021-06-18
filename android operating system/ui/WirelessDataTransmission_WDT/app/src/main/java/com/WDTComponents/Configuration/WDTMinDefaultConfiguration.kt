@@ -62,7 +62,7 @@ class WDTMinDefaultConfiguration(
         /**
          * Start WDT Components
          */
-        AppConfig.IPWorkInterface.IPV4.iIP.getListOfIP()
+//        AppConfig.IPWorkInterface.IPV4.iIP.getListOfIP()
     }
 
     fun start() {
