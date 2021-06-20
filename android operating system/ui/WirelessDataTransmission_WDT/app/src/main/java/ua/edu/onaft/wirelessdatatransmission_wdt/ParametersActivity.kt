@@ -7,6 +7,7 @@ import android.widget.Button
 import android.widget.Switch
 import androidx.appcompat.app.AppCompatActivity
 import com.WDTComponents.AppOption
+import ua.edu.onaft.wirelessdatatransmission_wdt.ActionView.ParametersActivity.HistoryButtonOnClickListener
 import ua.edu.onaft.wirelessdatatransmission_wdt.Common.Action.BackArrowButtonOnClickListener
 import ua.edu.onaft.wirelessdatatransmission_wdt.Common.Method
 import ua.edu.onaft.wirelessdatatransmission_wdt.Common.SessionState
@@ -37,6 +38,8 @@ class ParametersActivity : AppCompatActivity() {
         switch = findViewById(R.id.settingsActivitySwitch)
         deviceNameButton = findViewById(R.id.settingsActivityDeviceName)
         historyButton = findViewById(R.id.settingsActivityHistory)
+
+        historyButton.setOnClickListener(HistoryButtonOnClickListener(this))
     }
 
     override fun onResume() {

@@ -10,20 +10,23 @@
         android:id="@+id/selectedFileViewerFragmentMainScrollView"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        tools:layout_editor_absoluteX="118dp"
-        tools:layout_editor_absoluteY="194dp">
+        android:layout_marginTop="50dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent">
 
-<!--        <LinearLayout-->
-<!--            android:id="@+id/selectedFileViewerFragmentMainLinearLayout"-->
-<!--            android:layout_width="match_parent"-->
-<!--            android:layout_height="wrap_content"-->
-<!--            android:orientation="vertical" >-->
+        <!--        <LinearLayout-->
+        <!--            android:id="@+id/selectedFileViewerFragmentMainLinearLayout"-->
+        <!--            android:layout_width="match_parent"-->
+        <!--            android:layout_height="wrap_content"-->
+        <!--            android:orientation="vertical" >-->
 
-<!--            <Space-->
-<!--                android:id="@+id/selectedFileViewerFragmentSpace"-->
-<!--                android:layout_width="match_parent"-->
-<!--                android:layout_height="51dp" />-->
-<!--        </LinearLayout>-->
+        <!--            <Space-->
+        <!--                android:id="@+id/selectedFileViewerFragmentSpace"-->
+        <!--                android:layout_width="match_parent"-->
+        <!--                android:layout_height="51dp" />-->
+        <!--        </LinearLayout>-->
     </ScrollView>
 
     <FrameLayout

@@ -25,7 +25,7 @@ class ListOfDevicesActivity : AppCompatActivity() {
     private lateinit var frameLayoutAppBar: FrameLayout
     private lateinit var backArrowButton: View
     private lateinit var mainLinearLayout: ViewGroup
-    private lateinit var space: View
+//    private lateinit var space: View
     private lateinit var progressBar: ProgressBar
     private lateinit var cancelButton: View
     private lateinit var scanDeviceService: ScanDevicesIPVersion4
@@ -125,7 +125,7 @@ class ListOfDevicesActivity : AppCompatActivity() {
         backArrowButton = findViewById(R.id.deviceListBackArrowButton)
         mainLinearLayout = findViewById(R.id.deviceListMainLinearLayout)
         progressBar = findViewById(R.id.deviceListProgressBar)
-        space = findViewById(R.id.deviceListSpace)
+//        space = findViewById(R.id.deviceListSpace)
 
         cancelButton = findViewById(R.id.deviceListCancelButton)
 

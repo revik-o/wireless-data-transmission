@@ -2,15 +2,11 @@ package ua.edu.onaft.wirelessdatatransmission_wdt.Observer
 
 import android.annotation.SuppressLint
 import android.app.Activity
-import android.view.ViewGroup
 import android.view.animation.AnimationUtils
 import android.widget.LinearLayout
-import android.widget.Space
 import ua.edu.onaft.wirelessdatatransmission_wdt.ActionView.FileViewerActivity.ActionFragment.DirectoryOrFileLongClickListener
 import ua.edu.onaft.wirelessdatatransmission_wdt.ActionView.FileViewerActivity.ActionFragment.DirectoryOrFileOnClickListener
-import ua.edu.onaft.wirelessdatatransmission_wdt.Common.Constant
 import ua.edu.onaft.wirelessdatatransmission_wdt.Common.CustomFrameLayout
-import ua.edu.onaft.wirelessdatatransmission_wdt.Common.ScreenDimension
 import ua.edu.onaft.wirelessdatatransmission_wdt.Common.SessionState
 import ua.edu.onaft.wirelessdatatransmission_wdt.R
 import ua.edu.onaft.wirelessdatatransmission_wdt.ViewModel.FileViewerViewModel
@@ -23,7 +19,7 @@ class FileViewerObserver(activity: Activity, arraySize: Int, fileViewerViewModel
     private val linearLayouts = Array<LinearLayout?>(arraySize) { null }
     private var chosenCustomFrameLayouts = ArrayList<CustomFrameLayout>()
     private var currentCustomFrameLayouts = Array<CustomFrameLayout?>(0) { null }
-    private var spaceHeights = listOf(Constant.specialSpace, Constant.usualSpace)
+//    private var spaceHeights = listOf(Constant.specialSpace, Constant.usualSpace)
 
     private fun addViewToMainLinearLayout(indexOfCurrentArray: Int, customFrameLayoutArg: CustomFrameLayout) {
         val customFrameLayout = CustomFrameLayout(
@@ -42,14 +38,8 @@ class FileViewerObserver(activity: Activity, arraySize: Int, fileViewerViewModel
     }
 
     private fun removeAllAndAddSpaceToLinearLayout(idLinearLayout: Int) {
-        val linearLayout: LinearLayout? = linearLayouts[idLinearLayout]
-        val spaceHeight: Int = spaceHeights[idLinearLayout]
-        if (linearLayout != null) {
-            linearLayout.removeAllViews()
-            val newSpace = Space(SessionState.context)
-            newSpace.layoutParams = ViewGroup.LayoutParams(0, spaceHeight)
-            linearLayout.addView(newSpace)
-        }
+//        val spaceHeight: Int = spaceHeights[idLinearLayout]
+        linearLayouts[idLinearLayout]?.removeAllViews()
     }
 
     fun addLinearLayout(linearLayout: LinearLayout) {
@@ -96,7 +86,6 @@ class FileViewerObserver(activity: Activity, arraySize: Int, fileViewerViewModel
         /**
          * TODO???
          */
-        val screenDimension = ScreenDimension(activity)
         removeAllAndAddSpaceToLinearLayout(0)
         mainLoop@for ((index, file) in fileArray.withIndex()) {
             for (value in tempListOfChosenCustomFrameLayouts) {

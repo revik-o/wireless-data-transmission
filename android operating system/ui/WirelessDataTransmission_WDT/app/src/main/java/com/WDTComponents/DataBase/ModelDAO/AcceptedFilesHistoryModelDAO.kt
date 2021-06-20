@@ -67,4 +67,8 @@ class AcceptedFilesHistoryModelDAO(iWorkingWithDataBase: IWorkingWithDataBase): 
 
     override fun selectAll(): ArrayList<Array<String>> = iWorkingWithDataBase.executeRowQuery("SELECT * FROM ${acceptedFilesHistoryTable.TABLE_NAME};")
 
+    /*
+    * Select * from tablename where id > 0;
+    */
+
 }

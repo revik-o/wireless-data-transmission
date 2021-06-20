@@ -62,7 +62,7 @@ object Method {
             )
             mainDirectory.frameLayout.setOnClickListener(DirectoryOrFileOnClickListener(activity, fileViewerViewModel, mainDirectory))
             linearLayout.removeAllViews()
-            addInLinearLayoutNewSpace(activity, linearLayout, Constant.specialSpace)
+//            addInLinearLayoutNewSpace(activity, linearLayout, Constant.specialSpace)
             linearLayout.addView(mainDirectory.frameLayout)
         } else {
             if (!checkPermissions(activity)) {

@@ -12,7 +12,6 @@ import androidx.documentfile.provider.DocumentFile
 import com.WDTComponents.ArgClass.FileInfo
 import ua.edu.onaft.wirelessdatatransmission_wdt.Common.Constant
 import ua.edu.onaft.wirelessdatatransmission_wdt.Common.Method
-import ua.edu.onaft.wirelessdatatransmission_wdt.Common.ScreenDimension
 import ua.edu.onaft.wirelessdatatransmission_wdt.Common.SessionState
 import ua.edu.onaft.wirelessdatatransmission_wdt.Configuration.DefaultApplicationConfig
 import ua.edu.onaft.wirelessdatatransmission_wdt.Configuration.SystemClipboardConfiguration
@@ -47,10 +46,10 @@ class SplashScreen : AppCompatActivity() {
         /**
          * adapting activity
          */
-        ScreenDimension(this).also {
-            Constant.usualSpace = (it.height / 11.55).toInt()
-            Constant.specialSpace = (Constant.usualSpace * 2)
-        }
+//        ScreenDimension(this).also {
+//            Constant.usualSpace = (it.height / 11.55).toInt()
+//            Constant.specialSpace = (Constant.usualSpace * 2)
+//        }
         /**
          * Start Service
          */

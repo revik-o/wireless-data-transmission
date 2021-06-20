@@ -9,7 +9,6 @@ import android.view.ViewGroup
 import android.widget.FrameLayout
 import android.widget.LinearLayout
 import androidx.fragment.app.Fragment
-import ua.edu.onaft.wirelessdatatransmission_wdt.Common.ScreenDimension
 import ua.edu.onaft.wirelessdatatransmission_wdt.R
 import ua.edu.onaft.wirelessdatatransmission_wdt.ViewModel.FileViewerViewModel
 

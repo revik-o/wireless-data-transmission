@@ -31,7 +31,8 @@ public class JavaFXStarter extends Thread {
                 LoadAlertConfiguration.class,
                 new MessageConfiguration(),
                 new LittleMessageConfiguration(),
-                new NotifyAboutCompleteProcessConfiguration(),
+                (System.getProperty("os.name").toLowerCase().contains("windows")) ?
+                        new NotifyAboutCompleteProcessConfiguration4Windows() : new NotifyAboutCompleteProcessConfiguration(),
                 new SystemClipboardConfiguration(),
                 new WorkingWithDataBaseConfiguration(),
                 new OpenDataMethodConfiguration(),
