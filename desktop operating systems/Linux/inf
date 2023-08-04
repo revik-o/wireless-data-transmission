@@ -1,1 +1,0 @@
-jpackage --deploy -native --dest output --name Jfx --linux-app-category misc --main-jar /home/oleg/jdk-16.0.1/bin/WirelessDataTransmission_WDTFX.jar
