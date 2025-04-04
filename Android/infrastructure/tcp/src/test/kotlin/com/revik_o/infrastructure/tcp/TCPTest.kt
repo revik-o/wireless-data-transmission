@@ -6,6 +6,7 @@ import com.revik_o.core.dto.DeviceInfoDto
 import com.revik_o.core.entity.DeviceEntity.Companion.DeviceType
 import com.revik_o.core.entity.HistoryEntity.Companion.ResourceType
 import com.revik_o.core.factory.CommunicationContextFactory
+import com.revik_o.infrastructure.resource.ResourceUtils
 import com.revik_o.infrastructure.tcp.exception.UnsupportedVersionException
 import com.revik_o.tests.ApplicationTestConfig
 import com.revik_o.tests.MockRemoteController
@@ -86,7 +87,8 @@ class TCPTest {
 
     @Test
     fun sendFolderTest() {
-        val clientFolder = File("./../../app")
+        val target = ""
+        val testPrefix = "./../.."
 
         startTCPServer()
 
@@ -99,12 +101,31 @@ class TCPTest {
         }
         _communicationService.send(
             CommunicationContextFactory.buildCommunicationContext(
-                DeviceInfoDto("0.0.0.0"), clientFolder
+                DeviceInfoDto("0.0.0.0"), File("$testPrefix/$target")
             ),
-            onSending = { progress, resource  ->
+            onSending = { progress, resource ->
                 LogUtils.debug("$resource -> $progress%")
             }
         ) { assertNull(it) }
+
+        ResourceUtils.scanResources(onFile = { file ->
+            val filePath = file.path;
+            val remoteControllerOutputDir = _remoteController.outputDirPath
+            val rootFilePath = filePath.substring(
+                filePath.lastIndexOf(remoteControllerOutputDir) + remoteControllerOutputDir.length
+            )
+            val testResource = File("$testPrefix/$rootFilePath")
+            assertTrue(testResource.isFile == file.isFile)
+            assertEquals(testResource.readText(), file.readText())
+            assertEquals(testResource.readText().length, file.readText().length)
+        }, onFolder = { dir ->
+            val dirPath = dir.path;
+            val remoteControllerOutputDir = _remoteController.outputDirPath
+            val rootDirPath = dirPath.substring(
+                dirPath.lastIndexOf(remoteControllerOutputDir) + remoteControllerOutputDir.length
+            )
+            assertTrue(File("$testPrefix/$rootDirPath").isDirectory == dir.isDirectory)
+        }, File(_remoteController.outputDirPath))
 
         TCP.stop(_appTestConf)
     }

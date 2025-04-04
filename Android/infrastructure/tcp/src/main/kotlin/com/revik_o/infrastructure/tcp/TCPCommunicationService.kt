@@ -110,10 +110,14 @@ class TCPCommunicationService(
                 } else {
                     ResourceUtils.scanResources(
                         {
-                            handler.send("resource%/%${it.name}%/%${it.length()}%/%${it.path}")
+                            handler.send("resource%/%${it.path}%/%${it.length()}")
                             handler.send(it) { progress -> onSending(progress, it.name) }
+
+                            if (handler.readInt() < OK_STATUS) {
+                                throw DataTransferFailedException()
+                            }
                         },
-                        { handler.send("dir%/%${it.name}") },
+                        { handler.send("dir%/%${it.path}") },
                         *communicationContext.data
                     )
                     handler.send("$OP_DONE_STATUS:OPDone")
@@ -169,20 +173,23 @@ class TCPCommunicationService(
             ) {
                 val resourceSignature = response.split("%/%")
                 val type = resourceSignature[0].trim()
-                val resourceName = resourceSignature[1].trim()
+                val resourcePath = resourceSignature[1].trim()
+                    .replace("../", "/")
+                    .replace("./", "/")
+                    .replace("///", "/")
+                    .replace("//", "/")
 
                 if (type == "dir") {
-                    _remoteController.systemCallMkDir(resourceName)
+                    _remoteController.systemCallMkDir(resourcePath)
                 } else {
                     val resourceLength = resourceSignature[2].toULong()
-                    val resourcePath = resourceSignature[3]
 
                     communicationHandler.readResource(
-                        _remoteController.systemCallMkResource(
-                            resourcePath,
-                            resourceName
-                        ), resourceLength
-                    ) { progress -> _remoteController.checkProgress(resourceName, progress) }
+                        _remoteController.systemCallMkResource(resourcePath),
+                        resourceLength
+                    ) { progress -> _remoteController.checkProgress(resourcePath, progress) }
+
+                    communicationHandler.send(OK_STATUS)
                 }
             }
 
