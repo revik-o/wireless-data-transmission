@@ -14,6 +14,7 @@ kotlin {
 dependencies {
     implementation(project(":core:core"))
     implementation(project(":core:config"))
+    implementation(project(":infrastructure:resource"))
 
     testImplementation(project(":core:tests"))
     testImplementation(libs.junit)
