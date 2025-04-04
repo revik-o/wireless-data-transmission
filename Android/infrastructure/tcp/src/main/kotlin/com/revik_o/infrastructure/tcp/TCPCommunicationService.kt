@@ -111,7 +111,7 @@ class TCPCommunicationService(
                     ResourceUtils.scanResources(
                         {
                             handler.send("resource%/%${it.path}%/%${it.length()}")
-                            handler.send(it) { progress -> onSending(progress, it.name) }
+                            handler.send(it) { progress -> onSending(progress, it.path) }
 
                             if (handler.readInt() < OK_STATUS) {
                                 throw DataTransferFailedException()

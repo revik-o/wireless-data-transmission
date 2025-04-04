@@ -87,7 +87,7 @@ class TCPTest {
 
     @Test
     fun sendFolderTest() {
-        val target = ""
+        val target = "gradle"
         val testPrefix = "./../.."
 
         startTCPServer()
@@ -97,14 +97,14 @@ class TCPTest {
             true
         }
         _remoteController.checkProgressFunc = { name, progress ->
-            LogUtils.debug("server side: name: $name, progress: $progress")
+            LogUtils.debug("server side: name: $name, progress: \u001B[32m$progress%\u001B[0m")
         }
         _communicationService.send(
             CommunicationContextFactory.buildCommunicationContext(
                 DeviceInfoDto("0.0.0.0"), File("$testPrefix/$target")
             ),
             onSending = { progress, resource ->
-                LogUtils.debug("$resource -> $progress%")
+                LogUtils.debug("$resource -> \u001B[32m$progress%\u001B[0m")
             }
         ) { assertNull(it) }
 

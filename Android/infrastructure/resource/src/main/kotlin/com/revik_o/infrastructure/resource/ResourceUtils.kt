@@ -15,13 +15,13 @@ object ResourceUtils {
         progress: (UShort) -> Unit
     ) {
         var countOfWrite: Int
-        var length = 0uL
+        var length = 0
         val byteArray = ByteArray(BUFFER_SIZE_FOR_TRANSFER)
 
         while (resource.read(byteArray).also { countOfWrite = it } > 0) {
-            length += countOfWrite.toULong()
+            length += countOfWrite
             destination.write(byteArray, 0, countOfWrite)
-            progress(((length.toUInt() / expectedResourceLength) * 100u).toUShort())
+            progress(((length / expectedResourceLength.toDouble()) * 100).toInt().toUShort())
         }
 
         destination.flush()
@@ -34,20 +34,20 @@ object ResourceUtils {
         progress: (UShort) -> Unit
     ) {
         var countOfWrite: Int
-        var length = 0uL
+        var length = 0
         val byteArray = ByteArray(BUFFER_SIZE_FOR_TRANSFER)
 
         while (resource.read(byteArray).also { countOfWrite = it } > 0) {
-            length += countOfWrite.toULong()
+            length += countOfWrite
 
-            if (length >= expectedResourceLength) {
+            if (length.toULong() >= expectedResourceLength) {
                 destination.write(byteArray, 0, countOfWrite)
-                progress(((length.toUInt() / expectedResourceLength) * 100u).toUShort())
+                progress(((length / expectedResourceLength.toDouble()) * 100).toInt().toUShort())
                 break
             }
 
             destination.write(byteArray, 0, countOfWrite)
-            progress(((length.toUInt() / expectedResourceLength) * 100u).toUShort())
+            progress(((length / expectedResourceLength.toDouble()) * 100).toInt().toUShort())
         }
 
         destination.flush()
