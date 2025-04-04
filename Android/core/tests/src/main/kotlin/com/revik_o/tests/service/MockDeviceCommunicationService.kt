@@ -9,7 +9,7 @@ import com.revik_o.core.service.DeviceCommunicationServiceI
 
 data class MockDeviceCommunicationService(
     private val sendClipboard: (ClipboardCommunicationContextI, (Boolean) -> Unit) -> Unit = { _, _ -> },
-    private val sendFile: (FileCommunicationContextI) -> Unit = { TODO("file") },
+    private val sendFile: (FileCommunicationContextI, (UShort, String) -> Unit, (String?) -> Unit) -> Unit = { _, _, _ -> },
     private val sendPing: (CommunicationContextI, (RemoteDeviceDto) -> Unit) -> Unit = { _, _ -> },
     private val acceptFunc: (CommunicationHandlerI) -> Unit = {},
 ) : DeviceCommunicationServiceI {
@@ -20,9 +20,10 @@ data class MockDeviceCommunicationService(
     ) = sendClipboard(communicationContext, then)
 
     override fun send(
-        communicationContext: FileCommunicationContextI, onSending: () -> Unit,
+        communicationContext: FileCommunicationContextI,
+        onSending: (UShort, String) -> Unit,
         then: (String?) -> Unit
-    ) = sendFile(communicationContext)
+    ) = sendFile(communicationContext, onSending, then)
 
     override fun send(
         communicationContext: CommunicationContextI,
