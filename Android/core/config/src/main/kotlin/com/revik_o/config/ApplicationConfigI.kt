@@ -8,6 +8,7 @@ interface ApplicationConfigI {
         get() = true
     val currentCommunicationProtocol: CommunicationProtocol
     val tcpPort: Int
+        get() = 5050
     val tcpConnectionTimeout: Int
         get() = 100
     val deviceName: String

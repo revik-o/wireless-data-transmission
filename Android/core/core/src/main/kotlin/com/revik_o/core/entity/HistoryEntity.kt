@@ -13,6 +13,7 @@ data class HistoryEntity(
 ) {
 
     companion object {
+
         enum class ResourceType(val signature: Short) {
             PING(0), FILE_OR_FOLDER(1), CLIPBOARD_DATA(2);
 
@@ -29,7 +30,6 @@ data class HistoryEntity(
             }
         }
 
-        @Deprecated(message = "Mb can be removed")
         enum class ActionType(val signature: Short) {
             CLOSE_CONNECTION(-1), ACCEPT(0), SEND(1);
 

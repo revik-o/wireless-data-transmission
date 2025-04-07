@@ -10,20 +10,18 @@ data class DeviceEntity(
     val additionDate: Date = Date()
 ) {
 
-    companion object {
-        enum class DeviceType(val signature: Short) {
-            PHONE(0), WINDOWS_MACHINE(1);
+    enum class DeviceType(val signature: Short) {
+        ANDROID_PHONE(0), LINUX_MACHINE(1), WINDOWS_MACHINE(2);
 
-            companion object {
-                fun getDeviceTypeBySignature(signature: Short): DeviceType? {
-                    for (device in DeviceType.entries) {
-                        if (signature == device.signature) {
-                            return device
-                        }
+        companion object {
+            fun getDeviceTypeBySignature(signature: Short): DeviceType? {
+                for (device in DeviceType.entries) {
+                    if (signature == device.signature) {
+                        return device
                     }
-
-                    return null
                 }
+
+                return null
             }
         }
     }

@@ -21,10 +21,11 @@ dependencyResolutionManagement {
 
 rootProject.name = "Wireless data transmission"
 include(":app")
+include(":core:common")
+include(":core:data")
 include(":core:core")
 include(":core:config")
-include(":infrastructure:database")
 include(":infrastructure:tcp")
 include(":core:tests")
-include(":infrastructure:ip")
 include(":infrastructure:resource")
+include(":infrastructure:common")
