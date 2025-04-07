@@ -36,10 +36,9 @@ android {
 }
 
 dependencies {
-
-    implementation(project(":core:core"))
-    implementation(project(":core:config"))
+    implementation(project(":core:common"))
     implementation(project(":infrastructure:tcp"))
+    implementation(project(":infrastructure:common"))
     implementation(libs.androidx.core.ktx)
     implementation(libs.androidx.appcompat)
     implementation(libs.material)

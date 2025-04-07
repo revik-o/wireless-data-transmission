@@ -1,4 +1,4 @@
-package com.revik_o.infrastructure.tcp.handler
+package com.revik_o.infrastructure.tcp
 
 import com.revik_o.core.common.AppVersion
 import com.revik_o.core.common.OSType
@@ -13,7 +13,6 @@ import com.revik_o.infrastructure.tcp.dto.TCPRemoteDeviceDto.Companion.buildRemo
 import java.io.BufferedInputStream
 import java.io.DataInputStream
 import java.io.DataOutputStream
-import java.io.InputStream
 import java.io.OutputStream
 import java.net.Socket
 

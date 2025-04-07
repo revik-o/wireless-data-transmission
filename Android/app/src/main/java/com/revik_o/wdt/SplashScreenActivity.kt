@@ -21,7 +21,7 @@ class SplashScreenActivity : AppCompatActivity() {
             v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom)
             insets
         }
-        startService(Intent(this, DeviceCommunicationBackgroundService::class.java)) // FIXME
+        startService(Intent(this, DeviceCommunicationBackgroundService::class.java))
         startActivity(Intent(this, MainActivity::class.java))
     }
 }

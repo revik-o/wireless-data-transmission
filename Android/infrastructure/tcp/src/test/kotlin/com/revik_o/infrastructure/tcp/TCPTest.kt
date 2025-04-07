@@ -8,8 +8,10 @@ import com.revik_o.infrastructure.common.commands.fetch.RemoteClipboardCommand
 import com.revik_o.infrastructure.common.commands.send.ClipboardCommand
 import com.revik_o.infrastructure.common.commands.send.ResourcesCommand
 import com.revik_o.infrastructure.common.dtos.RemoteDeviceDto.CurrentDeviceDto.Companion.getCurrentDeviceDto
+import com.revik_o.infrastructure.common.utils.IPv4Utils
 import com.revik_o.test.TestOSAPI
 import com.revik_o.test.service.os.TEST_OUTPUT_DIR
+import com.revik_o.test.utils.LogUtils
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.test.runTest
 import org.junit.After
@@ -22,6 +24,8 @@ import org.junit.Before
 import org.junit.Test
 import java.io.File
 import java.net.ConnectException
+import java.util.concurrent.locks.ReentrantLock
+import kotlin.concurrent.withLock
 
 private const val IP = "0.0.0.0"
 
@@ -30,6 +34,7 @@ class TCPTest {
     private val _mockOSAPI = TestOSAPI()
     private val _fetcher = TCPFetcher(_mockOSAPI)
     private val _sender = TCPSender(_mockOSAPI)
+
 
     @Before
     fun before() {
@@ -43,6 +48,7 @@ class TCPTest {
     fun after() {
         TCP.stop(_mockOSAPI)
         assertFalse(_mockOSAPI.appSettings.isCommunicationEnabled)
+        ConcurrencyUtils.sleep(300)
         assertThrows(ConnectException::class.java) {
             TCP.stop(_mockOSAPI)
         }
@@ -104,5 +110,25 @@ class TCPTest {
             )
             assertTrue(File(testPrefix, rootDirPath).isDirectory == dir.isDirectory)
         }, TEST_OUTPUT_DIR)
+    }
+
+    @Test // for connecting JVM to some device (open ports)
+    fun runServer() {
+        val lock = ReentrantLock()
+
+        lock.withLock {
+            LogUtils.debug("TCP Server started...")
+            runTest {
+                IPv4Utils.iterateOverNetwork { ip ->
+                    LogUtils.debug(ip)
+                    try {
+                        LogUtils.debug(_fetcher.fetch(DeviceInfoCommand(ip))?.title + "!!!!!")
+                    } catch (e: Exception) {
+                        LogUtils.debug(e.message)
+                    }
+                }
+            }
+            lock.newCondition().await()
+        }
     }
 }

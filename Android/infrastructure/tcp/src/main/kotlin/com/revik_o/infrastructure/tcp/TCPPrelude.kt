@@ -10,7 +10,6 @@ import com.revik_o.infrastructure.tcp.TCPAppCodes.UNSUPPORTED_VERSION
 import com.revik_o.infrastructure.tcp.exception.UnsupportedOsTypeException
 import com.revik_o.infrastructure.tcp.exception.UnsupportedRequestTypeException
 import com.revik_o.infrastructure.tcp.exception.UnsupportedVersionException
-import com.revik_o.infrastructure.tcp.handler.TCPDataHandler
 import java.net.InetSocketAddress
 import java.net.Socket
 

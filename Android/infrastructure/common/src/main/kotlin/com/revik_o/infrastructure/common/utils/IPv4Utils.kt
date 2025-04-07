@@ -1,9 +1,5 @@
 package com.revik_o.infrastructure.common.utils
 
-import com.revik_o.core.common.utils.ConcurrencyUtils.runConcurrentIOOperation
-import com.revik_o.infrastructure.common.CommunicationProtocolFetcherI
-import com.revik_o.infrastructure.common.commands.fetch.DeviceInfoCommand
-import com.revik_o.infrastructure.common.dtos.RemoteDeviceDto
 import java.net.Inet4Address
 import java.net.NetworkInterface
 import java.util.Collections
@@ -21,7 +17,7 @@ object IPv4Utils {
         }
     }
 
-    private fun getIPAddress(): Iterable<String> {
+    private fun getIPAddress(): List<String> {
         val result = ArrayList<String>()
         val interfaces = NetworkInterface.getNetworkInterfaces()
 
@@ -40,24 +36,23 @@ object IPv4Utils {
         return Collections.unmodifiableList(result)
     }
 
-    fun scanNetwork(
+    suspend fun iterateOverNetwork(
         subNet: String,
-        fetcher: CommunicationProtocolFetcherI,
-        then: (RemoteDeviceDto) -> Unit
-    ) = runConcurrentIOOperation {
-        for (i in 1..254) {
-            val device = fetcher.fetch(DeviceInfoCommand("$subNet.$i"))
-
-            if (device != null) {
-                then(device)
+        deviceIpLastNumber: Int,
+        then: suspend (String) -> Unit
+    ) {
+        (1..254).map { index ->
+            if (deviceIpLastNumber != index) {
+                then("$subNet.$index")
             }
         }
     }
 
-
-    fun scanNetwork(fetcher: CommunicationProtocolFetcherI, then: (RemoteDeviceDto) -> Unit) {
-        for (ipV4 in getIPAddress()) {
-            scanNetwork(ipV4.substring(0, ipV4.lastIndexOf('.')), fetcher, then)
+    suspend fun iterateOverNetwork(then: suspend (String) -> Unit) {
+        getIPAddress().map { ipV4 ->
+            val subNet = ipV4.substring(0, ipV4.lastIndexOf('.'))
+            val lastNumber = ipV4.substring(ipV4.lastIndexOf('.') + 1).toInt()
+            iterateOverNetwork(subNet, lastNumber, then)
         }
     }
 }

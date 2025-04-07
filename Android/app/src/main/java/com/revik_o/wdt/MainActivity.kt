@@ -40,6 +40,5 @@ class MainActivity : AppCompatActivity() {
             button.setEnabled(false)
             button.alpha = 0.0f
         }
-        onRequestPermissionsResult()
     }
 }

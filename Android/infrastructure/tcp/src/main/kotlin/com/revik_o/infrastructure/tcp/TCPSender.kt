@@ -7,8 +7,8 @@ import com.revik_o.infrastructure.common.commands.send.ClipboardCommand
 import com.revik_o.infrastructure.common.commands.send.ResourcesCommand
 import com.revik_o.infrastructure.tcp.TCPAppCodes.DECLINED_STATUS
 import com.revik_o.infrastructure.tcp.TCPAppCodes.OK_STATUS
+import com.revik_o.infrastructure.tcp.TCPDataHandler.Companion.SPLITTER
 import com.revik_o.infrastructure.tcp.exception.BrokenRequestException
-import com.revik_o.infrastructure.tcp.handler.TCPDataHandler.Companion.SPLITTER
 
 class TCPSender(private val _osAPI: OSAPIInterface) : CommunicationProtocolSenderI {
 

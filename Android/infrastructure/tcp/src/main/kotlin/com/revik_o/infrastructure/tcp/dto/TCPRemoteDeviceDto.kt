@@ -4,7 +4,7 @@ import com.revik_o.core.common.AppVersion
 import com.revik_o.core.common.FetchOrSendType
 import com.revik_o.core.common.OSType
 import com.revik_o.core.common.RequestType
-import com.revik_o.infrastructure.tcp.handler.TCPDataHandler
+import com.revik_o.infrastructure.tcp.TCPDataHandler
 
 data class TCPRemoteDeviceDto(
     val requestType: RequestType?,

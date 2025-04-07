@@ -14,4 +14,7 @@ kotlin {
 dependencies {
     implementation(project(":core:common"))
     implementation(libs.kotlinx.coroutines.core)
+    testImplementation(project(":core:tests"))
+    testImplementation(libs.junit)
+    testImplementation(libs.kotlinx.coroutines.test)
 }

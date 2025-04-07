@@ -13,7 +13,7 @@ import com.revik_o.infrastructure.common.dtos.RemoteDeviceDto.CurrentDeviceDto.C
 import com.revik_o.infrastructure.tcp.TCPAppCodes.DECLINED_STATUS
 import com.revik_o.infrastructure.tcp.TCPAppCodes.EMPTY_RESOURCE
 import com.revik_o.infrastructure.tcp.TCPAppCodes.OK_STATUS
-import com.revik_o.infrastructure.tcp.handler.TCPDataHandler.Companion.extractData
+import com.revik_o.infrastructure.tcp.TCPDataHandler.Companion.extractData
 
 class TCPFetcher(private val _osAPI: OSAPIInterface) : CommunicationProtocolFetcherI {
 

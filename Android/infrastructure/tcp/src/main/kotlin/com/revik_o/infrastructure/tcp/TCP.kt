@@ -4,8 +4,6 @@ import com.revik_o.core.common.CommunicationProtocol
 import com.revik_o.core.common.contexts.ApplicationSettingsContextI
 import com.revik_o.core.common.utils.ConcurrencyUtils.runConcurrentOperation
 import com.revik_o.infrastructure.common.OSAPIInterface
-import com.revik_o.infrastructure.tcp.handler.TCPDataHandler
-import com.revik_o.infrastructure.tcp.handler.TCPServerSocketHandler
 import java.net.ServerSocket
 import java.util.UUID
 import java.util.concurrent.Semaphore

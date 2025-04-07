@@ -1,4 +1,4 @@
-package com.revik_o.infrastructure.tcp.handler
+package com.revik_o.infrastructure.tcp
 
 import com.revik_o.core.common.AppVersion.Companion.LATEST_VERSION
 import com.revik_o.core.common.FetchOrSendType.FETCH

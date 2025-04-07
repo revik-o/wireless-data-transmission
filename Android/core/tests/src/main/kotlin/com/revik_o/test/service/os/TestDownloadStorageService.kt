@@ -68,6 +68,6 @@ private class TestOutputStream(private val _file: File, private val _length: Lon
     override fun write(p0: ByteArray, p1: Int, p2: Int) {
         _fileOutputStream.write(p0, p1, p2)
         _sentBytes += p2
-        LogUtils.debug("${_file.path} -> ${(_sentBytes.toDouble() / _length) * 100}")
+        LogUtils.debug("${_file.path} -> \u001B[32m${(_sentBytes.toDouble() / _length) * 100}%\u001B[0m")
     }
 }

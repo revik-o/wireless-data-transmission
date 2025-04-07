@@ -3,7 +3,7 @@ package com.revik_o.wdt.component
 import android.annotation.SuppressLint
 import android.content.Context
 import androidx.appcompat.widget.AppCompatButton
-import com.revik_o.core.dto.RemoteDeviceDto
+import com.revik_o.infrastructure.common.dtos.RemoteDeviceDto
 
 @SuppressLint("ViewConstructor")
 class DeviceButtonComponent(
@@ -14,7 +14,7 @@ class DeviceButtonComponent(
     AppCompatButton(context) {
 
     init {
-        text = device.deviceName
+        text = device.title
         setOnClickListener { onClick(device) }
     }
 }

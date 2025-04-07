@@ -4,11 +4,9 @@ import android.Manifest.permission.ACCESS_NETWORK_STATE
 import android.Manifest.permission.INTERNET
 import android.app.Service
 import android.content.Intent
-import com.revik_o.core.CommunicationProtocol.TCP
-import com.revik_o.core.service.DeviceCommunicationServiceI
-import com.revik_o.infrastructure.tcp.TCP.start
-import com.revik_o.infrastructure.tcp.TCP.stop
-import com.revik_o.wdt.config.ApplicationConfig.Companion.getAppConfig
+import com.revik_o.core.common.CommunicationProtocol
+import com.revik_o.infrastructure.tcp.TCP
+import com.revik_o.wdt.configs.AndroidAPI
 import com.revik_o.wdt.utils.PermissionUtils.checkApplicationPermissions
 
 class DeviceCommunicationBackgroundService : Service() {
@@ -19,33 +17,34 @@ class DeviceCommunicationBackgroundService : Service() {
             @Synchronized set
     }
 
-    private val _appConfig = getAppConfig()
-
-    private fun checkPermissions(): Boolean =
+    private fun checkPermissions(api: AndroidAPI): Boolean =
         checkApplicationPermissions(this, INTERNET, ACCESS_NETWORK_STATE)
-                && _appConfig.isCommunicationEnabled && !IS_RUNNING
+                && api.appSettings.isCommunicationEnabled && !IS_RUNNING
 
     override fun onBind(intent: Intent?): Nothing? = null
 
     override fun onCreate() {
         super.onCreate()
+        val api = AndroidAPI()
 
-        if (checkPermissions()) {
-            IS_RUNNING = true
-
-            when (_appConfig.currentCommunicationProtocol) {
-                TCP -> {
-                    val _communicationService = TCPCommunicationService(_appConfig, )
-                    start(_appConfig, _communicationService)
-                }
+        if (checkPermissions(api)) {
+            when (api.appSettings.currentCommunicationProtocol) {
+                CommunicationProtocol.TCP -> TCP.start(api)
             }
+
+            IS_RUNNING = true
         }
     }
 
     override fun onDestroy() {
-        when (_appConfig.currentCommunicationProtocol) {
-            TCP -> stop(_appConfig)
+        val api = AndroidAPI()
+
+        when (api.appSettings.currentCommunicationProtocol) {
+            CommunicationProtocol.TCP -> TCP.stop(api)
         }
+
+        IS_RUNNING = false
+
         super.onDestroy()
     }
 }
