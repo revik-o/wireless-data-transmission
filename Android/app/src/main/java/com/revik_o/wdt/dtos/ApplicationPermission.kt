@@ -1,4 +1,4 @@
-package com.revik_o.wdt.dto
+package com.revik_o.wdt.dtos
 
 import android.content.pm.PackageManager
 

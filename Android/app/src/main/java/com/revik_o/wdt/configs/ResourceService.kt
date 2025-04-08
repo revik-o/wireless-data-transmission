@@ -5,6 +5,7 @@ import java.io.InputStream
 import java.io.OutputStream
 
 class ResourceService : ResourceServiceI {
+
     override fun writeResourceData(from: String, to: OutputStream): Boolean {
         return false
     }

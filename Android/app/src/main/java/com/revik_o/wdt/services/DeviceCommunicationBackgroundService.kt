@@ -1,4 +1,4 @@
-package com.revik_o.wdt.background
+package com.revik_o.wdt.services
 
 import android.Manifest.permission.ACCESS_NETWORK_STATE
 import android.Manifest.permission.INTERNET
@@ -25,7 +25,7 @@ class DeviceCommunicationBackgroundService : Service() {
 
     override fun onCreate() {
         super.onCreate()
-        val api = AndroidAPI()
+        val api = AndroidAPI(this)
 
         if (checkPermissions(api)) {
             when (api.appSettings.currentCommunicationProtocol) {
@@ -37,7 +37,7 @@ class DeviceCommunicationBackgroundService : Service() {
     }
 
     override fun onDestroy() {
-        val api = AndroidAPI()
+        val api = AndroidAPI(this)
 
         when (api.appSettings.currentCommunicationProtocol) {
             CommunicationProtocol.TCP -> TCP.stop(api)

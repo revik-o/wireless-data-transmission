@@ -35,7 +35,6 @@ class TCPTest {
     private val _fetcher = TCPFetcher(_mockOSAPI)
     private val _sender = TCPSender(_mockOSAPI)
 
-
     @Before
     fun before() {
         TCP.start(_mockOSAPI)

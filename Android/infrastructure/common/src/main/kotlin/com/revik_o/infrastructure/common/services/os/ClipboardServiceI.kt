@@ -2,7 +2,7 @@ package com.revik_o.infrastructure.common.services.os
 
 interface ClipboardServiceI {
 
-    val clipboardTextData: String?
+    val clipboardTextData: CharSequence?
 
     fun isServicePermitted(deviceTitle: String): ClipboardServiceI? = this
 

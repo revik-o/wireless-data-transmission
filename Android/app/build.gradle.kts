@@ -33,10 +33,14 @@ android {
     kotlinOptions {
         jvmTarget = "1.8"
     }
+    buildFeatures {
+        viewBinding = true
+    }
 }
 
 dependencies {
     implementation(project(":core:common"))
+    implementation(project(":core:androidCommon"))
     implementation(project(":infrastructure:tcp"))
     implementation(project(":infrastructure:common"))
     implementation(libs.androidx.core.ktx)

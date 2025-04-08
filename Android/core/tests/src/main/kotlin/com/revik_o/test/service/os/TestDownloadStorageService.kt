@@ -1,6 +1,7 @@
 package com.revik_o.test.service.os
 
 import com.revik_o.infrastructure.common.services.os.DownloadStorageServiceI
+import com.revik_o.infrastructure.common.services.os.DownloadStorageServiceI.Companion.handlePathValue
 import com.revik_o.test.exceptions.UnexpectedTestBehaviour
 import com.revik_o.test.utils.LogUtils
 import org.junit.Assert.assertFalse
@@ -12,8 +13,6 @@ const val TEST_OUTPUT_DIR = "./src/test/resources/.downloads"
 
 class TestDownloadStorageService : DownloadStorageServiceI {
 
-    private val _regularExpression = Regex("(/{2,})|(\\./)|(\\.\\./)")
-
     init {
         File(TEST_OUTPUT_DIR).also { ref ->
             if (ref.exists()) {
@@ -23,9 +22,7 @@ class TestDownloadStorageService : DownloadStorageServiceI {
     }
 
     override fun mkDir(path: String): Boolean {
-        val endDestination = path
-            .replace(_regularExpression, "/")
-            .replace(_regularExpression, "/")
+        val endDestination = handlePathValue(path)
 
         assertFalse(endDestination.contains("//"))
         assertFalse(endDestination.contains("///"))
@@ -36,9 +33,7 @@ class TestDownloadStorageService : DownloadStorageServiceI {
     }
 
     override fun getResourceOutputStream(path: String, length: Long): OutputStream {
-        val endDestination = path
-            .replace(_regularExpression, "/")
-            .replace(_regularExpression, "/")
+        val endDestination = handlePathValue(path)
 
         assertFalse(endDestination.contains("//"))
         assertFalse(endDestination.contains("///"))

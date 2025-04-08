@@ -13,4 +13,12 @@ interface DownloadStorageServiceI {
     fun mkDir(path: String): Boolean
 
     fun getResourceOutputStream(path: String, length: Long): OutputStream?
+
+    companion object {
+
+        fun handlePathValue(path: String): String =
+            Regex("(/{2,})|(\\./)|(\\.\\./)").let { regexp ->
+                path.replace(regexp, "/").replace(regexp, "/")
+            }
+    }
 }

@@ -23,6 +23,8 @@ class TCPDataHandler(socket: Socket, private val _osApi: OSAPIInterface) {
 
     fun send(data: String) = _outputStream.writeUTF(data)
 
+    fun send(data: CharSequence) = send(data.toString())
+
     fun send(data: Long) = _outputStream.writeLong(data)
 
     fun send(data: Int) = _outputStream.writeInt(data)

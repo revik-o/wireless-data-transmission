@@ -5,7 +5,7 @@ import com.revik_o.infrastructure.common.services.os.ClipboardServiceI
 class TestClipboardService(var putData: ((String) -> Boolean)? = null) : ClipboardServiceI {
 
     @Volatile
-    private var _clipboard: String? = null
+    private var _clipboard: String? = "Hello from JUnit"
         @Synchronized set
 
     override val clipboardTextData: String?

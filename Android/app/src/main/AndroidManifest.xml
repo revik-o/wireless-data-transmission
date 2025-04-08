@@ -22,7 +22,13 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/Theme.WirelessDataTransmission"
-        tools:targetApi="32">
+        tools:targetApi="35">
+        <activity
+            android:name=".AboutActivity"
+            android:configChanges="orientation|keyboardHidden|screenSize"
+            android:exported="false"
+            android:label="@string/title_activity_about"
+            android:theme="@style/Theme.WirelessDataTransmission.Fullscreen" />
         <activity
             android:name=".DownloadsActivity"
             android:exported="false" />
@@ -33,6 +39,7 @@
             android:name=".DevicesActivity"
             android:exported="false" />
         <activity
+            android:theme="@style/Theme.SplashScreen"
             android:name=".SplashScreenActivity"
             android:exported="true"
             android:noHistory="true">
@@ -46,7 +53,7 @@
             android:name=".MainActivity"
             android:exported="false" />
 
-        <service android:name=".background.DeviceCommunicationBackgroundService" />
+        <service android:name=".services.DeviceCommunicationBackgroundService" />
     </application>
 
 </manifest>

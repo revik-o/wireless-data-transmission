@@ -5,7 +5,7 @@ import com.revik_o.core.common.CommunicationProtocol
 import com.revik_o.core.common.contexts.ApplicationSettingsContextI
 
 data class ApplicationTestSettings(
-    override var deviceName: String = "test_device",
+    override var deviceName: String = "JUnit test device :D",
     override var applicationVersion: AppVersion = AppVersion.LATEST_VERSION,
     override var currentCommunicationProtocol: CommunicationProtocol = CommunicationProtocol.TCP,
     override val awaitTimeout: Int = 1000

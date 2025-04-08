@@ -10,5 +10,4 @@ class TestOSAPI(
     override var clipboardService: TestClipboardService = TestClipboardService(),
     override var downloadStorageService: TestDownloadStorageService = TestDownloadStorageService(),
     override var resourceService: TestResourceService = TestResourceService()
-) : OSAPIInterface {
-}
+) : OSAPIInterface
