@@ -18,7 +18,7 @@
         android:paddingBottom="15dp"
         android:text="Send data from clipboard"
         android:textSize="18sp"
-        app:icon="@drawable/baseline_double_arrow_24"
+        app:icon="@drawable/baseline_double_arrow_100"
         app:iconGravity="top"
         app:iconSize="85dp"
         app:layout_constraintEnd_toEndOf="parent"
@@ -36,7 +36,7 @@
         android:paddingBottom="15dp"
         android:text="Get data from the remote clipboard"
         android:textSize="18sp"
-        app:icon="@drawable/inverted_baseline_double_arrow_24"
+        app:icon="@drawable/inverted_baseline_double_arrow_100"
         app:iconGravity="top"
         app:iconSize="85dp"
         app:layout_constraintBottom_toBottomOf="parent"
@@ -53,7 +53,7 @@
         android:layout_marginTop="10dp"
         android:layout_marginEnd="5dp"
         android:padding="10dp"
-        app:icon="@drawable/settings_24"
+        app:icon="@drawable/settings_100"
         app:iconSize="24dp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
@@ -65,9 +65,21 @@
         android:layout_marginTop="10dp"
         android:layout_marginEnd="10dp"
         android:padding="10dp"
-        app:icon="@drawable/baseline_arrow_downward_24"
+        app:icon="@drawable/baseline_arrow_downward_100"
         app:iconSize="24dp"
         app:layout_constraintEnd_toStartOf="@+id/settings_button"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <Button
+        android:id="@+id/about_app_button"
+        android:layout_width="43dp"
+        android:layout_height="50dp"
+        android:layout_marginStart="10dp"
+        android:layout_marginTop="10dp"
+        android:padding="10dp"
+        app:icon="@drawable/app_logo_100"
+        app:iconSize="24dp"
+        app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

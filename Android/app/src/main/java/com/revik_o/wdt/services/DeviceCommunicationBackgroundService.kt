@@ -6,8 +6,7 @@ import android.app.Service
 import android.content.Intent
 import com.revik_o.core.common.CommunicationProtocol
 import com.revik_o.infrastructure.tcp.TCP
-import com.revik_o.wdt.configs.AndroidAPI
-import com.revik_o.wdt.utils.PermissionUtils.checkApplicationPermissions
+import com.revik_o.common.utils.PermissionUtils.checkApplicationPermissions
 
 class DeviceCommunicationBackgroundService : Service() {
 
@@ -17,7 +16,7 @@ class DeviceCommunicationBackgroundService : Service() {
             @Synchronized set
     }
 
-    private fun checkPermissions(api: AndroidAPI): Boolean =
+    private fun checkPermissions(api: com.revik_o.impl.AndroidAPI): Boolean =
         checkApplicationPermissions(this, INTERNET, ACCESS_NETWORK_STATE)
                 && api.appSettings.isCommunicationEnabled && !IS_RUNNING
 
@@ -25,7 +24,7 @@ class DeviceCommunicationBackgroundService : Service() {
 
     override fun onCreate() {
         super.onCreate()
-        val api = AndroidAPI(this)
+        val api = com.revik_o.impl.AndroidAPI(this)
 
         if (checkPermissions(api)) {
             when (api.appSettings.currentCommunicationProtocol) {
@@ -37,7 +36,7 @@ class DeviceCommunicationBackgroundService : Service() {
     }
 
     override fun onDestroy() {
-        val api = AndroidAPI(this)
+        val api = com.revik_o.impl.AndroidAPI(this)
 
         when (api.appSettings.currentCommunicationProtocol) {
             CommunicationProtocol.TCP -> TCP.stop(api)

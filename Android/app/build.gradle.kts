@@ -40,7 +40,8 @@ android {
 
 dependencies {
     implementation(project(":core:common"))
-    implementation(project(":core:androidCommon"))
+    implementation(project(":android:impl"))
+    implementation(project(":android:common"))
     implementation(project(":infrastructure:tcp"))
     implementation(project(":infrastructure:common"))
     implementation(libs.androidx.core.ktx)
@@ -49,6 +50,7 @@ dependencies {
     implementation(libs.androidx.activity)
     implementation(libs.androidx.constraintlayout)
     testImplementation(libs.junit)
+    androidTestImplementation(libs.mockito.core)
     androidTestImplementation(libs.androidx.junit)
     androidTestImplementation(libs.androidx.espresso.core)
 }

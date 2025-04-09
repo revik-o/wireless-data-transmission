@@ -22,10 +22,10 @@ import com.revik_o.core.common.OSType.LINUX
 import com.revik_o.core.common.OSType.WINDOWS
 import com.revik_o.core.common.RequestType
 import com.revik_o.core.common.utils.ConcurrencyUtils.runConcurrentIOOperation
+import com.revik_o.impl.AndroidAPI
 import com.revik_o.infrastructure.common.commands.fetch.DeviceInfoCommand
 import com.revik_o.infrastructure.common.dtos.RemoteDeviceDto
 import com.revik_o.infrastructure.common.utils.IPv4Utils.iterateOverNetwork
-import com.revik_o.wdt.configs.AndroidAPI
 import com.revik_o.wdt.definitions.IntentExtraApplicationKeys.FETCH_OR_SEND_KEY
 import com.revik_o.wdt.definitions.IntentExtraApplicationKeys.REQUEST_TYPE_KEY
 import com.revik_o.wdt.factories.ProtocolToolsFactory.createFetcher
@@ -44,9 +44,9 @@ class DevicesActivity : AppCompatActivity() {
         (LayoutInflater.from(this).inflate(R.layout.device_button, null) as MaterialButton)
             .also { button ->
                 when (device.os) {
-                    LINUX -> button.icon = getDrawable(this, R.drawable.linux_24)
-                    ANDROID -> button.icon = getDrawable(this, R.drawable.android_24)
-                    WINDOWS -> button.icon = getDrawable(this, R.drawable.microsoft_windows_24)
+                    LINUX -> button.icon = getDrawable(this, R.drawable.linux_100)
+                    ANDROID -> button.icon = getDrawable(this, R.drawable.android_100)
+                    WINDOWS -> button.icon = getDrawable(this, R.drawable.microsoft_windows_100)
                 }
 
                 button.text = device.title

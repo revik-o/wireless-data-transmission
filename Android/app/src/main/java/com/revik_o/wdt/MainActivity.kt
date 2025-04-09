@@ -45,6 +45,11 @@ class MainActivity : AppCompatActivity() {
             button.setEnabled(false)
             button.alpha = 0.0f
         }
+        findViewById<Button>(R.id.about_app_button).let { button ->
+            button.setOnClickListener {
+                startActivity(Intent(this, AboutActivity::class.java))
+            }
+        }
     }
 }
 

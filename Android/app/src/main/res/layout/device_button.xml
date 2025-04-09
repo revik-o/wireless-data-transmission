@@ -5,6 +5,6 @@
     android:layout_height="wrap_content"
     android:text="Device Name"
     android:textSize="30sp"
-    app:icon="@drawable/android_24"
+    app:icon="@drawable/android_100"
     app:iconGravity="top"
     app:iconSize="100dp" />
