@@ -20,7 +20,7 @@ object TCP {
      * We use only one `concurrent while loop` to work with devices, we don't need
      * to create a real server. It's just a phone!
      */
-    fun start(api: OSAPIInterface) {
+    fun start(api: OSAPIInterface<*>) {
         val semaphore = Semaphore(MAX_DEVICES)
         val handler = TCPServerSocketHandler(api)
         api.appSettings.enableCommunication()
@@ -41,7 +41,7 @@ object TCP {
         }
     }
 
-    fun stop(api: OSAPIInterface) {
+    fun stop(api: OSAPIInterface<*>) {
         if (api.appSettings.currentCommunicationProtocol == CommunicationProtocol.TCP) {
             api.appSettings.disableCommunication()
             val socket = configureTCPSocket(

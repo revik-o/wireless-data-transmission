@@ -38,6 +38,7 @@ dependencies {
     implementation(project(":core:common"))
     implementation(project(":android:common"))
     implementation(project(":infrastructure:common"))
+    implementation(project(":infrastructure:tcp"))
     implementation(libs.androidx.appcompat)
     implementation(libs.material)
     testImplementation(libs.junit)

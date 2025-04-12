@@ -7,9 +7,9 @@ import com.revik_o.infrastructure.common.dtos.RemoteDeviceDto.CurrentDeviceDto.C
 import com.revik_o.infrastructure.tcp.TCPAppCodes.UNSUPPORTED_OS
 import com.revik_o.infrastructure.tcp.TCPAppCodes.UNSUPPORTED_REQUEST
 import com.revik_o.infrastructure.tcp.TCPAppCodes.UNSUPPORTED_VERSION
-import com.revik_o.infrastructure.tcp.exception.UnsupportedOsTypeException
-import com.revik_o.infrastructure.tcp.exception.UnsupportedRequestTypeException
-import com.revik_o.infrastructure.tcp.exception.UnsupportedVersionException
+import com.revik_o.infrastructure.tcp.exceptions.UnsupportedOsTypeException
+import com.revik_o.infrastructure.tcp.exceptions.UnsupportedRequestTypeException
+import com.revik_o.infrastructure.tcp.exceptions.UnsupportedVersionException
 import java.net.InetSocketAddress
 import java.net.Socket
 
@@ -19,11 +19,11 @@ fun configureTCPSocket(ip: String, port: Int, timeout: Int): Socket =
         socket.soTimeout = timeout + (timeout * 0.5).toInt()
     }
 
-fun sendIntent(
+fun <R> sendIntent(
     socket: Socket,
-    osAPI: OSAPIInterface,
+    osAPI: OSAPIInterface<R>,
     command: NetworkCommandI
-): TCPDataHandler {
+): TCPDataHandler<R> {
     val handler = TCPDataHandler(socket, osAPI)
     val info = getCurrentDeviceDto(osAPI.appSettings)
     handler.intent(info, command)
@@ -36,11 +36,11 @@ fun sendIntent(
     }
 }
 
-suspend fun <T> createEstablishedTCPConnection(
+suspend fun <T, R> createEstablishedTCPConnection(
     ip: String,
-    osAPI: OSAPIInterface,
+    osAPI: OSAPIInterface<R>,
     command: NetworkCommandI,
-    then: suspend (TCPDataHandler) -> T?
+    then: suspend (TCPDataHandler<R>) -> T?
 ): T? = concurrencyScope {
     val socket = configureTCPSocket(ip, osAPI.appSettings.tcpPort, osAPI.appSettings.awaitTimeout)
     val handler = sendIntent(socket, osAPI, command)

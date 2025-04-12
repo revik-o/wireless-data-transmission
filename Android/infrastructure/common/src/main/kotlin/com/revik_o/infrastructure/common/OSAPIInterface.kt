@@ -5,10 +5,10 @@ import com.revik_o.infrastructure.common.services.os.ClipboardServiceI
 import com.revik_o.infrastructure.common.services.os.DownloadStorageServiceI
 import com.revik_o.infrastructure.common.services.os.ResourceServiceI
 
-interface OSAPIInterface {
+interface OSAPIInterface<R> {
 
     val appSettings: ApplicationSettingsContextI
     val clipboardService: ClipboardServiceI
     val downloadStorageService: DownloadStorageServiceI
-    val resourceService: ResourceServiceI
+    val resourceService: ResourceServiceI<R>
 }

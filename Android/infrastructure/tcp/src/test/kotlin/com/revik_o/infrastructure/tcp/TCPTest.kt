@@ -90,28 +90,21 @@ class TCPTest {
         val target = "gradle"
         val testPrefix = "./../.."
 
-        _sender.send(ResourcesCommand(IP, arrayOf("$testPrefix/$target")))
+        _sender.send(ResourcesCommand(IP, arrayOf(File(testPrefix, target))))
         delay(300)
 
-        _mockOSAPI.resourceService.scanDirectories(onResource = { path, length ->
-            val file = File(path)
-            val rootFilePath = path.substring(
-                path.lastIndexOf(TEST_OUTPUT_DIR) + TEST_OUTPUT_DIR.length
+        _mockOSAPI.resourceService.scanDirectories(onResource = { file, length ->
+            val rootFilePath = file.path.substring(
+                file.path.lastIndexOf(TEST_OUTPUT_DIR) + TEST_OUTPUT_DIR.length
             )
             val testResource = File(testPrefix, rootFilePath)
             assertEquals(testResource.length(), length)
             assertEquals(testResource.readText(), file.readText())
             assertEquals(testResource.readText().length, file.readText().length)
-        }, onDir = { path ->
-            val dir = File(path)
-            val rootDirPath = path.substring(
-                path.lastIndexOf(TEST_OUTPUT_DIR) + TEST_OUTPUT_DIR.length
-            )
-            assertTrue(File(testPrefix, rootDirPath).isDirectory == dir.isDirectory)
-        }, TEST_OUTPUT_DIR)
+        }, File(TEST_OUTPUT_DIR))
     }
 
-    @Test // for connecting JVM to some device (open ports)
+//    @Test // for connecting JVM to some device (open ports)
     fun runServer() {
         val lock = ReentrantLock()
 

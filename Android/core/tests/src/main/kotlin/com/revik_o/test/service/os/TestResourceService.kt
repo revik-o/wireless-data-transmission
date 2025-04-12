@@ -1,5 +1,6 @@
 package com.revik_o.test.service.os
 
+import com.revik_o.infrastructure.common.dtos.ResourceData
 import com.revik_o.infrastructure.common.services.os.ResourceServiceI
 import java.io.File
 import java.io.FileInputStream
@@ -8,12 +9,12 @@ import java.io.OutputStream
 
 private const val BUFFER_SIZE_FOR_TRANSFER = 4096
 
-class TestResourceService : ResourceServiceI {
+class TestResourceService : ResourceServiceI<File> {
 
-    override fun writeResourceData(from: String, to: OutputStream): Boolean {
+    override fun writeResourceData(from: File, to: OutputStream): Boolean {
         var countOfWrite: Int
         val byteArray = ByteArray(BUFFER_SIZE_FOR_TRANSFER)
-        val inputStream = FileInputStream(File(from))
+        val inputStream = FileInputStream(from)
 
         while (inputStream.read(byteArray).also { countOfWrite = it } > 0) {
             to.write(byteArray, 0, countOfWrite)
@@ -26,7 +27,8 @@ class TestResourceService : ResourceServiceI {
     override fun readResourceData(
         from: InputStream,
         to: OutputStream,
-        expectedLength: Long
+        expectedLength: Long,
+        check: () -> Unit
     ): Boolean {
         var length = 0
         var countOfWrite: Int
@@ -44,23 +46,28 @@ class TestResourceService : ResourceServiceI {
         }
 
         to.flush()
+        check()
+        to.close()
         return true
     }
 
-    override fun scanDirectories(
-        onResource: (String, Long) -> Unit,
-        onDir: (String) -> Unit,
-        vararg resources: String
+    override fun getResourcesFromRefs(vararg refs: File): Array<ResourceData<File>> {
+        val files = ArrayList<ResourceData<File>>()
+        scanDirectories({ ref, size -> files.add(ResourceData(ref.path, size, ref)) }, *refs)
+        return files.toTypedArray()
+    }
+
+    fun scanDirectories(
+        onResource: (File, Long) -> Unit,
+        vararg resources: File
     ) {
-        for (item in resources) {
-            val file = File(item)
+        for (file in resources) {
             if (file.isDirectory) {
                 file.listFiles()?.let { files ->
-                    onDir(file.path)
-                    scanDirectories(onResource, onDir, *files.map { it.path }.toTypedArray())
+                    scanDirectories(onResource, *files)
                 }
             } else {
-                onResource(file.path, file.length())
+                onResource(file, file.length())
             }
         }
     }

@@ -8,43 +8,26 @@ import com.revik_o.infrastructure.common.commands.send.ResourcesCommand
 import com.revik_o.infrastructure.tcp.TCPAppCodes.DECLINED_STATUS
 import com.revik_o.infrastructure.tcp.TCPAppCodes.OK_STATUS
 import com.revik_o.infrastructure.tcp.TCPDataHandler.Companion.SPLITTER
-import com.revik_o.infrastructure.tcp.exception.BrokenRequestException
+import com.revik_o.infrastructure.tcp.exceptions.BrokenRequestException
 
-class TCPSender(private val _osAPI: OSAPIInterface) : CommunicationProtocolSenderI {
+class TCPSender<T>(private val _osAPI: OSAPIInterface<T>) : CommunicationProtocolSenderI<T> {
 
-    override suspend fun send(command: ResourcesCommand) {
+    override suspend fun send(command: ResourcesCommand<T>) {
         createEstablishedTCPConnection(command.ip, _osAPI, command) { handler ->
-            var resources = 0
-            var dirs = 0
-
-            _osAPI.resourceService.scanDirectories(
-                onResource = { _, _ -> resources++ },
-                onDir = { dirs++ },
-                *command.paths
-            )
-
-            handler.send("$resources,$dirs")
+            val resources = _osAPI.resourceService.getResourcesFromRefs(*command.refs)
+            handler.send("${resources.size}")
 
             when (handler.readInt()) {
                 OK_STATUS -> {
-                    _osAPI.resourceService.scanDirectories(
-                        onResource = { path, length ->
-                            handler.send("RESOURCE$SPLITTER$path$SPLITTER$length")
-                            handler.sendResource(path)
+                    for (resource in resources) {
+                        handler.send("${resource.path}$SPLITTER${resource.size}")
+                        handler.sendResource(resource.ref)
 
-                            if (handler.readInt() < 0) {
-                                throw DataTransferFailedException()
-                            }
-                        },
-                        onDir = { path ->
-                            handler.send("DIR${SPLITTER}$path")
+                        if (handler.readInt() < 0) {
+                            throw DataTransferFailedException()
+                        }
+                    }
 
-                            if (handler.readInt() < 0) {
-                                throw DataTransferFailedException()
-                            }
-                        },
-                        *command.paths
-                    )
                     handler.send("EOS")
 
                     if (handler.readInt() < 0) {

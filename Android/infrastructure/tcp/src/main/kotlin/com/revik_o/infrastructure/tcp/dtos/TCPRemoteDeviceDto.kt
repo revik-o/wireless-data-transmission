@@ -1,4 +1,4 @@
-package com.revik_o.infrastructure.tcp.dto
+package com.revik_o.infrastructure.tcp.dtos
 
 import com.revik_o.core.common.AppVersion
 import com.revik_o.core.common.FetchOrSendType

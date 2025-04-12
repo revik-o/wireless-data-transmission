@@ -7,11 +7,7 @@ import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
-import com.revik_o.core.common.FetchOrSendType.FETCH
-import com.revik_o.core.common.FetchOrSendType.SEND
-import com.revik_o.core.common.RequestType.CLIPBOARD
-import com.revik_o.wdt.definitions.IntentExtraApplicationKeys.FETCH_OR_SEND_KEY
-import com.revik_o.wdt.definitions.IntentExtraApplicationKeys.REQUEST_TYPE_KEY
+import com.revik_o.common.factory.IntentFactory.createIntentCompat
 
 class MainActivity : AppCompatActivity() {
 
@@ -26,12 +22,15 @@ class MainActivity : AppCompatActivity() {
         }
         findViewById<Button>(R.id.send_request_button).let { button ->
             button.setOnClickListener {
-                startActivity(Intent(this, DevicesActivity::class.java).sendClipboard())
+                startActivity(createIntentCompat(this, DevicesActivity::class.java).sendClipboard())
             }
         }
         findViewById<Button>(R.id.get_from_remote_device_button).let { button ->
             button.setOnClickListener {
-                startActivity(Intent(this, DevicesActivity::class.java).getRemoteClipboard())
+                startActivity(
+                    createIntentCompat(this, DevicesActivity::class.java)
+                        .getRemoteClipboard()
+                )
             }
         }
         findViewById<Button>(R.id.settings_button).let { button ->
@@ -51,16 +50,4 @@ class MainActivity : AppCompatActivity() {
             }
         }
     }
-}
-
-private fun Intent.sendClipboard(): Intent {
-    putExtra(FETCH_OR_SEND_KEY, SEND)
-    putExtra(REQUEST_TYPE_KEY, CLIPBOARD)
-    return this
-}
-
-private fun Intent.getRemoteClipboard(): Intent {
-    putExtra(FETCH_OR_SEND_KEY, FETCH)
-    putExtra(REQUEST_TYPE_KEY, CLIPBOARD)
-    return this
 }

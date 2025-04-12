@@ -1,18 +1,16 @@
 package com.revik_o.infrastructure.common.services.os
 
+import com.revik_o.infrastructure.common.dtos.RemoteResourceData
 import java.io.OutputStream
 
 interface DownloadStorageServiceI {
 
     fun isServicePermitted(
         deviceTitle: String,
-        resources: Int,
-        folders: Int
+        resources: Int
     ): DownloadStorageServiceI? = this
 
-    fun mkDir(path: String): Boolean
-
-    fun getResourceOutputStream(path: String, length: Long): OutputStream?
+    fun createResourceOutputStream(resource: RemoteResourceData): OutputStream?
 
     companion object {
 

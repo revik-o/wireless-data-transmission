@@ -1,4 +1,4 @@
-package com.revik_o.infrastructure.tcp.exception
+package com.revik_o.infrastructure.tcp.exceptions
 
 open class UnsupportedException : RuntimeException {
 

@@ -15,7 +15,7 @@ import com.revik_o.infrastructure.tcp.TCPAppCodes.EMPTY_RESOURCE
 import com.revik_o.infrastructure.tcp.TCPAppCodes.OK_STATUS
 import com.revik_o.infrastructure.tcp.TCPDataHandler.Companion.extractData
 
-class TCPFetcher(private val _osAPI: OSAPIInterface) : CommunicationProtocolFetcherI {
+class TCPFetcher(private val _osAPI: OSAPIInterface<*>) : CommunicationProtocolFetcherI {
 
     override suspend fun fetch(command: DeviceInfoCommand): RemoteDeviceDto? =
         createEstablishedTCPConnection(command.ip, _osAPI, command) { handler ->

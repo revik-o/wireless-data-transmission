@@ -8,15 +8,15 @@ import com.revik_o.infrastructure.common.dtos.RemoteDeviceDto.CurrentDeviceDto
 import com.revik_o.infrastructure.common.dtos.RemoteDeviceDto.CurrentDeviceDto.Companion.APP_VERSION_KEY
 import com.revik_o.infrastructure.common.dtos.RemoteDeviceDto.CurrentDeviceDto.Companion.OS_KEY
 import com.revik_o.infrastructure.common.dtos.RemoteDeviceDto.CurrentDeviceDto.Companion.TITLE_KEY
-import com.revik_o.infrastructure.tcp.dto.TCPRemoteDeviceDto
-import com.revik_o.infrastructure.tcp.dto.TCPRemoteDeviceDto.Companion.buildRemoteDeviceDto
+import com.revik_o.infrastructure.tcp.dtos.TCPRemoteDeviceDto
+import com.revik_o.infrastructure.tcp.dtos.TCPRemoteDeviceDto.Companion.buildRemoteDeviceDto
 import java.io.BufferedInputStream
 import java.io.DataInputStream
 import java.io.DataOutputStream
 import java.io.OutputStream
 import java.net.Socket
 
-class TCPDataHandler(socket: Socket, private val _osApi: OSAPIInterface) {
+class TCPDataHandler<R>(socket: Socket, private val _osApi: OSAPIInterface<R>) {
 
     private val _inputStream = DataInputStream(BufferedInputStream(socket.getInputStream()))
     private val _outputStream = DataOutputStream(socket.getOutputStream())
@@ -32,8 +32,7 @@ class TCPDataHandler(socket: Socket, private val _osApi: OSAPIInterface) {
     fun send(data: CurrentDeviceDto) =
         send("${data.os.signature}$SPLITTER${data.appVersion.name}$SPLITTER${data.title}")
 
-    fun sendResource(path: String) =
-        _osApi.resourceService.writeResourceData(path, _outputStream)
+    fun sendResource(ref: R) = _osApi.resourceService.writeResourceData(ref, _outputStream)
 
     fun intent(data: CurrentDeviceDto, command: NetworkCommandI) =
         send(
@@ -58,9 +57,23 @@ class TCPDataHandler(socket: Socket, private val _osApi: OSAPIInterface) {
         )
     }
 
-
-    fun readResource(from: OutputStream, expectedLength: Long) =
-        _osApi.resourceService.readResourceData(_inputStream, from, expectedLength)
+    fun readResource(
+        from: OutputStream?,
+        expectedLength: Long,
+        onOk: () -> Unit,
+        onDeclined: () -> Unit = {}
+    ) {
+        if (from != null) {
+            _osApi.resourceService.readResourceData(_inputStream, from, expectedLength, onOk)
+                .let { result ->
+                    if (!result) {
+                        onDeclined()
+                    }
+                }
+        } else {
+            onDeclined()
+        }
+    }
 
     fun readIntent(): TCPRemoteDeviceDto? = buildRemoteDeviceDto(readString())
 

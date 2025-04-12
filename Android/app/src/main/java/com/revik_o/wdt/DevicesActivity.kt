@@ -1,11 +1,11 @@
 package com.revik_o.wdt
 
 import android.annotation.SuppressLint
-import android.content.Intent
-import android.os.Build
+import android.net.Uri
 import android.os.Bundle
 import android.util.Log
 import android.view.LayoutInflater
+import android.view.View.OnClickListener
 import android.widget.Button
 import android.widget.LinearLayout
 import android.widget.ProgressBar
@@ -16,6 +16,7 @@ import androidx.core.content.ContextCompat.getDrawable
 import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
 import com.google.android.material.button.MaterialButton
+import com.revik_o.common.factory.IntentFactory.createIntentCompat
 import com.revik_o.core.common.FetchOrSendType
 import com.revik_o.core.common.OSType.ANDROID
 import com.revik_o.core.common.OSType.LINUX
@@ -23,20 +24,18 @@ import com.revik_o.core.common.OSType.WINDOWS
 import com.revik_o.core.common.RequestType
 import com.revik_o.core.common.utils.ConcurrencyUtils.runConcurrentIOOperation
 import com.revik_o.impl.AndroidAPI
+import com.revik_o.impl.AndroidAPI.Companion.APPLICATION_LOG_TAG
+import com.revik_o.impl.factory.ProtocolToolsFactory.createFetcher
 import com.revik_o.infrastructure.common.commands.fetch.DeviceInfoCommand
 import com.revik_o.infrastructure.common.dtos.RemoteDeviceDto
 import com.revik_o.infrastructure.common.utils.IPv4Utils.iterateOverNetwork
-import com.revik_o.wdt.definitions.IntentExtraApplicationKeys.FETCH_OR_SEND_KEY
-import com.revik_o.wdt.definitions.IntentExtraApplicationKeys.REQUEST_TYPE_KEY
-import com.revik_o.wdt.factories.ProtocolToolsFactory.createFetcher
 import com.revik_o.wdt.listeners.button.DeviceOnClickListener
 import kotlinx.coroutines.Job
-import java.io.Serializable
 import java.net.SocketTimeoutException
 
 class DevicesActivity : AppCompatActivity() {
 
-    private val _osApi = AndroidAPI(this)
+    private lateinit var _osApi: AndroidAPI
     private lateinit var _concurrentContext: Job
 
     @SuppressLint("InflateParams")
@@ -52,6 +51,19 @@ class DevicesActivity : AppCompatActivity() {
                 button.text = device.title
             }
 
+    private fun deviceOnClickListener(
+        device: RemoteDeviceDto,
+        requestType: RequestType,
+        fetchOrSendType: FetchOrSendType,
+        resources: Array<out Uri>
+    ): OnClickListener = DeviceOnClickListener(
+        this,
+        _osApi,
+        device,
+        requestType,
+        fetchOrSendType,
+        resources
+    )
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -62,30 +74,33 @@ class DevicesActivity : AppCompatActivity() {
             v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom)
             insets
         }
+        _osApi = AndroidAPI(this)
         val devicesList = findViewById<LinearLayout>(R.id.device_list)
         val progressBar = findViewById<ProgressBar>(R.id.device_search_progress_bar)
         val deviceSearchTitle = findViewById<TextView>(R.id.device_search_title)
         _concurrentContext = runConcurrentIOOperation {
+            val intent = createIntentCompat(intent)
             val fetcher = createFetcher(_osApi)
             val fetchOrSendType = intent.getFetchOrSendType()
             val requestType = intent.getRequestTypeType()
+            val resources = intent.getResourceSequence().toTypedArray()
 
             iterateOverNetwork { ip ->
                 try {
                     val device = fetcher.fetch(DeviceInfoCommand(ip))
                         ?: throw IllegalStateException()
-                    DeviceOnClickListener(this, _osApi, device, requestType, fetchOrSendType)
-                        .let { onClickListener ->
-                            createDeviceButton(device).let { deviceButton ->
-                                deviceButton.setOnClickListener(onClickListener)
-                                runOnUiThread { devicesList.addView(deviceButton) }
-                            }
-                        }
+                    val deviceButton = createDeviceButton(device)
+
+                    deviceButton.setOnClickListener(
+                        deviceOnClickListener(device, requestType, fetchOrSendType, resources)
+                    )
+
+                    runOnUiThread { devicesList.addView(deviceButton) }
                 } catch (exception: SocketTimeoutException) {
-                    Log.i(DevicesActivity::class.simpleName, "Skipped: $ip")
+                    Log.i(APPLICATION_LOG_TAG, "Skipped: $ip")
                     // ignore
                 } catch (e: Exception) {
-                    Log.e("WDT", e.toString())
+                    Log.e(APPLICATION_LOG_TAG, e.toString())
                 }
             }
             runOnUiThread {
@@ -104,18 +119,3 @@ class DevicesActivity : AppCompatActivity() {
         super.onStop()
     }
 }
-
-private fun <T : Serializable> Intent.getSerializableExtraCompat(key: String, type: Class<T>): T? =
-    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
-        getSerializableExtra(key, type)
-    } else {
-        type.cast(getSerializableExtra(key))
-    }
-
-private fun Intent.getFetchOrSendType(): FetchOrSendType =
-    getSerializableExtraCompat(FETCH_OR_SEND_KEY, FetchOrSendType::class.java)
-        ?: throw IllegalStateException()
-
-private fun Intent.getRequestTypeType(): RequestType =
-    getSerializableExtraCompat(REQUEST_TYPE_KEY, RequestType::class.java)
-        ?: throw IllegalStateException()

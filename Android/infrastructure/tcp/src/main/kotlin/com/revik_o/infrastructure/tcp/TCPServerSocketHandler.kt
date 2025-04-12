@@ -7,7 +7,7 @@ import com.revik_o.core.common.RequestType
 import com.revik_o.core.common.exceptions.DataTransferFailedException
 import com.revik_o.infrastructure.common.OSAPIInterface
 import com.revik_o.infrastructure.common.dtos.RemoteDeviceDto.CurrentDeviceDto.Companion.getCurrentDeviceDto
-import com.revik_o.infrastructure.common.services.os.DownloadStorageServiceI
+import com.revik_o.infrastructure.common.dtos.RemoteResourceData
 import com.revik_o.infrastructure.tcp.TCPAppCodes.BROKEN_REQUEST
 import com.revik_o.infrastructure.tcp.TCPAppCodes.DECLINED_STATUS
 import com.revik_o.infrastructure.tcp.TCPAppCodes.EMPTY_RESOURCE
@@ -15,63 +15,50 @@ import com.revik_o.infrastructure.tcp.TCPAppCodes.OK_STATUS
 import com.revik_o.infrastructure.tcp.TCPAppCodes.UNSUPPORTED_OS
 import com.revik_o.infrastructure.tcp.TCPAppCodes.UNSUPPORTED_REQUEST
 import com.revik_o.infrastructure.tcp.TCPAppCodes.UNSUPPORTED_VERSION
-import com.revik_o.infrastructure.tcp.dto.TCPRemoteDeviceDto
-import com.revik_o.infrastructure.tcp.exception.UnsupportedException
+import com.revik_o.infrastructure.tcp.dtos.TCPRemoteDeviceDto
+import com.revik_o.infrastructure.tcp.exceptions.UnsupportedException
 import java.net.Socket
 
-class TCPServerSocketHandler(private val _api: OSAPIInterface) {
+class TCPServerSocketHandler(private val _api: OSAPIInterface<*>) {
 
-    private fun sendDeviceInfo(dataHandler: TCPDataHandler) {
+    private fun sendDeviceInfo(dataHandler: TCPDataHandler<*>) {
         dataHandler.send(getCurrentDeviceDto(_api.appSettings))
         if (dataHandler.readInt() < 0) {
             throw DataTransferFailedException()
         }
     }
 
-    private fun sendResources(dataHandler: TCPDataHandler, device: TCPRemoteDeviceDto): Nothing =
-        throw UnsupportedException() // TODO
-
-    private fun onDir(service: DownloadStorageServiceI, dataHandler: TCPDataHandler, path: String) {
-        if (!service.mkDir(path)) {
-            dataHandler.send(DECLINED_STATUS)
-            throw DataTransferFailedException()
-        } else {
-            dataHandler.send(OK_STATUS)
-        }
+    private fun throwDeclinedStatus(dataHandler: TCPDataHandler<*>) {
+        dataHandler.send(DECLINED_STATUS)
+        throw DataTransferFailedException()
     }
 
-    private fun acceptResources(dataHandler: TCPDataHandler, device: TCPRemoteDeviceDto) {
-        val rawFileData = dataHandler.readString().split(',')
-        val resources = rawFileData[0].toInt()
-        val dirs = rawFileData[1].toInt()
-        val service = _api.downloadStorageService.isServicePermitted(device.title, resources, dirs)
+    private fun sendResources(dataHandler: TCPDataHandler<*>, device: TCPRemoteDeviceDto): Nothing =
+        throw UnsupportedException() // TODO
+
+    private fun acceptResources(dataHandler: TCPDataHandler<*>, device: TCPRemoteDeviceDto) {
+        val resourcesCount = dataHandler.readString().toInt()
+        val service = _api.downloadStorageService.isServicePermitted(device.title, resourcesCount)
 
         if (service != null) {
             var result: String
             dataHandler.send(OK_STATUS)
 
             while (dataHandler.readString().also { result = it } != "EOS") {
-                val rawResult = result.split(TCPDataHandler.SPLITTER)
-                val path = rawResult[1]
+                val resourceData = parseToResourceData(result)
 
-                when (rawResult[0]) {
-                    "DIR" -> onDir(service, dataHandler, path)
-                    "RESOURCE" -> {
-                        val length = rawResult[2].toLong()
-                        val resourceOutputStream = service.getResourceOutputStream(path, length)
+                when {
+                    resourceData != null -> dataHandler.readResource(
+                        service.createResourceOutputStream(resourceData),
+                        resourceData.size,
+                        onOk = { dataHandler.send(OK_STATUS) },
+                        onDeclined = { throwDeclinedStatus(dataHandler) }
+                    )
 
-                        if (resourceOutputStream != null && dataHandler.readResource(
-                                resourceOutputStream,
-                                length
-                            )
-                        ) {
-                            dataHandler.send(OK_STATUS)
-                        } else {
-                            dataHandler.send(DECLINED_STATUS)
-                            throw DataTransferFailedException()
-                        }
-                    }
+                    else -> throwDeclinedStatus(dataHandler)
                 }
+
+                dataHandler.send(OK_STATUS)
             }
 
             dataHandler.send(OK_STATUS)
@@ -80,7 +67,7 @@ class TCPServerSocketHandler(private val _api: OSAPIInterface) {
         }
     }
 
-    private fun sendClipboard(dataHandler: TCPDataHandler, device: TCPRemoteDeviceDto) {
+    private fun sendClipboard(dataHandler: TCPDataHandler<*>, device: TCPRemoteDeviceDto) {
         val service = _api.clipboardService.isServicePermitted(device.title)
 
         if (service != null) {
@@ -97,7 +84,7 @@ class TCPServerSocketHandler(private val _api: OSAPIInterface) {
         }
     }
 
-    private fun acceptClipboard(dataHandler: TCPDataHandler, device: TCPRemoteDeviceDto) {
+    private fun acceptClipboard(dataHandler: TCPDataHandler<*>, device: TCPRemoteDeviceDto) {
         val service = _api.clipboardService.isServicePermitted(device.title)
 
         if (service != null) {
@@ -113,7 +100,7 @@ class TCPServerSocketHandler(private val _api: OSAPIInterface) {
         }
     }
 
-    private fun startWorkWithRemoteDevice(handler: TCPDataHandler, device: TCPRemoteDeviceDto) {
+    private fun startWorkWithRemoteDevice(handler: TCPDataHandler<*>, device: TCPRemoteDeviceDto) {
         val fetchOrSend = device.fetchOrSendType!!
         handler.send(OK_STATUS)
 
@@ -153,3 +140,12 @@ class TCPServerSocketHandler(private val _api: OSAPIInterface) {
         }
     }
 }
+
+private fun parseToResourceData(tcpRawData: String): RemoteResourceData? =
+    tcpRawData.split(TCPDataHandler.SPLITTER).let { data ->
+        if (data.size >= 2) {
+            return RemoteResourceData(data[0], data[1].toLong())
+        }
+
+        return null
+    }
