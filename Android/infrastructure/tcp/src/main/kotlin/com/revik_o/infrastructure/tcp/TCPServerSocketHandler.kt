@@ -57,8 +57,6 @@ class TCPServerSocketHandler(private val _api: OSAPIInterface<*>) {
 
                     else -> throwDeclinedStatus(dataHandler)
                 }
-
-                dataHandler.send(OK_STATUS)
             }
 
             dataHandler.send(OK_STATUS)
