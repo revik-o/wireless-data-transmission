@@ -15,7 +15,8 @@ dependencies {
     implementation(project(":core:common"))
     implementation(project(":infrastructure:common"))
     implementation(libs.kotlinx.coroutines.core)
-    testImplementation(project(":core:tests"))
     testImplementation(libs.junit)
+    testImplementation(project(":core:data"))
+    testImplementation(project(":core:tests"))
     testImplementation(libs.kotlinx.coroutines.test)
 }

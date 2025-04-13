@@ -12,6 +12,7 @@ kotlin {
     }
 }
 dependencies {
+    implementation(project(":core:data"))
     implementation(project(":core:common"))
     implementation(libs.kotlinx.coroutines.core)
     testImplementation(project(":core:tests"))
