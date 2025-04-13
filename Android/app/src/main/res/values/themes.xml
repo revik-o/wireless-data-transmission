@@ -1,0 +1,30 @@
+<resources xmlns:tools="http://schemas.android.com/tools">
+    <!-- Base application theme. -->
+    <style name="Base.Theme.WirelessDataTransmission" parent="Theme.Material3.DayNight.NoActionBar">
+        <!-- Customize your light theme here. -->
+        <!-- <item name="colorPrimary">@color/my_light_primary</item> -->
+    </style>
+
+    <style name="Theme.WirelessDataTransmission" parent="Base.Theme.WirelessDataTransmission">
+        <item name="colorPrimary">@color/gray</item>
+        <item name="android:windowBackground">@color/black</item>
+    </style>
+
+    <style name="Theme.WirelessDataTransmission.Fullscreen" parent="Theme.WirelessDataTransmission">
+        <item name="android:actionBarStyle">
+            @style/Widget.Theme.WirelessDataTransmission.ActionBar.Fullscreen
+        </item>
+        <item name="android:windowActionBarOverlay">true</item>
+        <item name="android:windowBackground">@null</item>
+    </style>
+
+    <style name="ThemeOverlay.WirelessDataTransmission.FullscreenContainer" parent="">
+        <item name="fullscreenBackgroundColor">@color/light_blue_600</item>
+        <item name="fullscreenTextColor">@color/light_blue_A200</item>
+    </style>
+
+    <style name="Theme.SplashScreen" parent="Theme.AppCompat.NoActionBar">
+        <item name="android:windowBackground">@color/black</item>
+        <item name="android:windowFrame">@drawable/ic_launcher_foreground_16_9</item>
+    </style>
+</resources>
