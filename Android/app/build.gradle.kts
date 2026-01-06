@@ -5,12 +5,12 @@ plugins {
 
 android {
     namespace = "com.revik_o.wdt"
-    compileSdk = 35
+    compileSdk = 36
 
     defaultConfig {
         applicationId = "com.revik_o.wdt"
         minSdk = 19
-        targetSdk = 35
+        targetSdk = 36
         versionCode = 1
         versionName = "2.0.0"
 
